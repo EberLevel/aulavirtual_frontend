@@ -46,7 +46,20 @@ export class DocumentoGestionService {
                 })
             );
     }
-
+    
+    listarDocumentosAlumno(domain_id: number, user_id: number): Observable<Base> {
+        return this.http
+            .get<Base>(`${this.baseUrl}alumnos/${domain_id}/${user_id}/documentos`)
+            .pipe(
+                map((response: Base) => {
+                    if (response.responseCode === 0) {
+                        return response.response;
+                    } else {
+                        throw new Error(response.msgResultado);
+                    }
+                })
+            );
+      }
 
     guardarDocumentoGestion(parametro: any): Observable<Response> {
         const headers = new HttpHeaders({

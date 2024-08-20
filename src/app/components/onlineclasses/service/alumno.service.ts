@@ -28,6 +28,9 @@ export class AlumnoService{
     getAlumnos(domain_id:number):Observable<any>{
         return this.http.get(`${this.baseUrl}alumnos/${domain_id}`);
     }
+    getLoggedAlumno(alumnoId: number, domainId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}alumnos/logged/${alumnoId}/${domainId}`);
+    }
     deleteAlumno(data:any):Observable<any>{
         return this.http.delete(`${this.baseUrl}alumnos/${data.id}/${data.domain_id}`);
     }

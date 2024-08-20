@@ -98,6 +98,10 @@ export class HelpersService {
       timer: 1500
     });
   }
+  getUserId(): number {
+    const user = this.getUserData();  
+    return user ? user.id : 0; 
+  }
   showErrorMessage(message: string) {
     Swal.fire({
       icon: 'error',

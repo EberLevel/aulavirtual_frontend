@@ -18,9 +18,7 @@ export class RegDocumentosAlumnoComponent implements OnInit{
 
     loading: boolean = false;
     parametroDatos: DocumentoGestion = new DocumentoGestion();
-    /*parametro: Parametro = new Parametro;
-    parametroGroupItemList: Parametro[] = [];
-    itemSeleccionado?: Parametro | null;*/
+
     acciones: string = 'register';
     domain_id=1;
 
@@ -56,23 +54,31 @@ export class RegDocumentosAlumnoComponent implements OnInit{
             });
     }
 
-    guardarDocumentoGestion(){
+    guardarDocumentoGestion() {
         this.parametroDatos.recursos = 'recursos';
-
+        this.parametroDatos.domain_id = this.domain_id;  
+        this.parametroDatos.user_id = this.helperService.getUserId();
+    
         this.confirmationService.confirm({
             header: '¿Está seguro de agregar un nuevo registro?',
-            message: 'El documento se visualizara en la tabla. ',
+            message: 'El documento se visualizará en la tabla.',
             acceptLabel: 'Guardar',
             rejectLabel: 'Cancelar',
             accept: () => {
-                this.documentoGestionService.guardarDocumentoGestion(this.parametroDatos).subscribe((res: any) => {
-                    if (res){
-                        this.limpiar();
-                        this.ref.close({register: true});
-                    } else {
-                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar.', life: 1000 });
+                this.documentoGestionService.guardarDocumentoGestion(this.parametroDatos).subscribe(
+                    (res: any) => {
+                        if (res) {
+                            this.limpiar();
+                            this.ref.close({ register: true });
+                        } else {
+                            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al registrar.', life: 1000 });
+                        }
+                    },
+                    (error: any) => {
+                        console.error("Error en el backend:", error.error);  
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error en el backend.', life: 3000 });
                     }
-                });
+                );
             },
             reject: () => {}
         });

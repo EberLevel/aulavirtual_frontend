@@ -34,18 +34,42 @@ export class BandejaAlumnoComponent {
     }
 
     cargaInicial(): void {
-        //get all alumnos
+        const esAlumno = this.helpersService.getRolId() === 12; // Rol 12 como alumno
+    
         this.loading = true;
-
-        this.alumnoService.getAlumnos(this.domain_id).subscribe(
-            (data: any) => {
-                this.instituciones = data;
-                this.loading = false;
-            },
-            (error: any) => {
-                this.loading = false;
+        
+        if (esAlumno) {
+            // Si es Alumno, cargar solo los datos de su perfil
+            const alumnoId = this.helpersService.getAlumnoId(); // Obtén el ID del alumno logueado
+            if (alumnoId) {
+                this.alumnoService.getLoggedAlumno(alumnoId, this.domain_id).subscribe(
+                    (data: any) => {
+                        // Cargar solo la información de este alumno
+                        this.instituciones = [data]; // Poner la data del alumno en un array
+                        this.loading = false;
+                    },
+                    (error: any) => {
+                        this.loading = false;
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Error al cargar los datos del alumno',
+                            icon: 'error'
+                        });
+                    }
+                );
             }
-        );
+        } else {
+            // Si no es Alumno, cargar todos los alumnos (esto aplica a los administradores o usuarios con permisos especiales)
+            this.alumnoService.getAlumnos(this.domain_id).subscribe(
+                (data: any) => {
+                    this.instituciones = data;
+                    this.loading = false;
+                },
+                (error: any) => {
+                    this.loading = false;
+                }
+            );
+        }
     }
     eliminarAlumno(alumno: any) {
         //show swall confirmation
