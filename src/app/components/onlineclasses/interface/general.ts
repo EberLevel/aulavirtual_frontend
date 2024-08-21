@@ -43,6 +43,8 @@ export class DocumentoGestion {
     public estado: boolean | null = null
     public txUseCreado: string | null = null
     public txUseModificado: string | null = null
+    public domain_id: number | null = null;
+    public user_id: number | null = null;
 }
 
 export class Capacitaciones {

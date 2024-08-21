@@ -290,8 +290,12 @@ export class ListaPermisosComponent {
                         hijos: [
                             { id: 17, nombre: 'Nuevo', seleccionado: false },
                             { id: 18, nombre: 'Ver', seleccionado: false },
-                            { id: 19, nombre: 'Editar', seleccionado: false },
-                            { id: 20, nombre: 'Eliminar', seleccionado: false },
+                            { id: null, nombre: 'Editar', seleccionado: false },
+                            {
+                                id: null,
+                                nombre: 'Eliminar',
+                                seleccionado: false,
+                            },
                             {
                                 id: 21,
                                 nombre: 'ÁREAS',
@@ -371,7 +375,11 @@ export class ListaPermisosComponent {
                             { id: 101, nombre: 'Nuevo', seleccionado: false },
                             { id: 102, nombre: 'Ver', seleccionado: false },
                             { id: 103, nombre: 'Editar', seleccionado: false },
-                            { id: 104, nombre: 'Eliminar', seleccionado: false },
+                            {
+                                id: 104,
+                                nombre: 'Eliminar',
+                                seleccionado: false,
+                            },
                         ],
                         isExpanded: false,
                     },
@@ -384,7 +392,7 @@ export class ListaPermisosComponent {
                 seleccionado: false,
                 permisos: [
                     {
-                        id: 31,
+                        id: null,
                         nombre: 'MANTENIMIENTOS',
                         seleccionado: false,
                         hijos: [],
@@ -727,6 +735,18 @@ export class ListaPermisosComponent {
                         ],
                         isExpanded: false,
                     },
+                    {
+                        id: null,
+                        nombre: 'CAPACITACIONES',
+                        seleccionado: false,
+                        hijos: [
+                            { id: 33, nombre: 'Nuevo', seleccionado: false },
+                            { id: 34, nombre: 'Editar', seleccionado: false },
+                            { id: 35, nombre: 'Ver', seleccionado: false },
+                            { id: 36, nombre: 'Eliminar', seleccionado: false },
+                        ],
+                        isExpanded: false,
+                    },
                 ],
                 isExpanded: false,
             },
@@ -795,7 +815,17 @@ export class ListaPermisosComponent {
                     grupos['AulaVirtual'].permisos[2].seleccionado =
                         this.permisosSeleccionados.has(permiso.id);
                     break;
+                case 'aula_virtual_mantenimientos':
+                    grupos['AulaVirtual'].permisos[0].id = permiso.id;
+                    grupos['AulaVirtual'].permisos[0].seleccionado =
+                        this.permisosSeleccionados.has(permiso.id);
+                    break;
 
+                case 'aula_virtual_capacitaciones':
+                    grupos['AulaVirtual'].permisos[4].id = permiso.id;
+                    grupos['AulaVirtual'].permisos[4].seleccionado =
+                        this.permisosSeleccionados.has(permiso.id);
+                    break;
                 case 'ver_modulo_estructura_organica':
                     grupos['EstructuraOrganica'].id = permiso.id;
                     grupos['EstructuraOrganica'].seleccionado =

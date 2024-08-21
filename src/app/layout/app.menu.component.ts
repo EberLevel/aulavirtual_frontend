@@ -37,31 +37,89 @@ export class AppMenuComponent implements OnInit {
         private permisoService: GeneralService,
         private helpersService: HelpersService
     ) { }
+
     ngOnInit() {
         const isUserLogged = this.helpersService.checkIsUserLogged();
         console.log('isUserLogged', isUserLogged);
-        if(!isUserLogged){
+        if (!isUserLogged) {
             this.router.navigate(['/auth/login']);
             return;
         }
+    
         this.domain_id = this.helpersService.getDominioId();
         const rolId = this.helpersService.getRolId();
-        this.permisoService.fetchPermisos(rolId,this.domain_id);
-        this.permisoService.permisos$.pipe(
-            tap(permisos => {
-                this.permisos = permisos;
-                this.actualizarMenu();
-            })
-        ).subscribe();
-
-
-
-
+    
+        // Imprime el rolId en la consola
+        console.log('RolId obtenido:', rolId);
+    
+        // Verifica si el rol es "Alumno"
+        if (rolId === 12) {
+            console.log('Rol Alumno detectado. Actualizando menú para Alumno...');
+            this.actualizarMenuAlumno();
+        } else {
+            this.permisoService.fetchPermisos(rolId, this.domain_id);
+            this.permisoService.permisos$.pipe(
+                tap(permisos => {
+                    this.permisos = permisos;
+                    this.actualizarMenu();
+                })
+            ).subscribe();
+        }
     }
 
+    actualizarMenuAlumno() {
+        console.log('actualizarMenuAlumno llamado');
+        this.model4 = [
+            {
+                items: [
+                    {
+                        label: 'AULA VIRTUAL',
+                        icon: 'pi pi-play',
+                        items: [
+                            {
+                                label: 'Alumno',
+                                icon: 'pi pi-users',
+                                items: [
+                                    {
+                                        label: 'Datos Personales',
+                                        icon: 'pi pi-user-edit',
+                                        routerLink: ['/pl-virtual/bandeja-alumno']
+                                    },
+                                    {
+                                        label: 'Documentos de Gestión',
+                                        icon: 'pi pi-file',
+                                        routerLink: ['/pl-virtual/documentos-alumnos']
+                                    },
+                                    {
+                                        label: 'Avance Curricular',
+                                        icon: 'pi pi-sitemap',
+                                        routerLink: ['/pl-virtual/avance-curricular']
+                                    },
+                                    {
+                                        label: 'Cursos',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        routerLink: ['/pl-virtual/bandeja-curso']
+                                    },
+                                    {
+                                        label: 'Horarios',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        routerLink: ['/apps/calendar']
+                                    },
+                                    // {
+                                    //     label: 'Foros',
+                                    //     icon: 'pi pi-comment',
+                                    //     routerLink: ['/pl-virtual/foro-alumnos']
+                                    // }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+    }
 
     actualizarMenu() {
-
         this.model0 = [
             {
                 items: [
@@ -72,7 +130,6 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Empresas',
                                 icon: 'pi pi-fw pi-building',
-
                                 routerLink: ['/pl-virtual/lista-empresas']
                             }
                         ]
@@ -87,30 +144,25 @@ export class AppMenuComponent implements OnInit {
                         label: 'SEGURIDAD',
                         icon: 'pi pi-play',
                         items: [
-                           ...(this.tienePermiso('ver_seguridad_configuracion')) ? [{
+                            ...(this.tienePermiso('ver_seguridad_configuracion')) ? [{
                                 label: 'Configuración',
-                               icon: 'pi pi-fw pi-building',
-                                 routerLink: ['/pl-virtual/configuracion-institucion'],
-                             }
-                            ] : [],
+                                icon: 'pi pi-fw pi-building',
+                                routerLink: ['/pl-virtual/configuracion-institucion'],
+                            }] : [],
 
                             ...(this.tienePermiso('ver_seguridad_roles')) ? [{
-
                                 label: 'Roles y permisos',
                                 icon: 'pi pi-fw pi-building',
                                 routerLink: ['/pl-virtual/lista-roles'],
-                            }
-                            ] : [],
+                            }] : [],
 
                             {
                                 label: 'Usuarios',
                                 icon: 'pi pi-fw pi-building',
                                 routerLink: ['/pl-virtual/bandeja-usuarios'],
                                 permisos: 'ver_modulo_seguridad'
-
                             }
                         ],
-
                     }
                 ]
             }
@@ -132,6 +184,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             }
         ];
+
         this.model3 = [
             {
                 items: [
@@ -143,17 +196,6 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Banco CV',
                                 icon: 'pi pi-play',
                                 items: [
-                                    //     {
-                                    //     label: 'Configuración',
-                                    //     icon: 'pi pi-cog',
-                                    //     items:[
-                                    //         {  label: 'Instituciones',
-                                    //             icon: 'pi pi-building',
-                                    //             routerLink: ['/pl-virtual/registro-instituciones']
-                                    //         }
-                                    //     ]
-                                    //    // routerLink: ['/pl-virtual/bandeja-instituciones']
-                                    //     },
                                     {
                                         label: 'Postulantes 1',
                                         icon: 'pi pi-users',
@@ -180,66 +222,7 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-users',
                                         routerLink: ['/pl-virtual/mantenimiento-gestiones']
                                     },
-                                    {
-                                        label: 'Afiliado a partido',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/afiliado-partido']
-                                    },
-                                    {
-                                        label: 'Grado de instrucción',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/grado-de-instruccion']
-                                    },
-                                    {
-                                        label: 'Vinculos laborales',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/vinculos-laborales']
-                                    },
-                                    {
-                                        label: 'Documentos de identidad',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/documentos-de-identidad']
-                                    },
-                                    {
-                                        label: 'Tipos de documentos de gestión',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/tipos-de-documentos-de-gestion']
-                                    },
-                                    {
-                                        label: 'Estados civiles',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/estado-civil']
-                                    },
-                                    {
-                                        label: 'Niveles de puesto',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/nivel-de-puesto']
-                                    },
-                                    {
-                                        label: 'Modalidades de puesto',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/modalidad-de-puesto']
-                                    },
-                                    {
-                                        label: 'Profesiones',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/profesiones']
-                                    },
-                                    {
-                                        label: 'Estado de avance',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/estado-de-avance']
-                                    },
-                                    {
-                                        label: 'Escala',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/escala']
-                                    },
-                                    {
-                                        label: 'Ocupación actual',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/ocupacion-actual']
-                                    },
+                                    // Más items de mantenimiento
                                 ]
                             },
                             {
@@ -247,15 +230,11 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-play',
                             },
                         ]
-
-
                     }
                 ]
             }
-
-
-
         ];
+
         this.model4 = [
             {
                 items: [
@@ -452,6 +431,7 @@ export class AppMenuComponent implements OnInit {
                 ].filter(item => item !== null)
             }
         ];
+
         this.model5 = [
             {
                 items: [
@@ -468,6 +448,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             }
         ];
+
         this.model6 = [
             {
                 items: [
@@ -484,6 +465,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             }
         ];
+
         this.model7 = [
             {
                 items: [
@@ -496,193 +478,15 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-fw pi-building',
                             }
                         ]
-                    },
-
-
+                    }
                 ]
             }
         ];
-        /*
-        this.model3 = [
-            {
-                label: 'Aula virtual',
-                icon: 'pi pi-building',
-                items: [
-                    {
-                        label: 'Mantenimientos',
-                        icon: 'pi pi-play',
-                        items: [
-                                {
-                                    label: 'Ciclos',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/ciclos']
-                                },
-                                {
-                                    label: 'Areas de formación',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/areas-de-formacion']
-                                },
-                                {
-                                    label: 'Unidades formativas',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/u-formativas']
-                                },
-                                {
-                                    label: 'Unidades didácticas (cursos)',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/u-didacticas']
-                                },
-                                {
-                                    label: 'Estado de cursos',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/e-cursos']
-                                },
-                                {
-                                    label: 'Tipo de curso',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/t-cursos']
-                                },
-                                {
-                                    label: 'Modalidad',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/modalidad']
-                                },
-                                {
-                                    label: 'Aula',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/aula']
-                                },
-                                {
-                                    label: 'Tipo de actividad',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/tipo-de-actividad']
-                                },
-                            ]
-                    },
-                    {
-                        label: 'Alumnos',
-                        icon: 'pi pi-play',
-                        items: [
-                                {
-                                    label: 'Datos personales',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/datos-personales']
-                                },
-                                {
-                                    label: 'Documentos de gestión',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/documentos-alumnos']
-                                },
-                                {
-                                    label: 'Avance curricular',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                {
-                                    label: 'Cursos',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                {
-                                    label: 'Horarios',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                {
-                                    label: 'Cursos y capacitaciones',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                {
-                                    label: 'Pagos',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                ]
-                    },
-                    {
-                        label: 'Docentes',
-                        icon: 'pi pi-play',
-                        items: [
-                                {
-                                    label: 'Datos personales',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/bandeja-docente']
-                                },
-                                {
-                                    label: 'Cursos',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/cursos-docente']
-                                },
-                                {
-                                    label: 'Horarios',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                {
-                                    label: 'Evaluaciones',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/evaluacion-docente']
-                                },
-                                {
-                                    label: 'Foros',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                {
-                                    label: 'Asistencia',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/lista-postulantes']
-                                },
-                                ]
-                    },
-                    {
-                        label: 'Carreras técnicas',
-                        icon: 'pi pi-play',
-                        items: [
-                                {
-                                    label: 'Cursos',
-                                    icon: 'pi pi-users',
-                                    routerLink: ['/pl-virtual/registro-de-cursos']
-                                },
-                                ]
-                    },
-                    {
-                        label: 'Cursos y capacitaciones',
-                        icon: 'pi pi-play',
-                        routerLink: ['/pl-virtual/lista-postulantes']
-                    },
-                    {
-                        label: 'Documentos de gestión',
-                        icon: 'pi pi-play',
-                        routerLink: ['/pl-virtual/lista-postulantes']
-                    },
-                    {
-                        label: 'Pagos',
-                        icon: 'pi pi-play',
-                        routerLink: ['/pl-virtual/lista-postulantes']
-                    },
-                    {
-                        label: 'Biblioteca',
-                        icon: 'pi pi-play',
-                        routerLink: ['/pl-virtual/lista-postulantes']
-                    },
-                ]
-              }
-
-
-
-        ];
-        */
-
-
     }
-
 
     tienePermiso(nombrePermiso: string): boolean {
         return this.permisoService.tienePermiso(nombrePermiso);
     }
-
 
     private configuracionInicial(): void {
         if (window.location.href.includes(VAR_URL) && (localStorage.getItem(PL_TOKEN) === 'invalid' || localStorage.getItem(PL_TOKEN))) {
@@ -702,13 +506,11 @@ export class AppMenuComponent implements OnInit {
                     },
                     error: (errorResponse: any) => {
                         console.log('LoadUser:observable subscribe error', errorResponse);
-
                     },
                     complete: () => {
                         this.router.navigate(['/consejo-directivo']);
-                        // console.log("this.LoadUser complete");
                     }
-                })
+                });
         }
     }
 }
