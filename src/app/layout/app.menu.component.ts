@@ -242,6 +242,23 @@ export class AppMenuComponent implements OnInit {
                         label: 'AULA VIRTUAL',
                         icon: 'pi pi-play',
                         items: [
+                            // {
+                            //     label: 'Configuración',
+                            //     icon: 'pi pi-cog',
+                            //     items: [
+                            //         {
+                            //             label: 'Instituciones',
+                            //             icon: 'pi pi-building',
+                            //             routerLink: ['/pl-virtual/registro-instituciones']
+                            //         }
+                            //     ]
+                            //     // routerLink: ['/pl-virtual/bandeja-instituciones']
+                            // },
+                            // {
+                            //     label: 'Roles',
+                            //     icon: 'pi pi-users',
+                            //     routerLink: ['/pl-virtual/bandeja-usuarios']
+                            // },
                             {
                                 label: 'Mantenimientos',
                                 icon: 'pi pi-wrench',
@@ -256,50 +273,161 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-credit-card',
                                         routerLink: ['/pl-virtual/modulos-formativos']
                                     },
-                                    // Más items de mantenimientos
+                                    {
+                                        label: 'Estados',
+                                        icon: 'pi pi-envelope',
+                                        routerLink: ['/pl-virtual/estados']
+                                    },
+                                    {
+                                        label: 'Estado de Cursos',
+                                        icon: 'pi pi-id-card',
+                                        routerLink: ['/pl-virtual/estado-cursos']
+                                    },
+                                    {
+                                        label: 'Ciclos',
+                                        icon: 'pi pi-inbox',
+                                        routerLink: ['/pl-virtual/ciclos']
+                                    },
+                                    {
+                                         label: 'Aulas',
+                                         icon: 'pi pi-wrench',
+                                         routerLink: ['/pl-virtual/aulas']
+                                     },
                                 ]
-                            },
-                            this.tienePermiso('aula_virtual_carreras') ? {
+                            }
+
+
+
+                            //     ]
+                            // },
+                            ,
+                            this.tienePermiso('aula_virtual_carreras')?{
                                 label: 'Carreras técnicas',
                                 icon: 'pi pi-book',
                                 routerLink: ['/pl-virtual/bandeja-carrtecnicas']
-                            } : null,
-                            this.tienePermiso('aula_virtual_alumno') ? {
+                            }:null,
+                            this.tienePermiso('aula_virtual_alumno')?{
                                 label: 'Alumno',
                                 icon: 'pi pi-users',
                                 items: [
-                                    this.tienePermiso('aula_virtual_alumno_datos_personales') ? {
+                                    /*{
+                                        label: 'Bandeja',
+                                        icon: 'pi pi-bars',
+                                        routerLink: ['/pl-virtual/bandeja-alumno']
+
+                                    },*/
+                                    this.tienePermiso('aula_virtual_alumno_datos_personales')?{
                                         label: 'Datos Personales',
                                         icon: 'pi pi-user-edit',
                                         routerLink: ['/pl-virtual/bandeja-alumno']
-                                    } : null,
+                                    }:null,
                                     {
                                         label: 'Documentos de Gestión',
                                         icon: 'pi pi-file',
                                         routerLink: ['/pl-virtual/documentos-alumnos']
                                     },
-                                    // Más items del submenú Alumno
+                                    {
+                                        label: 'Avance Curricular',
+                                        icon: 'pi pi-sitemap',
+                                        routerLink: ['/pl-virtual/avance-curricular']
+                                    },
+                                    {
+                                        label: 'Cursos',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        routerLink: ['/pl-virtual/bandeja-curso']
+                                    },
+
+                                    /* {
+                                         label: 'Practicas',
+                                         icon: 'pi pi-fw pi-folder',
+                                         routerLink: ['']
+                                     },*/
+                                    {
+                                        label: 'Horarios',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        routerLink: ['/apps/calendar']
+                                    },
+
+                                    {
+                                        label: 'Foros',
+                                        icon: 'pi pi-comment',
+                                        routerLink: ['/pl-virtual/foro-alumnos']
+                                    },
+                                    // {
+                                    //     label: 'Record de pago',
+                                    //     icon: 'pi pi-money-bill',
+                                    //     routerLink: ['']
+                                    // },
+                                    // {
+                                    //     label: 'Otros cursos',
+                                    //     icon: 'pi pi-shopping-bag',
+                                    //     routerLink: ['']
+                                    // },
+                                    // {
+                                    //     label: 'Capacitaciones',
+                                    //     icon: 'pi pi-sun',
+                                    //     routerLink: ['']
+                                    // },
                                 ].filter(item => item !== null)
-                            } : null,
-                            this.tienePermiso('aula_virtual_docente') ? {
+                            }:null,
+
+                            this.tienePermiso('aula_virtual_docente')?{
                                 label: 'Docente',
                                 icon: 'pi pi-fw pi-briefcase',
                                 items: [
-                                    this.tienePermiso('aula_virtual_docente_datos_personales') ? {
+                                    this.tienePermiso('aula_virtual_docente_datos_personales')?{
                                         label: 'Datos personales',
                                         icon: 'pi pi-file-edit',
                                         routerLink: ['/pl-virtual/bandeja-docente']
-                                    } : null,
-                                    // Más items del submenú Docente
+                                        // routerLink: ['/pl-virtual/']
+
+                                    }:null,
+                                    {
+                                        label: 'Horario',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        // routerLink: ['/pl-virtual/cursos-docente']
+                                        routerLink: ['/pl-virtual/horario-docente']
+                                    },
+                                    {
+                                        label: 'Cursos',
+                                        icon: 'pi pi-share-alt',
+                                        // routerLink: ['/pl-virtual/cursos-docente']
+                                        routerLink: ['/pl-virtual/cursos-docente']
+                                    },
+                                    {
+                                        label: 'Evaluaciones',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        // routerLink: ['/pl-virtual/evaluacion-docente']
+                                        routerLink: ['/pl-virtual/']
+
+                                    },
+                                    // {
+                                    //     label: 'Foros',
+                                    //     icon: 'pi pi-comment',
+                                    //     routerLink: ['/']
+
+                                    // },
+                                    {
+                                        label: 'Asistencia',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/']
+
+                                    },
+
                                 ].filter(item => item !== null)
-                            } : null,
+
+                               }:null,
+
+
                             {
                                 label: 'CAPACITACIONES',
                                 icon: 'pi pi-users',
                                 routerLink: ['/pl-virtual/capacitaciones']
                             },
-                        ].filter(item => item !== null)
+                                ].filter(item => item !== null)
                     }
+
+
                 ].filter(item => item !== null)
             }
         ];
