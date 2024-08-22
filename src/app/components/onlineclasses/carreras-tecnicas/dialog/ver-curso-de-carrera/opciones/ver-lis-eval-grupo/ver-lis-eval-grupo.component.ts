@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { RegCursosComponent } from '../../../../../cursos/dialog/reg-cursos/reg-cursos.component';
 import Swal from 'sweetalert2';
 import { VerListadoDePreguntasComponent } from '../ver-listado-de-preguntas/ver-listado-de-preguntas.component';
+import { RegEvaluacionDocenteComponent } from '../../../../../docentes/evaluaciones-docente-menu/dialog/reg-evaluacion-docente/reg-evaluacion-docente.component';
 
 @Component({
   selector: 'app-ver-lis-eval-grupo',
@@ -35,6 +36,7 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
   constructor(
     private dialogService: DialogService,
     private grupoEvaluacionesService: GeneralService,
+    private router: Router,
     public config: DynamicDialogConfig
   ) { }
 
@@ -74,6 +76,18 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     });
   }
 
+  navigateToNuevo() {
+    this.ref = this.dialogService.open(RegEvaluacionDocenteComponent, {  
+        width: '60%',
+        styleClass: 'custom-dialog-header',
+        data: { idGrupoEvaluaciones: this.grupoEvaluaciones.id }  
+    });
+
+    this.ref.onClose.subscribe((dataFromDialog) => {
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+    });
+}
   navigateToDetalle(data: any) {
     this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
       width: '80%',

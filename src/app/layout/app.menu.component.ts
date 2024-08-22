@@ -56,6 +56,11 @@ export class AppMenuComponent implements OnInit {
         if (rolId === 12) {
             console.log('Rol Alumno detectado. Actualizando menú para Alumno...');
             this.actualizarMenuAlumno();
+        }
+        // Verifica si el rol es "Docente"
+        else if (rolId === 17) {
+            console.log('Rol Docente detectado. Actualizando menú para Docente...');
+            this.actualizarMenuDocente();
         } else {
             this.permisoService.fetchPermisos(rolId, this.domain_id);
             this.permisoService.permisos$.pipe(
@@ -65,6 +70,81 @@ export class AppMenuComponent implements OnInit {
                 })
             ).subscribe();
         }
+    }
+    
+    actualizarMenuDocente() {
+        console.log('actualizarMenuDocente llamado');
+        this.model4 = [
+            {
+                items: [
+                    {
+                        label: 'AULA VIRTUAL',
+                        icon: 'pi pi-play',
+                        items: [
+                            {
+                                label: 'Mantenimientos',
+                                icon: 'pi pi-wrench',
+                                items: [
+                                    {
+                                        label: 'Áreas de Formación',
+                                        icon: 'pi pi-briefcase',
+                                        routerLink: ['/pl-virtual/area-formacion']
+                                    },
+                                    {
+                                        label: 'Modulos Formativos',
+                                        icon: 'pi pi-credit-card',
+                                        routerLink: ['/pl-virtual/modulos-formativos']
+                                    },
+                                    {
+                                        label: 'Estado de Cursos',
+                                        icon: 'pi pi-id-card',
+                                        routerLink: ['/pl-virtual/estado-cursos']
+                                    },
+                                    {
+                                        label: 'Ciclos',
+                                        icon: 'pi pi-inbox',
+                                        routerLink: ['/pl-virtual/ciclos']
+                                    },
+                                    {
+                                         label: 'Aulas',
+                                         icon: 'pi pi-wrench',
+                                         routerLink: ['/pl-virtual/aulas']
+                                     },
+                                ]
+                            },
+                            {
+                                label: 'Docente',
+                                icon: 'pi pi-users',
+                                items: [
+                                    {
+                                        label: 'Horario',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        // routerLink: ['/pl-virtual/cursos-docente']
+                                        routerLink: ['/pl-virtual/horario-docente']
+                                    },
+                                    {
+                                        label: 'Cursos',
+                                        icon: 'pi pi-share-alt',
+                                        // routerLink: ['/pl-virtual/cursos-docente']
+                                        routerLink: ['/pl-virtual/cursos-docente']
+                                    },
+                                    {
+                                        label: 'Evaluaciones',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        routerLink: ['/pl-virtual/evaluacion-docente']
+                                        //routerLink: ['/pl-virtual/']
+
+                                    },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+    
+        // Elimina CAPACITACIONES
+        this.model4 = this.model4.filter(item => item.label !== 'CAPACITACIONES');
     }
 
     actualizarMenuAlumno() {
@@ -222,7 +302,6 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-users',
                                         routerLink: ['/pl-virtual/mantenimiento-gestiones']
                                     },
-                                    // Más items de mantenimiento
                                 ]
                             },
                             {

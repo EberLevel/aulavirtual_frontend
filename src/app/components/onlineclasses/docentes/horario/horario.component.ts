@@ -41,6 +41,7 @@ this.spinner.show();
 
 this.eventService.getEventsDocente(data).subscribe({
   next: (events) => {
+    console.log(events); 
     this.events = this.getEventsAlumno(events);
     this.calendarOptions = { ...this.calendarOptions, events: this.events };
 

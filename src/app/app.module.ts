@@ -17,6 +17,7 @@ import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MessageService } from 'primeng/api';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -40,12 +41,13 @@ export function HttpLoaderFactory(http: HttpClient) {
         HttpClientModule,
         TableModule,
         CalendarModule,
-        ReactiveFormsModule // Add ReactiveFormsModule to imports array
+        ReactiveFormsModule 
 
 
 
     ],
     providers: [
+        MessageService,
         DialogService,
         { provide: LocationStrategy, useClass: HashLocationStrategy }
     ],
