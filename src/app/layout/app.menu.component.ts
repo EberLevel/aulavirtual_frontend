@@ -129,11 +129,9 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/pl-virtual/cursos-docente']
                                     },
                                     {
-                                        label: 'Evaluaciones',
-                                        icon: 'pi pi-fw pi-calendar',
-                                        routerLink: ['/pl-virtual/evaluacion-docente']
-                                        //routerLink: ['/pl-virtual/']
-
+                                        label: 'Datos personales',
+                                        icon: 'pi pi-file-edit',
+                                        routerLink: ['/pl-virtual/bandeja-docente']
                                     },
                                 ]
                             }

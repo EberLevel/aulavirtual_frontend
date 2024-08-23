@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="mb-2">
                                     <button pButton label="Nuevooooooooo" icon="pi pi-user-plus" id="btnNuevo"
-                                        class="p-button-primary mr-2" (click)="navigateToNuevo()"
+                                        class="p-button-primary mr-2" (click)="navigateAddCurso()"
                                         style="border-radius: 30px;"></button>
                                 </div>
                             </div>
@@ -28,7 +28,7 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="min-width: 10rem" scope="col">Acciones</th>
-                                <th style="min-width: 10rem" scope="col">N Bloque</th>
+                                <th style="min-width: 10rem" scope="col">ID</th>
                                 <th style="min-width: 10rem" scope="col">Nombre del grupo</th>
                                 <th style="min-width: 10rem" scope="col">Preguntas</th>
                                 <th style="min-width: 10rem" scope="col">Nota</th>
@@ -45,13 +45,15 @@
                         <ng-template pTemplate="body" let-carrera>
                             <tr>
                                 <td>
-                                    <button pButton icon="pi pi-eye" style="width: 70px; border-radius: 30px;"
+                                    <!-- <button pButton icon="pi pi-eye" style="width: 70px; border-radius: 30px;"
                                         title="Ver" class="p-button-rounded p-button-text p-button-success"
                                         (click)="navigateToDetalle(carrera)">
-                                    </button>
-                                    <button pButton icon="pi pi-pencil" style="width: 70px; border-radius: 30px;"
-                                        title="Editar" class="p-button-rounded p-button-text p-button-warning"
-                                        (click)="navigateToEdit(carrera)">
+                                    </button> -->
+                                    <button pButton icon="pi pi-pencil" 
+                                    style="width: 70px; border-radius: 30px;"
+                                    title="Editar" 
+                                    class="p-button-rounded p-button-text p-button-warning"
+                                    (click)="navigateToEdit(carrera)">
                                     </button>
                                     <button pButton icon="pi pi-trash" style="width: 70px; border-radius: 30px;"
                                         title="Eliminar" class="p-button-rounded p-button-text p-button-danger"

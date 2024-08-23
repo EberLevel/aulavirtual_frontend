@@ -19,7 +19,7 @@ export class BandejaDocenteComponent {
 
   @ViewChild('filter') filter!: ElementRef;
   @ViewChild('dt1') tabledt1: Table | undefined;
-  public docentes = [];
+  docentes: any[] = [];
   loading: boolean = false;
   public idDocente:number = 0;
   ref: DynamicDialogRef | undefined;
@@ -33,31 +33,51 @@ export class BandejaDocenteComponent {
   ) { }
 
   ngOnInit() {
-    // console.log("Datos-extraidos-de-bandeja-colegiado-PARA MIEMBRO");
-    // this.cargaInicial();
     this.domain_id = this.helpersService.getDominioId();
     this.listarDocente();
+    console.log("first")
+    console.log(this.domain_id)
   }
 
   listarDocente() {
-    console.log("Listar docente", this.domain_id);
-    this.docenteService.listarDocentes(this.domain_id).subscribe(
-      (res:any) => {
-        this.docentes = res.Datos;
-        console.log(res);
-      },(error:any)=>{
-        console.log(error);
-      });
-
-       // Convertir las imágenes a base64
-    this.docentes.forEach((item:any) => {
+    const rolId = this.helpersService.getRolId(); // Obtén el rol del docente logueado
+    
+    if (rolId === 17) {
+      // Si el rol es 17, obtén solo el docente logueado
+      const docenteId = this.helpersService.getDocenteId(); // Aquí debes obtener el id del docente logueado
+      this.docenteService.getLoggedDocente(docenteId, this.domain_id).subscribe(
+        (res: any) => {
+          this.docentes = [res]; // Asegúrate de que es un solo docente y lo asignas en un array
+          console.log(res);
+        }, 
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    } else {
+      // Si el rol es diferente de 17, lista todos los docentes
+      this.docenteService.listarDocentes(this.domain_id).subscribe(
+        (res: any) => {
+          this.docentes = res.Datos; // Lista todos los docentes
+          console.log(res);
+        }, 
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    }
+  
+    // Convertir las imágenes a base64
+    this.docentes.forEach((item: any) => {
       this.convertImageToBase64(item.foto, (base64: string) => {
         item.fotoBase64 = base64;
       });
     });
-
-    console.log(this.docentes)
+  
+    console.log(this.docentes);
   }
+  
+  
 
   buscarDocente(){
     // this.docenteService.buscarDocentes(this).subscribe((res:any)=>{},(error:any)=>{});
@@ -139,7 +159,9 @@ export class BandejaDocenteComponent {
     });
   }
   cargaInicial(): void {
-   
+    const esDocente = this.helpersService.getRolId() === 17;
+    console.log("aaaa")  
+    console.log(esDocente)
   }
 
   navigateToNuevo() {

@@ -9,7 +9,6 @@ import { ApiResponse, Base } from '../interface/general';
     providedIn: 'root',
 })
 export class DocenteService {
-
     private baseUrl = `${environment.API_BASE}`;    
     private urlparametro = `${environment.API_BASE}`;
     httpOptions = {
@@ -25,6 +24,10 @@ export class DocenteService {
 
     listarDocentes(domain_id:any):Observable<any>{
         return this.http.get(`${this.baseUrl}docentes/listar/${domain_id}`);
+    }
+
+    getLoggedDocente(docenteId: number, domainId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}docentes/logged/${docenteId}/${domainId}`);
     }
 
     buscarDocentes(id:number):Observable<any>{
@@ -44,6 +47,4 @@ export class DocenteService {
         // let response = JSON.stringify(data);
         return this.http.get<any>(`${this.baseUrl}docentes/eliminar/${id}`);
     }
-    
-
 }

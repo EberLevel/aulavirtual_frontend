@@ -31,7 +31,7 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
   promedioTotal: number = 0;
   porcentajeTotal: number = 0;
   grupoEvaluaciones: any;
-
+  evaluacion: any;
 
   constructor(
     private dialogService: DialogService,
@@ -64,49 +64,42 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     this.porcentajeTotal = totalPorcentaje / this.grupoEvaluacionesList.length;
   }
 
+
   navigateAddCurso() {
-    this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
-      width: '60%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'add', idGrupoEvaluaciones: this.grupoEvaluaciones.id }
-    });
-
-    this.ref.onClose.subscribe((data: any) => {
-      this.listarGrupoEvaluaciones();
-    });
-  }
-
-  navigateToNuevo() {
     this.ref = this.dialogService.open(RegEvaluacionDocenteComponent, {  
         width: '60%',
         styleClass: 'custom-dialog-header',
-        data: { idGrupoEvaluaciones: this.grupoEvaluaciones.id }  
+        data: { acciones: 'registrar', idGrupoEvaluaciones: this.grupoEvaluaciones.id } 
     });
 
-    this.ref.onClose.subscribe((dataFromDialog) => {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.onSameUrlNavigation = 'reload';
+    this.ref.onClose.subscribe(() => {
+        this.listarGrupoEvaluaciones();  
     });
 }
-  navigateToDetalle(data: any) {
-    this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
-      width: '80%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'ver', idCurso: this.grupoEvaluaciones.id ,data: data }
-    });
+  // navigateToDetalle(data: any) {
+  //   this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
+  //     width: '80%',
+  //     styleClass: 'custom-dialog-header',
+  //     data: { acciones: 'ver', idCurso: this.grupoEvaluaciones.id ,data: data }
+  //   });
 
-    this.ref.onClose.subscribe((data: any) => {
-      this.listarGrupoEvaluaciones();
-    });
-  }
+  //   this.ref.onClose.subscribe((data: any) => {
+  //     this.listarGrupoEvaluaciones();
+  //   });
+  // }
 
-  navigateToEdit(data: any) {
-    this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
+  navigateToEdit(evaluacion: any) {
+    if (!evaluacion || !evaluacion.id) {
+      console.error('Evaluación no válida o sin ID', evaluacion);
+      return;
+    }
+  
+    this.ref = this.dialogService.open(RegEvaluacionDocenteComponent, {
       width: '60%',
       styleClass: 'custom-dialog-header',
-      data: { acciones: 'actualizar', idCurso: this.grupoEvaluaciones.id ,data: data } 
-     });
-
+      data: { acciones: 'actualizar', idEvaluacion: evaluacion.id, data: evaluacion } 
+    });
+  
     this.ref.onClose.subscribe((data: any) => {
       this.listarGrupoEvaluaciones();
     });

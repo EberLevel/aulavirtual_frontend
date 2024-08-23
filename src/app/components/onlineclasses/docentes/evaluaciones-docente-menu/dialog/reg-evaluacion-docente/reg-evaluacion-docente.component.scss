@@ -1,3 +1,12 @@
 .p-inputtext{
     width: -1px;
 }
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -1rem;
+    margin-left: -1rem;
+    margin-top: -1rem;
+    gap: 6rem;
+    row-gap: 0rem;
+}

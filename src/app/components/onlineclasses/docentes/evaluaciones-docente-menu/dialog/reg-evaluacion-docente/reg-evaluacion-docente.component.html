@@ -1,6 +1,8 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl">Registrar Evaluación</span>
+        <span class="text-primary font-semibold text-xl">
+            {{ acciones === 'registrar' ? 'Registrar Evaluación' : 'Actualizar Evaluación' }}
+        </span>
     </ng-template>
 
     <ng-template pTemplate="content">
@@ -8,17 +10,11 @@
             <div class="grid p-fluid">
                 <div class="field col-12 md:col-6">
                     <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="codigo">
-                        <label class="required">Código</label>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
                         <input type="text" pInputText [(ngModel)]="nombre">
                         <label class="required">Nombre</label>
                     </span>
                 </div>
-             </div>  
+            </div>  
         </div>
 
         <div class="row mb-4">
@@ -27,12 +23,6 @@
                     <span class="p-float-label">
                         <input type="text" pInputText [(ngModel)]="porcentajeEvaluacion">
                         <label class="required">Valor %</label>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="puntos">
-                        <label class="required">Puntos</label>
                     </span>
                 </div>
             </div>            
@@ -60,7 +50,7 @@
                       <label for="horaprogramada">Hora programada</label>
                     </span>
                     <small style="color: brown;">Campo obligatorio *</small>
-                  </div>
+                </div>
             </div>   
             <div class="row mb-4">
                 <div class="grid p-fluid">
@@ -78,34 +68,24 @@
             <div class="grid p-fluid">
                 <div class="field md:col-6">
                     <span class="p-float-label">
-                        <p-dropdown inputId="dropdownAula" [options]="tipEvaluacion"  [(ngModel)]="tipoEvaluacion" optionLabel="name" optionValue="name"></p-dropdown>
+                        <p-dropdown inputId="dropdownAula" [options]="tipEvaluacion"  [(ngModel)]="tipoEvaluacion" optionLabel="name" optionValue="value"></p-dropdown>
                         <label for="dropdownAula">Tipo de Evaluación</label>
                     </span>
                 </div>
                 <div class="field md:col-6">
                     <span class="p-float-label">
-                        <p-dropdown inputId="dropdownEstado" [options]="estados"  [(ngModel)]="estado" optionLabel="name" optionValue="name"></p-dropdown>
+                        <p-dropdown inputId="dropdownEstado" [options]="estados"  [(ngModel)]="estado" optionLabel="name" optionValue="value"></p-dropdown>
                         <label for="dropdownEstado">Estados</label>
                     </span>
                 </div>
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdownModalidad" [options]="modalidad"  [(ngModel)]="selectedModalidad" optionLabel="name" optionValue="name"></p-dropdown>
-                        <label for="dropdownModalidad">Modalidad</label>
-                    </span>
-                </div>
-            </div>            
-        </div>
-
         <div class="row">
             <div class="flex justify-content-end flex-column sm:flex-row">
                 <div class="flex flex-wrap gap-2">
-                    <button pButton icon="pi pi-plus" label="Guardar Evaluación" iconPos="right" class="p-button-success p-button-sm" (click)="guardarEvaluacion()"></button>
+                    <button *ngIf="acciones === 'registrar'" pButton icon="pi pi-plus" label="Guardar Evaluación" iconPos="right" class="p-button-success p-button-sm" (click)="guardarEvaluacion()"></button>
+                    <button *ngIf="acciones === 'actualizar'" pButton icon="pi pi-refresh" label="Actualizar Evaluación" iconPos="right" class="p-button-warning p-button-sm" (click)="actualizarEvaluacion()"></button>
                     <button pButton label="Cerrar" icon="pi pi-times" iconPos="right" class="p-button-close-clean" (click)="closeModal()"></button>
                 </div>
             </div>
