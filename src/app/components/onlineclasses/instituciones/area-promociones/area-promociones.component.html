@@ -1,0 +1,75 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">Listado de Promociones</span>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row mb-4">
+            <div class="grid p-fluid">
+                <div class="field md:col-12">
+                    <p-table #dt1 [value]="promocionesList" [rows]="10" [loading]="loading" [rowHover]="true"
+                        styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
+                        class="custom-search-input">
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-wrap">
+                                <div class="flex-grow-1 mb-2 mr-2">
+                                    <span class="p-input-icon-left w-full">
+                                        <input pInputText type="text" #filter (input)="onGlobalFilter($event)"
+                                            placeholder="Buscar promociones" class="w-full" />
+                                    </span>
+                                </div>
+                                <!-- <div class="mb-2">
+                                    <button pButton label="Nueva Promoción" icon="pi pi-plus" id="btnNuevo"
+                                        class="p-button-primary mr-2" (click)="navigateAddPromocion()"
+                                        style="border-radius: 30px;"></button>
+                                </div> -->
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <!-- <th style="min-width: 10rem" scope="col">Acciones</th> -->
+                                <th style="min-width: 10rem" scope="col">Nombre</th>
+                                <th style="min-width: 10rem" scope="col">Descripción</th>
+                                <th style="min-width: 10rem" scope="col">Fecha de Inscripción</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-promocion>
+                            <tr>
+                                <!-- <td>
+                                    <button pButton icon="pi pi-eye" style="width: 70px; border-radius: 30px;"
+                                        title="Ver" class="p-button-rounded p-button-text p-button-success"
+                                        (click)="navigateToDetalle(promocion)">
+                                    </button>
+                                    <button pButton icon="pi pi-pencil" style="width: 70px; border-radius: 30px;"
+                                        title="Editar" class="p-button-rounded p-button-text p-button-warning"
+                                        (click)="navigateToEdit(promocion)">
+                                    </button>
+                                    <button pButton icon="pi pi-trash" style="width: 70px; border-radius: 30px;"
+                                        title="Eliminar" class="p-button-rounded p-button-text p-button-danger"
+                                        (click)="navigateToDelete(promocion.id)">
+                                    </button>
+                                </td> -->
+                                <td>{{ promocion.nombre_promocion }}</td>
+                                <td>{{ promocion.descripcion }}</td>
+                                <td>{{ promocion.fecha_inscripcion }}</td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="4">No se encontraron promociones</td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="4">Cargando registros. Por favor espere.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

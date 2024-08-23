@@ -318,6 +318,11 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/pl-virtual/modulos-formativos']
                                     },
                                     {
+                                        label: 'Área de Promociones',
+                                        icon: 'pi pi-credit-card',
+                                        routerLink: ['/pl-virtual/area-promociones']
+                                    },
+                                    {
                                         label: 'Estados',
                                         icon: 'pi pi-envelope',
                                         routerLink: ['/pl-virtual/estados']
