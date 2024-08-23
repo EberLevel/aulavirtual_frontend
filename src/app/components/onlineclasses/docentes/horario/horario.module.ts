@@ -14,6 +14,9 @@ import { ToastModule } from 'primeng/toast'
 import { EventService } from 'src/app/demo/service/event.service';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PanelModule } from 'primeng/panel'
+import {  ReactiveFormsModule } from '@angular/forms'
 
 @NgModule({
     imports: [
@@ -29,7 +32,11 @@ import { NgxSpinnerModule } from 'ngx-spinner';
         DropdownModule,
         ToastModule,
         RippleModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        CheckboxModule,
+        PanelModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     declarations: [HorarioComponent],
     providers: [EventService]

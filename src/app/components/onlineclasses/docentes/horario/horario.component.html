@@ -1,101 +1,51 @@
-<div class="card">
-    <full-calendar [options]="calendarOptions"></full-calendar>
-    <ngx-spinner *ngIf="isLoading" bdColor="rgba(0,0,0,0.5)" size="large" color="#fff" type="ball-spin"></ngx-spinner>
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="text-primary font-semibold text-xl">Seleccionar Horario {{curso.nombre}}</span>
+    </ng-template>
+    <ng-template pTemplate="content">
+      <form [formGroup]="parametroForm">
+        <div class="mb-4">
+          <label for="aula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar Aula:</label>
+          <p-dropdown [options]="aulas" formControlName="aula_id" optionLabel="nombre" optionValue="id"
+                      (onChange)="onAulaChange($event)" [style]="{'width':'100%'}" placeholder="Seleccione un aula">
+          </p-dropdown>
+        </div>
+  
+        <div class="mb-4">
+          <full-calendar [options]="calendarOptions"></full-calendar>
+        </div>
+  
+        <div class="flex justify-center mt-4">
+          <button pButton type="button" label="Guardar" class="p-button-success mr-2" (click)="saveHorario()" [disabled]="!parametroForm.valid"></button>
+          <button pButton type="button" label="Cancelar" class="p-button-secondary" (click)="closeModal($event)"></button>
+        </div>
+      </form>
+  
 
-    <p-dialog #dd [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '90vw'}" [style]="{width: '36rem'}" [modal]="true" [closable]="true" (onHide)="view = ''">
-        <ng-template pTemplate="header">
-            <span class="text-900 font-semibold text-xl">{{view === 'display' ? changedEvent.title : view === 'new' ? 'Nuevo Evento' : 'Editar Evento'}}</span>
-        </ng-template>
         <ng-template pTemplate="content">
-            <div *ngIf="view === 'display'">
-              
-
-                <div class="grid">
-                    <div class="col-6">
-                        <div class="text-900 font-semibold mb-2">Inicio</div>
-                        <p class="flex align-items-center m-0">
-                            <i class="pi pi-fw pi-clock text-700 mr-2"></i>
-                            <span>{{changedEvent.start.toISOString().slice(0,10)}}</span>
-                        </p>
-                    </div>
-                    <div class="col-6">
-                        <div class="text-900 font-semibold mb-2">Fin</div>
-                        <p class="flex align-items-center m-0">
-                            <i class="pi pi-fw pi-clock text-700 mr-2"></i>
-                            <span>{{changedEvent.end.toISOString().slice(0,10)}}</span>
-                        </p>
-                    </div>
-                    <!-- <div class="col-12">
-                        <div class="text-900 font-semibold mb-2">Ubicación</div>
-                        <p class="flex align-items-center m-0">
-                            <i class="pi pi-fw pi-map-marker text-700 mr-2"></i>
-                            <span>{{changedEvent.location}}</span>
-                        </p>
-                    </div> -->
-                    <div class="col-12">
-                        <div class="text-900 font-semibold mb-2">Color</div>
-                        <p class="flex align-items-center m-0">
-                            <span class="inline-flex flex-shrink-0 w-1rem h-1rem mr-2 border-circle" [style.backgroundColor]="changedEvent.tag.color"></span>
-                            <span>{{changedEvent.tag.name}}</span>
-                        </p>
-                    </div>
-                </div>
+          <div class="grid">
+            <div class="col-6">
+              <label for="start" class="block mb-2">Fecha de inicio:</label>
+              <p-calendar [(ngModel)]="replicateStartDate" dateFormat="dd-mm-yy" inputId="start" appendTo="body"></p-calendar>
             </div>
-            <div *ngIf="view !== 'display'">
-                <div class="grid p-fluid formgrid">
-                    <div class="col-12 md:col-6 field">
-                        <label for="title" class="text-900 font-semibold">Título</label>
-                        <span class="p-input-icon-left">
-                            <i class="pi pi-pencil"></i>
-                            <input id="title" type="text" pInputText placeholder="Título" [(ngModel)]="changedEvent.title" />
-                        </span>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="location" class="text-900 font-semibold">Ubicación</label>
-                        <span class="p-input-icon-left">
-                            <i class="pi pi-map-marker"></i>
-                            <input id="location" type="text" pInputText placeholder="Ubicación" [(ngModel)]="changedEvent.location" />
-                        </span>
-                    </div>
-                    <div class="col-12 field">
-                        <label for="description" class="text-900 font-semibold">Descripción del evento</label>
-                        <textarea id="description" type="text" pInputTextarea [rows]="5" [(ngModel)]="changedEvent.description" style="resize: none"></textarea>
-                    </div>
-
-                    <div class="col-12 md:col-6 field">
-                        <label for="start" class="text-900 font-semibold">Fecha de Inicio</label>
-                        <p-calendar [appendTo]="dd" dateFormat="dd-mm-yy" [maxDate]="changedEvent.end" [showTime]="true" [required]="true" inputId="start" [(ngModel)]="changedEvent.start"></p-calendar>
-                    </div>
-                    <div class="col-12 md:col-6 field">
-                        <label for="end" class="text-900 font-semibold">Fecha Fin</label>
-                        <p-calendar [appendTo]="dd" dateFormat="dd-mm-yy" [minDate]="changedEvent.start" [showTime]="true" [required]="true" inputId="end" [(ngModel)]="changedEvent.end"></p-calendar>
-                    </div>
-                    <div class="col-12 field">
-                        <label for="company-color" class="text-900 font-semibold">Color</label>
-                        <p-dropdown inputId="company-color" [appendTo]="dd" [options]="tags" [(ngModel)]="changedEvent.tag" optionLabel="name">
-                            <ng-template pTemplate="selectedItem">
-                                <div *ngIf="changedEvent.tag" class="flex align-items-center">
-                                    <div class="flex-shrink-0 w-1rem h-1rem mr-2 border-circle" [style.backgroundColor]="changedEvent.tag.color"></div>
-                                    <div>{{changedEvent.tag.name}}</div>
-                                </div>
-                            </ng-template>
-                            <ng-template let-tag pTemplate="item">
-                                <div class="flex align-items-center">
-                                    <div class="flex-shrink-0 w-1rem h-1rem mr-2 border-circle" [style.backgroundColor]="tag.color"></div>
-                                    <div>{{tag.name}}</div>
-                                </div>
-                            </ng-template>
-                        </p-dropdown>
-                    </div>
-                </div>
+            <div class="col-6">
+              <label for="end" class="block mb-2">Fecha de fin:</label>
+              <p-calendar [(ngModel)]="replicateEndDate" dateFormat="dd-mm-yy" inputId="end" appendTo="body"></p-calendar>
             </div>
+            <div class="col-12 mt-3">
+              <label>Días de la semana a replicar:</label>
+              <div class="flex flex-wrap gap-3 mt-2">
+                <div *ngFor="let day of daysOfWeek; let i = index">
+                  <p-checkbox [(ngModel)]="selectedDays[i]" [binary]="true" [label]="day"></p-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
         </ng-template>
-
+  
         <ng-template pTemplate="footer">
-            <!-- <button pButton *ngIf="view === 'display'" label="Editar" icon="pi pi-pencil" (click)="onEditClick()"></button> -->
-            <!-- <button pButton *ngIf="view === 'new' || view === 'edit'" label="Guardar" icon="pi pi-check" (click)="handleSave()" [disabled]="!changedEvent.start || !changedEvent.end"></button> -->
+          <button pButton label="Replicar" icon="pi pi-check" (click)="replicateHorario()"></button>
+          <button pButton label="Cancelar" icon="pi pi-times" (click)="showReplicateDialog = false"></button>
         </ng-template>
-
-    </p-dialog>
-
-</div>
+    </ng-template>
+  </p-panel>

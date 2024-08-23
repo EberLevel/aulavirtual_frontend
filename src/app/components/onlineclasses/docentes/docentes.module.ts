@@ -53,6 +53,7 @@ import { HorarioComponent } from './horario/horario.component';
     EvaluacionesDocenteMenuComponent,
     BandejaPreguntasDocenteComponent,
     EditDocenteComponent,
+    
   ],
   imports: [
     CommonModule,
