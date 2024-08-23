@@ -22,6 +22,8 @@ export class BandejaDocenteComponent {
   docentes: any[] = [];
   loading: boolean = false;
   public idDocente:number = 0;
+  public rolId: number = 0;
+
   ref: DynamicDialogRef | undefined;
   domain_id: number = 1;
   constructor(
@@ -34,6 +36,7 @@ export class BandejaDocenteComponent {
 
   ngOnInit() {
     this.domain_id = this.helpersService.getDominioId();
+    this.rolId = this.helpersService.getRolId();
     this.listarDocente();
     console.log("first")
     console.log(this.domain_id)

@@ -82,50 +82,17 @@ export class AppMenuComponent implements OnInit {
                         icon: 'pi pi-play',
                         items: [
                             {
-                                label: 'Mantenimientos',
-                                icon: 'pi pi-wrench',
-                                items: [
-                                    {
-                                        label: 'Áreas de Formación',
-                                        icon: 'pi pi-briefcase',
-                                        routerLink: ['/pl-virtual/area-formacion']
-                                    },
-                                    {
-                                        label: 'Modulos Formativos',
-                                        icon: 'pi pi-credit-card',
-                                        routerLink: ['/pl-virtual/modulos-formativos']
-                                    },
-                                    {
-                                        label: 'Estado de Cursos',
-                                        icon: 'pi pi-id-card',
-                                        routerLink: ['/pl-virtual/estado-cursos']
-                                    },
-                                    {
-                                        label: 'Ciclos',
-                                        icon: 'pi pi-inbox',
-                                        routerLink: ['/pl-virtual/ciclos']
-                                    },
-                                    {
-                                         label: 'Aulas',
-                                         icon: 'pi pi-wrench',
-                                         routerLink: ['/pl-virtual/aulas']
-                                     },
-                                ]
-                            },
-                            {
                                 label: 'Docente',
                                 icon: 'pi pi-users',
                                 items: [
                                     {
                                         label: 'Horario',
                                         icon: 'pi pi-fw pi-calendar',
-                                        // routerLink: ['/pl-virtual/cursos-docente']
                                         routerLink: ['/pl-virtual/horario-docente']
                                     },
                                     {
                                         label: 'Cursos',
                                         icon: 'pi pi-share-alt',
-                                        // routerLink: ['/pl-virtual/cursos-docente']
                                         routerLink: ['/pl-virtual/cursos-docente']
                                     },
                                     {
