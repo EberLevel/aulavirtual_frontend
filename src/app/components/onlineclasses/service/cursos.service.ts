@@ -23,4 +23,7 @@ export class CursoService {
     getCursosPorAlumno(alumnoId: number): Observable<any> {
       return this.http.get(`${this.baseUrl}cursos-alumno/${alumnoId}`);
     }
+    getCursosPorDocente(docenteId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}cursos-docente/${docenteId}`);
+    }
 }

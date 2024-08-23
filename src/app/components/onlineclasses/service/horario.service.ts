@@ -20,4 +20,5 @@ export class HorarioService{
     getHorario(idCurso:any): Observable<ApiResponse> { 
         return this.http.get<ApiResponse>(`${this.baseUrl}horario/${idCurso}`);
     }
+    
 }

@@ -1,0 +1,67 @@
+.aulas-container{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1em;
+    .aula-item{
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #f5f5f5;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        .aula-item__title{
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .aula-item__info{
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            .aula-item__info__item{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .aula-item__info__item__title{
+                    font-size: 1rem;
+                    font-weight: 600;
+                }
+                .aula-item__info__item__value{
+                    font-size: 0.9rem;
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+}
+.sidebar {
+    .selected {
+      background-color: #e6f3ff;
+      font-weight: bold;
+    }
+  }
+  
+  :host ::ng-deep {
+    .p-multiselect {
+      width: 100%;
+    }
+  }
+  
+ 
+  
+
+  
+  .aula-header {
+    background-color: #f0f0f0;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .aula-body {
+    padding: 1rem;
+  }

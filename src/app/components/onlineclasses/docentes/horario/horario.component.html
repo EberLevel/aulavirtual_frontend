@@ -1,51 +1,54 @@
 <p-panel>
-    <ng-template pTemplate="header">
-      <span class="text-primary font-semibold text-xl">Seleccionar Horario {{curso.nombre}}</span>
-    </ng-template>
-    <ng-template pTemplate="content">
-      <form [formGroup]="parametroForm">
-        <div class="mb-4">
-          <label for="aula" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccionar Aula:</label>
-          <p-dropdown [options]="aulas" formControlName="aula_id" optionLabel="nombre" optionValue="id"
-                      (onChange)="onAulaChange($event)" [style]="{'width':'100%'}" placeholder="Seleccione un aula">
-          </p-dropdown>
-        </div>
-  
-        <div class="mb-4">
-          <full-calendar [options]="calendarOptions"></full-calendar>
-        </div>
-  
-        <div class="flex justify-center mt-4">
-          <button pButton type="button" label="Guardar" class="p-button-success mr-2" (click)="saveHorario()" [disabled]="!parametroForm.valid"></button>
-          <button pButton type="button" label="Cancelar" class="p-button-secondary" (click)="closeModal($event)"></button>
-        </div>
-      </form>
-  
-
-        <ng-template pTemplate="content">
-          <div class="grid">
-            <div class="col-6">
-              <label for="start" class="block mb-2">Fecha de inicio:</label>
-              <p-calendar [(ngModel)]="replicateStartDate" dateFormat="dd-mm-yy" inputId="start" appendTo="body"></p-calendar>
-            </div>
-            <div class="col-6">
-              <label for="end" class="block mb-2">Fecha de fin:</label>
-              <p-calendar [(ngModel)]="replicateEndDate" dateFormat="dd-mm-yy" inputId="end" appendTo="body"></p-calendar>
-            </div>
-            <div class="col-12 mt-3">
-              <label>Días de la semana a replicar:</label>
-              <div class="flex flex-wrap gap-3 mt-2">
-                <div *ngFor="let day of daysOfWeek; let i = index">
-                  <p-checkbox [(ngModel)]="selectedDays[i]" [binary]="true" [label]="day"></p-checkbox>
-                </div>
+  <ng-template pTemplate="header">
+      <span class="text-primary font-semibold text-xl">Seleccionar Horario</span>
+  </ng-template>
+  <ng-template pTemplate="content">
+      <div class="flex">
+          <!-- Sidebar Lateral -->
+          <div class="sidebar w-1/4 p-4 border-r border-gray-200">
+              <h2 class="text-lg font-semibold mb-4">Cursos Disponibles</h2>
+              <ul class="list-disc pl-4">
+                  <li
+                      *ngFor="let cursoItem of cursos"
+                      (click)="selectCurso(cursoItem)"
+                      class="cursor-pointer hover:bg-gray-100 p-2 rounded"
+                      [class.selected]="cursoItem.id === curso?.id"
+                  >
+                      {{ cursoItem.nombre }}
+                  </li>
+              </ul>
+              <!-- Sección de configuración del horario -->
+              <div *ngIf="curso" class="mt-8">
+                  <h3 class="text-lg font-semibold mb-4">
+                      Seleccionar fechas para {{ curso.nombre }}
+                  </h3>
+                  <p-calendar 
+                      [(ngModel)]="selectedDates" 
+                      [inline]="true" 
+                      [showTime]="true" 
+                      [hourFormat]="'24'"
+                      [selectionMode]="'multiple'"
+                      (onSelect)="onDateSelect($event)"
+                      (onClear)="onDateClear()"
+                  ></p-calendar>
               </div>
-            </div>
           </div>
-        </ng-template>
-  
-        <ng-template pTemplate="footer">
-          <button pButton label="Replicar" icon="pi pi-check" (click)="replicateHorario()"></button>
-          <button pButton label="Cancelar" icon="pi pi-times" (click)="showReplicateDialog = false"></button>
-        </ng-template>
-    </ng-template>
-  </p-panel>
+          <!-- Contenido Principal -->
+          <div class="w-3/4 p-4">
+
+              <div class="aulas-container">
+                  <div class="aula-item" *ngFor="let aula of aulasDisponibles">
+                      <div class="aula-header">
+                          <span class="font-semibold">{{ aula.nombre }}</span>
+                      </div>
+                      <div class="aula-body">
+                          <full-calendar
+                              [options]="calendarOptionsMap[aula.id]"
+                          ></full-calendar>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </ng-template>
+</p-panel>

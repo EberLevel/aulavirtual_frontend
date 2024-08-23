@@ -1,49 +1,98 @@
-import { Component } from '@angular/core';
-import { EventService } from 'src/app/demo/service/event.service';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CalendarOptions } from '@fullcalendar/core';
-import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { HelpersService } from 'src/app/helpers.service';
 import { AulaService } from '../../service/aula.service';
 import { HorarioService } from '../../service/horario.service';
+import { CursoService } from '../../service/cursos.service';
 
 @Component({
   selector: 'app-horario',
   templateUrl: './horario.component.html',
   styleUrls: ['./horario.component.scss']
 })
-export class HorarioComponent {
+export class HorarioComponent implements OnInit {
   loading: boolean = false;
   parametroForm: FormGroup;
   curso: any;
-  aulas: any[] = [];
-  aulaDisponibilidad: any[] = [];
-  cursoHorarios: any[] = [];
+  cursos: any[] = [];
+  originalAulaDisponibilidad: any = {};
+  aulaDisponibilidad: any = {};
+  cursoHorarios: any = {};
   domain_id: number = 1;
-  calendarOptions: CalendarOptions;
+  calendarOptionsMap: { [key: number]: CalendarOptions } = {};
   showReplicateDialog: boolean = false;
   selectedEvent: any;
   replicateStartDate: Date = new Date();
   replicateEndDate: Date = new Date();
   daysOfWeek: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   selectedDays: boolean[] = [true, true, true, true, true, false, false];
+  selectedDates: Date[] = [];
+  aulasDisponibles: any[] = [];
+  originalAulasDisponibles: any[] = [];
+  horarioForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private horarioService: HorarioService,
     private aulaService: AulaService,
-    private helpersService: HelpersService
+    private helpersService: HelpersService,
+    private cursoService: CursoService
   ) {
     this.domain_id = this.helpersService.getDominioId();
-    this.curso = 1;
     this.parametroForm = this.fb.group({
       aula_id: ['', Validators.required]
     });
-    this.calendarOptions = {
+    this.horarioForm = this.fb.group({
+      aula_id: ['', Validators.required],
+      dias: [[], Validators.required],
+      horaInicio: ['', Validators.required],
+      horaFin: ['', Validators.required]
+    });
+  }
+
+  ngOnInit() {
+    this.getAulas();
+    this.getCursos();
+  }
+
+  agregarHorario() {
+    if (this.horarioForm.valid) {
+      const nuevoHorario = this.horarioForm.value;
+      console.log('Nuevo horario:', nuevoHorario);
+      this.actualizarCalendario(nuevoHorario);
+    }
+  }
+
+  actualizarCalendario(nuevoHorario: any) {
+    const aulaId = nuevoHorario.aula_id;
+    const diasSeleccionados = nuevoHorario.dias.map((dia: number) => dia === 0 ? 7 : dia);
+
+    const eventoCalendario = {
+      title: this.curso.nombre,
+      daysOfWeek: diasSeleccionados,
+      startTime: nuevoHorario.horaInicio,
+      endTime: nuevoHorario.horaFin,
+      startRecur: new Date(),
+      backgroundColor: 'blue',
+      borderColor: 'blue'
+    };
+
+    if (!this.calendarOptionsMap[aulaId]) {
+      this.calendarOptionsMap[aulaId] = this.getDefaultCalendarOptions(aulaId);
+    }
+
+    this.calendarOptionsMap[aulaId].events = [
+      ...(this.calendarOptionsMap[aulaId].events as any[]),
+      eventoCalendario
+    ];
+  }
+
+  getDefaultCalendarOptions(aulaId: number): CalendarOptions {
+    return {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       initialView: 'timeGridWeek',
       headerToolbar: {
@@ -55,22 +104,70 @@ export class HorarioComponent {
       selectable: true,
       selectMirror: true,
       dayMaxEvents: true,
-      select: this.handleDateSelect.bind(this),
+      select: (selectInfo) => this.handleDateSelect(aulaId, selectInfo),
       eventClick: this.handleEventClick.bind(this),
-      eventsSet: this.handleEvents.bind(this)
+      eventsSet: this.handleEvents.bind(this),
+      events: []
     };
   }
 
-  ngOnInit() {
-    this.getAulas();
-    this.getCursoHorarios();
+  selectCurso(curso: any) {
+    this.curso = curso;
+    this.selectedDates = [];
+  }
 
+  onDateClear() {
+    this.aulasDisponibles = [];
+  }
+
+  onDateSelect(date: any) {
+    console.log(date,this.selectedDates);
+    this.aulasDisponibles = this.originalAulasDisponibles;
+    const newAulasDisponibles = this.updateAulasDisponibles(date);
+    this.aulasDisponibles =newAulasDisponibles
+  }
+
+  updateAulasDisponibles(date: Date) {
+    return this.aulasDisponibles.filter(aula => {
+      const aulaId = aula.id;
+      const disponibilidad = this.originalAulaDisponibilidad[aulaId];
+      const isAvailable = this.selectedDates.every(selectedDate => {
+        return disponibilidad.some((d: { fecha: any; hora_inicio: any; hora_fin: any; }) => {
+          const formatedSelectedDate = this.helpersService.formatDate(selectedDate);
+          const availabilityStart = new Date(`${d.fecha}T${d.hora_inicio}`);
+          const availabilityEnd = new Date(`${d.fecha}T${d.hora_fin}`);
+          console.log(selectedDate);
+          console.log(availabilityStart, availabilityEnd);
+          console.log(selectedDate >= availabilityStart && selectedDate <= availabilityEnd)
+          return selectedDate >= availabilityStart && selectedDate <= availabilityEnd;
+        });
+      });
+      return isAvailable;
+    });
+  }
+
+  getCursos() {
+    this.cursoService.getCursosPorDocente(this.helpersService.getDocenteId()).subscribe(
+      (response: any) => {
+        console.log(response, 'cursos');
+        this.cursos = response;
+      },
+      (error: any) => {
+        this.helpersService.showErrorMessage('Error al obtener los cursos');
+      }
+    );
   }
 
   getAulas() {
     this.aulaService.getAulas(this.domain_id).subscribe(
       (response: any) => {
-        this.aulas = Array.isArray(response.data) ? response.data : [];
+        this.aulasDisponibles = Array.isArray(response.data) ? response.data : [];
+        this.originalAulasDisponibles = Array.isArray(response.data) ? response.data : [];
+        this.originalAulasDisponibles.forEach(aula => {
+          const aulaId = aula.id;
+          this.calendarOptionsMap[aulaId] = this.getDefaultCalendarOptions(aulaId);
+          this.getAulaDisponibilidad(aulaId);
+        });
       },
       (error: any) => {
         this.helpersService.showErrorMessage('Error al obtener las aulas');
@@ -78,17 +175,15 @@ export class HorarioComponent {
     );
   }
 
-  onAulaChange(event: any) {
-    const aulaId = event.value;
-    this.getAulaDisponibilidad(aulaId);
-    this.getCursoHorarios();
-  }
+
 
   getAulaDisponibilidad(aulaId: number) {
     this.aulaService.getDisponibilidad(aulaId).subscribe(
       (res: any) => {
-        this.aulaDisponibilidad = res.data;
-        this.updateCalendar();
+        this.originalAulaDisponibilidad[aulaId] = res.data;
+        this.aulaDisponibilidad[aulaId] = res.data;
+        this.updateCalendar(aulaId);
+        console.log('Disponibilidad del aula', this.aulaDisponibilidad);
       },
       error => {
         this.helpersService.showErrorMessage('Error al obtener la disponibilidad del aula');
@@ -96,11 +191,11 @@ export class HorarioComponent {
     );
   }
 
-  getCursoHorarios() {
+  getCursoHorarios(aulaId: number) {
     this.horarioService.getHorario(this.curso.id).subscribe(
       (response: any) => {
-        this.cursoHorarios = response;
-        this.updateCalendar();
+        this.cursoHorarios[aulaId] = response;
+        this.updateCalendar(aulaId);
       },
       (error: any) => {
         this.helpersService.showErrorMessage('Error al obtener los horarios del curso');
@@ -108,53 +203,35 @@ export class HorarioComponent {
     );
   }
 
-  updateCalendar() {
+  updateCalendar(aulaId: number) {
     const events = [
-      ...this.aulaDisponibilidad.map(d => {
-        let fechaInicio = new Date(`${d.fecha}T${d.hora_inicio}`);
-        let fechaFin = new Date(`${d.fecha}T${d.hora_fin}`);
-        console.log('Disponibilidad:', fechaInicio, '-', fechaFin,d.id,'aula_id:',d.aula_id); 
-        return ({
-        start: fechaInicio,
-        end: fechaFin,
+      ...this.aulaDisponibilidad[aulaId].map((d: { fecha: any; hora_inicio: any; hora_fin: any; id: any; aula_id: any; }) => ({
+        start: new Date(`${d.fecha}T${d.hora_inicio}`),
+        end: new Date(`${d.fecha}T${d.hora_fin}`),
         title: 'Disponibilidad',
         backendId: d.id,
         backgroundColor: 'green',
-        borderColor: 'green', // Si quieres que el borde sea del mismo color
-        display: "background", // Esto hará que el evento sea un fondo
-        allDay: false, // Asegúrate de que no esté configurado como "todo el día"
+        borderColor: 'green',
+        display: "background",
+        allDay: false,
         aula_id: d.aula_id,
         availability_id: d.id
-      })}),
-      ...this.cursoHorarios.map(h => {
-        let fechaInicio = new Date(`${h.fecha_inicio}T${h.hora_inicio}`);
-        let fechaFin = new Date(`${h.fecha_fin}T${h.hora_fin}`);
-        return ({
-        title: 'Horario del curso',
-        start: fechaInicio,
-        end: fechaFin,
-        backgroundColor: 'blue',
-        allDay: false, // Asegúrate de que no esté configurado como "todo el día"
-
-      })}
-    )
+      })),
     ];
-    this.calendarOptions = {
-      ...this.calendarOptions,
+
+    this.calendarOptionsMap[aulaId] = {
+      ...this.calendarOptionsMap[aulaId],
       events
     };
-    console.log('Events:', events);
   }
 
-  handleDateSelect(selectInfo: any) {
+  handleDateSelect(aulaId: number, selectInfo: any) {
     const { start, end } = selectInfo;
-    console.log('Fecha seleccionada:', start, end);
-    
-    if (this.isWithinAulaDisponibilidad(start, end)) {
+
+    if (this.isWithinAulaDisponibilidad(aulaId, start, end)) {
       const title = 'Nuevo horario';
-      const aulaId = this.parametroForm.value.aula_id;
-      const availabilityId = this.getAvailabilityId(start, end);
-      
+      const availabilityId = this.getAvailabilityId(aulaId, start, end);
+
       const newEvent = { 
         title, 
         start, 
@@ -165,147 +242,77 @@ export class HorarioComponent {
           availability_id: availabilityId
         }
       };
-      console.log('Nuevo evento creado:', newEvent);
-      
-      this.calendarOptions.events = [
-        ...(this.calendarOptions.events as any[]),
+
+      this.calendarOptionsMap[aulaId].events = [
+        ...(this.calendarOptionsMap[aulaId].events as any[]),
         newEvent
       ];
     } else {
       this.helpersService.showErrorMessage('El horario seleccionado no está dentro de la disponibilidad del aula');
     }
   }
-  
-  getAvailabilityId(start: Date, end: Date): number | undefined {
-    const disponibilidad = this.aulaDisponibilidad.find(d => {
+
+  getAvailabilityId(aulaId: number, start: Date, end: Date): number | undefined {
+    const disponibilidad = this.aulaDisponibilidad[aulaId].find((d: { fecha: any; hora_inicio: any; hora_fin: any; }) => {
       const availabilityStart = new Date(`${d.fecha}T${d.hora_inicio}`);
       const availabilityEnd = new Date(`${d.fecha}T${d.hora_fin}`);
       return start >= availabilityStart && end <= availabilityEnd;
     });
-    console.log('Disponibilidad encontrada:', disponibilidad);
-    return disponibilidad?.id;
+    return disponibilidad ? disponibilidad.id : undefined;
+  }
+
+  isWithinAulaDisponibilidad(aulaId: number, start: Date, end: Date): boolean {
+    return this.aulaDisponibilidad[aulaId].some((d: { fecha: any; hora_inicio: any; hora_fin: any; }) => {
+      const availabilityStart = new Date(`${d.fecha}T${d.hora_inicio}`);
+      const availabilityEnd = new Date(`${d.fecha}T${d.hora_fin}`);
+      return start >= availabilityStart && end <= availabilityEnd;
+    });
   }
 
   handleEventClick(clickInfo: any) {
     this.selectedEvent = clickInfo.event;
-    this.replicateStartDate = new Date(this.selectedEvent.start);
-    this.replicateEndDate = new Date(this.selectedEvent.start);
-    this.replicateEndDate.setMonth(this.replicateEndDate.getMonth() + 1);
     this.showReplicateDialog = true;
   }
 
   handleEvents(events: any) {
-    // Manejar eventos si es necesario
+    // Puedes manejar eventos aquí si es necesario
   }
 
-  isWithinAulaDisponibilidad(start: Date, end: Date): boolean {
-    // Obtener la fecha en formato YYYY-MM-DD
-    const fechaEvento = start.toISOString().split('T')[0];
-  
-    // Filtrar las disponibilidades para la fecha específica del evento
-    const disponibilidadesDia = this.aulaDisponibilidad.filter(d => d.fecha === fechaEvento);
-  
-    // Verificar si el nuevo horario está dentro de alguna disponibilidad existente
-    return disponibilidadesDia.some(d => {
-      const availabilityStart = new Date(`${d.fecha}T${d.hora_inicio}`);
-      const availabilityEnd = new Date(`${d.fecha}T${d.hora_fin}`);
-  
-      console.log('Disponibilidad:', availabilityStart, '-', availabilityEnd);
-      console.log('Nuevo horario:', start, '-', end);
-  
-      // Verificar si el nuevo horario está completamente dentro de la disponibilidad
-      return start >= availabilityStart && end <= availabilityEnd;
-    });
+  onReplicateDialogClose() {
+    this.showReplicateDialog = false;
   }
 
-  replicateHorario() {
-    if (this.selectedEvent && this.replicateStartDate && this.replicateEndDate) {
-      console.log('Evento seleccionado para replicar:', this.selectedEvent);
-      
-      const newEvents: any[] = [];
-      const eventDuration = this.selectedEvent.end.getTime() - this.selectedEvent.start.getTime();
-  
-      for (let date = new Date(this.replicateStartDate); date <= this.replicateEndDate; date.setDate(date.getDate() + 1)) {
-        const dayOfWeek = date.getDay();
-        if (this.selectedDays[dayOfWeek === 0 ? 6 : dayOfWeek - 1]) {
-          const startCopy = new Date(date);
-          startCopy.setHours(this.selectedEvent.start.getHours(), this.selectedEvent.start.getMinutes(), 0, 0);
-          const endCopy = new Date(startCopy.getTime() + eventDuration);
-  
-          if (this.isWithinAulaDisponibilidad(startCopy, endCopy)) {
-            const newEvent = {
-              id: Math.floor(Math.random() * 10000),
-              title: 'Horario replicado',
-              start: startCopy,
-              end: endCopy,
-              backgroundColor: 'blue',
-              extendedProps: {
-                aula_id: this.selectedEvent.extendedProps?.aula_id,
-                availability_id: this.getAvailabilityId(startCopy, endCopy)
-              }
-            };
-            console.log('Nuevo evento replicado:', newEvent);
-            newEvents.push(newEvent);
-          }
-        }
-      }
-  
-      const updatedEvents = [
-        ...(this.calendarOptions.events as any[]).filter(event => event.title === 'Disponibilidad' || event.display === 'background'),
+  onReplicateDialogSave() {
+    if (this.selectedEvent) {
+      const newEvents = this.generateReplicatedEvents();
+      const aulaId = this.selectedEvent.extendedProps.aula_id;
+
+      this.calendarOptionsMap[aulaId].events = [
+        ...(this.calendarOptionsMap[aulaId].events as any[]),
         ...newEvents
       ];
-  
-      console.log('Eventos actualizados:', updatedEvents);
-  
-      this.calendarOptions = {
-        ...this.calendarOptions,
-        events: updatedEvents
-      };
-  
+
       this.showReplicateDialog = false;
     }
   }
 
-  saveHorario() {
-    if (this.parametroForm.valid) {
-      const horarios = (this.calendarOptions.events as any[])
-        .filter(event => event.title !== 'Horario del curso' && !event.display)
-        .map(event => ({
-          day_id: event.start.getDay(),
-          fecha_inicio: event.start.toISOString().split('T')[0],
-          fecha_fin: event.end.toISOString().split('T')[0],
-          hora_inicio: event.start.toTimeString().split(' ')[0],
-          hora_fin: event.end.toTimeString().split(' ')[0],
-          aula_id: event.aula_id,
-          availability_id: event.extendedProps.availability_id,
-          curso_id:this.curso.id,
-          docente_id:this.curso.docente_id,
-          domain_id: this.domain_id
-        }));
+  generateReplicatedEvents(): any[] {
+    const events: any[] = [];
+    let currentDate = new Date(this.replicateStartDate);
 
-      const data = {
-        curso_id: this.curso.id,
-        aula_id: this.parametroForm.value.aula_id,
-        horarios
-      };
-
-      this.loading = true;
-      this.horarioService.saveHorario(data).subscribe(
-        (response: any) => {
-          this.helpersService.showSuccessMessage('Horario guardado correctamente');
-        },
-        (error: any) => {
-          this.helpersService.showErrorMessage('Error al guardar el horario');
-        }
-      ).add(() => {
-        this.loading = false;
-      });
-    } else {
-      this.helpersService.showErrorMessage('Por favor, complete todos los campos requeridos');
+    while (currentDate <= this.replicateEndDate) {
+      if (this.selectedDays[currentDate.getDay()]) {
+        const newEvent = {
+          ...this.selectedEvent.toPlainObject(),
+          start: new Date(currentDate),
+          end: new Date(currentDate),
+          id: undefined // Nueva ID para evitar colisiones
+        };
+        events.push(newEvent);
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
     }
-  }
 
-  closeModal(event: Event) {
-    event.preventDefault();
+    return events;
   }
 }

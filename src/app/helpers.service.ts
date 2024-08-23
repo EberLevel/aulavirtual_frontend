@@ -102,6 +102,7 @@ export class HelpersService {
     const user = this.getUserData();  
     return user ? user.id : 0; 
   }
+
   showErrorMessage(message: string) {
     Swal.fire({
       icon: 'error',

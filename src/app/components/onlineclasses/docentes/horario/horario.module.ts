@@ -17,6 +17,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PanelModule } from 'primeng/panel'
 import {  ReactiveFormsModule } from '@angular/forms'
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
     imports: [
@@ -36,7 +37,8 @@ import {  ReactiveFormsModule } from '@angular/forms'
         CheckboxModule,
         PanelModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MultiSelectModule
     ],
     declarations: [HorarioComponent],
     providers: [EventService]
