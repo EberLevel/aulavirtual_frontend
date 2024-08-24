@@ -50,7 +50,7 @@ export class GeneralService {
         );
     }
     getPromocionesByDomainId(domain_id: number): Observable<any> {
-        return this.http.get(`${this.baseUrl}promociones-dominio/${domain_id}`);
+        return this.http.get(`${this.baseUrl}promociones/${domain_id}`);
       }
     guardarCarreraTecnica(parametro: any): Observable<ApiResponse> {
         return this.http
