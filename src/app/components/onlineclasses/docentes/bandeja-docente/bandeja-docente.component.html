@@ -17,7 +17,7 @@
                                             placeholder="Buscar Docente" class="w-full" />
                                     </span>
                                 </div>
-                                <div class="mb-2">
+                                <div class="mb-2" *ngIf="rolId !== 17">
                                     <button pButton label="Nuevo" icon="pi pi-user-plus" id="btnNuevo" class="p-button-primary mr-2" (click)="navigateToNuevo()" style="border-radius: 30px;"></button>
                                 </div>
                             </div>
@@ -96,7 +96,7 @@
                                             }"
                                         ></i>
                                     </button>
-                                    <button (click)="eliminarDocente(docente.id)"
+                                    <button *ngIf="rolId !== 17" (click)="eliminarDocente(docente.id)"
                                         style="width: fit-content"
                                         pButton
                                         class="p-button-danger p-button-rounded"

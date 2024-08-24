@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { RegCursosComponent } from '../../../../../cursos/dialog/reg-cursos/reg-cursos.component';
 import Swal from 'sweetalert2';
 import { VerListadoDePreguntasComponent } from '../ver-listado-de-preguntas/ver-listado-de-preguntas.component';
+import { RegEvaluacionDocenteComponent } from '../../../../../docentes/evaluaciones-docente-menu/dialog/reg-evaluacion-docente/reg-evaluacion-docente.component';
 
 @Component({
   selector: 'app-ver-lis-eval-grupo',
@@ -30,11 +31,12 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
   promedioTotal: number = 0;
   porcentajeTotal: number = 0;
   grupoEvaluaciones: any;
-
+  evaluacion: any;
 
   constructor(
     private dialogService: DialogService,
     private grupoEvaluacionesService: GeneralService,
+    private router: Router,
     public config: DynamicDialogConfig
   ) { }
 
@@ -62,37 +64,42 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     this.porcentajeTotal = totalPorcentaje / this.grupoEvaluacionesList.length;
   }
 
+
   navigateAddCurso() {
-    this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
+    this.ref = this.dialogService.open(RegEvaluacionDocenteComponent, {  
+        width: '60%',
+        styleClass: 'custom-dialog-header',
+        data: { acciones: 'registrar', idGrupoEvaluaciones: this.grupoEvaluaciones.id } 
+    });
+
+    this.ref.onClose.subscribe(() => {
+        this.listarGrupoEvaluaciones();  
+    });
+}
+  // navigateToDetalle(data: any) {
+  //   this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
+  //     width: '80%',
+  //     styleClass: 'custom-dialog-header',
+  //     data: { acciones: 'ver', idCurso: this.grupoEvaluaciones.id ,data: data }
+  //   });
+
+  //   this.ref.onClose.subscribe((data: any) => {
+  //     this.listarGrupoEvaluaciones();
+  //   });
+  // }
+
+  navigateToEdit(evaluacion: any) {
+    if (!evaluacion || !evaluacion.id) {
+      console.error('Evaluación no válida o sin ID', evaluacion);
+      return;
+    }
+  
+    this.ref = this.dialogService.open(RegEvaluacionDocenteComponent, {
       width: '60%',
       styleClass: 'custom-dialog-header',
-      data: { acciones: 'add', idGrupoEvaluaciones: this.grupoEvaluaciones.id }
+      data: { acciones: 'actualizar', idEvaluacion: evaluacion.id, data: evaluacion } 
     });
-
-    this.ref.onClose.subscribe((data: any) => {
-      this.listarGrupoEvaluaciones();
-    });
-  }
-
-  navigateToDetalle(data: any) {
-    this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
-      width: '80%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'ver', idCurso: this.grupoEvaluaciones.id ,data: data }
-    });
-
-    this.ref.onClose.subscribe((data: any) => {
-      this.listarGrupoEvaluaciones();
-    });
-  }
-
-  navigateToEdit(data: any) {
-    this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
-      width: '60%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'actualizar', idCurso: this.grupoEvaluaciones.id ,data: data } 
-     });
-
+  
     this.ref.onClose.subscribe((data: any) => {
       this.listarGrupoEvaluaciones();
     });

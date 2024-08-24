@@ -56,6 +56,11 @@ export class AppMenuComponent implements OnInit {
         if (rolId === 12) {
             console.log('Rol Alumno detectado. Actualizando menú para Alumno...');
             this.actualizarMenuAlumno();
+        }
+        // Verifica si el rol es "Docente"
+        else if (rolId === 17) {
+            console.log('Rol Docente detectado. Actualizando menú para Docente...');
+            this.actualizarMenuDocente();
         } else {
             this.permisoService.fetchPermisos(rolId, this.domain_id);
             this.permisoService.permisos$.pipe(
@@ -65,6 +70,46 @@ export class AppMenuComponent implements OnInit {
                 })
             ).subscribe();
         }
+    }
+    
+    actualizarMenuDocente() {
+        console.log('actualizarMenuDocente llamado');
+        this.model4 = [
+            {
+                items: [
+                    {
+                        label: 'AULA VIRTUAL',
+                        icon: 'pi pi-play',
+                        items: [
+                            {
+                                label: 'Docente',
+                                icon: 'pi pi-users',
+                                items: [
+                                    {
+                                        label: 'Horario',
+                                        icon: 'pi pi-fw pi-calendar',
+                                        routerLink: ['/pl-virtual/horario-docente']
+                                    },
+                                    {
+                                        label: 'Cursos',
+                                        icon: 'pi pi-share-alt',
+                                        routerLink: ['/pl-virtual/cursos-docente']
+                                    },
+                                    {
+                                        label: 'Datos personales',
+                                        icon: 'pi pi-file-edit',
+                                        routerLink: ['/pl-virtual/bandeja-docente']
+                                    },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+    
+        // Elimina CAPACITACIONES
+        this.model4 = this.model4.filter(item => item.label !== 'CAPACITACIONES');
     }
 
     actualizarMenuAlumno() {
@@ -222,7 +267,6 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-users',
                                         routerLink: ['/pl-virtual/mantenimiento-gestiones']
                                     },
-                                    // Más items de mantenimiento
                                 ]
                             },
                             {
@@ -272,6 +316,11 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Modulos Formativos',
                                         icon: 'pi pi-credit-card',
                                         routerLink: ['/pl-virtual/modulos-formativos']
+                                    },
+                                    {
+                                        label: 'Área de Promociones',
+                                        icon: 'pi pi-credit-card',
+                                        routerLink: ['/pl-virtual/area-promociones']
                                     },
                                     {
                                         label: 'Estados',

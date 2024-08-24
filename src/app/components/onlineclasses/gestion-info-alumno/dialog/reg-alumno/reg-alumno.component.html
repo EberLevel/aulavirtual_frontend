@@ -146,6 +146,23 @@
                         </span>
                         <small style="color: brown;" *ngIf="alumnoForm.get('fechaNacimiento')?.invalid && alumnoForm.get('fechaNacimiento')?.touched">Campo obligatorio *</small>
                     </div>
+                    <div class="field md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="promocionId"
+                                [options]="promocionesList"
+                                formControlName="promocionId"
+                                optionLabel="name"
+                                optionValue="value"
+                                placeholder="Selecciona una promoción"
+                                [filter]="true"
+                                filterPlaceholder="Buscar promoción" 
+                            ></p-dropdown>
+                            <label for="promocionId">Promociones</label>
+                        </span>
+                    </div>
+                    
+                    
                 </div>
             </div>
             <div class="row mb-4">

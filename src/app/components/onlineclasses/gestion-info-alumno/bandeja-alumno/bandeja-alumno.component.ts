@@ -119,7 +119,6 @@ export class BandejaAlumnoComponent {
             domain_id: alumno.domain_id ?? 1,
             id: alumno.id,
         };
-        //call service to get alumno
         this.alumnoService.showAlumno(data).subscribe(
             (data: any) => {
                 this.ref = this.dialogService.open(RegAlumnoComponent, {
