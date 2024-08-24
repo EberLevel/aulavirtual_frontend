@@ -1,9 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Table } from 'primeng/table';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { GeneralService } from '../../service/general.service';
 import Swal from 'sweetalert2';	
 import { HelpersService } from 'src/app/helpers.service';
+import { AeAreaPromocionesComponent } from './ae-area-promociones/ae-area-promociones.component';
+import { PromocionService } from '../../service/promocion.service';
 
 @Component({
   selector: 'app-area-promociones',
@@ -20,7 +21,7 @@ export class AreaPromocionesComponent {
 
   constructor(
     private dialogService: DialogService,
-    private promocionesService: GeneralService,  // Servicio de promoción
+    private promocionesService: PromocionService,  // Servicio de promoción
     private helpersService: HelpersService  // Importar tu servicio de helpers
   ) { }
 
@@ -53,20 +54,30 @@ export class AreaPromocionesComponent {
   }
 
   navigateAddPromocion() {
-    // Navegar a la vista para agregar una nueva promoción
+    this.ref = this.dialogService.open(AeAreaPromocionesComponent, {
+      width: '60%',
+      styleClass: 'custom-dialog-header',
+      data: { acciones: 'add' } 
+    });
+
+    this.ref.onClose.subscribe((data: any) => {
+      this.listarPromocionesPorDominio(this.domain_id);
+    });
   }
 
-  navigateToDetalle(promocion: any) {
-    // Navegar a la vista para ver los detalles de una promoción
+  navigateToEdit(data: any) {
+    this.ref = this.dialogService.open(AeAreaPromocionesComponent, {
+      width: '60%',
+      styleClass: 'custom-dialog-header',
+      data: { acciones: 'actualizar', data: data }
+     });
+
+    this.ref.onClose.subscribe((data: any) => {
+      this.listarPromocionesPorDominio(this.domain_id);
+    });
   }
 
-  navigateToEdit(promocion: any) {
-    // Navegar a la vista para editar una promoción
-  }
 
-  navigateToDelete(id: number) {
-    // Lógica para eliminar una promoción
-  }
 
   onGlobalFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.toLowerCase();

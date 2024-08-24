@@ -30,11 +30,13 @@ import { EditorModule } from 'primeng/editor';
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AreaPromocionesRoutingModule } from './area-promociones-routing.module';
+import { AeAreaPromocionesComponent } from './ae-area-promociones/ae-area-promociones.component';
 
 
 @NgModule({
   declarations: [
-    AreaPromocionesComponent
+    AreaPromocionesComponent,
+    AeAreaPromocionesComponent
   ],
   imports: [
     CommonModule,

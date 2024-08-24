@@ -30,7 +30,7 @@ export class AreaFormacionComponent {
 
   }
 
-  listarAreasDeFormacion() {
+  listarAreasDeFormacion() { 
     this.areasDeFormacionService.getAreasDeFormacion().subscribe((response: any) => {
       
         this.areaFormacionList = response;

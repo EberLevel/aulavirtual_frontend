@@ -15,6 +15,7 @@ import { Table } from 'primeng/table';
 import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelpersService } from 'src/app/helpers.service';
+import { PromocionService } from '../../../service/promocion.service';
 
 interface tipodoc {
     name: string;
@@ -49,6 +50,7 @@ export class RegAlumnoComponent {
     tipoDoc: tipodoc | undefined;
     carreraSeleccionada: Carreras | undefined;
     ciclosSeleccionado: Ciclos | undefined;
+    promocionesList: any[] = []; 
     carrerasList: Carreras[] = [];
     ciclosList: Ciclos[] = [];
     fechanacimiento: Date | null = new Date();
@@ -69,6 +71,7 @@ export class RegAlumnoComponent {
         private messageService: MessageService,
         private alumnoService: AlumnoService,
         private commonService: CommonService,
+        private promocionService: PromocionService,
         private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private helpersService: HelpersService
@@ -91,6 +94,7 @@ export class RegAlumnoComponent {
             // edad: ['', [Validators.required, Validators.min(1)]],
             direccion: [''],
             fechaNacimiento: [this.fechanacimiento, Validators.required],
+            promocionId: ['', Validators.required],
             fotoPerfil: [null],
             fotoCarnet: [null],
         });
@@ -113,6 +117,8 @@ export class RegAlumnoComponent {
 
         if (this.config.data) {
             this.alumno = this.config.data.alumno;
+            console.log("first")
+            console.log(this.alumno)
             if (this.alumno) {
                 this.alumnoForm.patchValue({
                     codigo: this.alumno.codigo,
@@ -125,7 +131,7 @@ export class RegAlumnoComponent {
                     carreraId: this.alumno.carrera_id,
                     cicloId: this.alumno.ciclo_id,
                     contraseña: this.alumno.contraseña,
-                    // edad: this.getAge(this.alumno.fecha_nacimiento),
+                    promocionId: this.alumno.promocion_id,
                     direccion: this.alumno.direccion,
                     fechaNacimiento: new Date(this.alumno.fecha_nacimiento),
                     fotoPerfil: this.alumno.foto_perfil,
@@ -135,7 +141,26 @@ export class RegAlumnoComponent {
         }
         this.getCarrerasDropdown();
         this.getCiclosDropdown();
+        this.getPromocionesDropdown();
     }
+    getPromocionesDropdown() {
+        this.promocionService.getPromocionesByDomainId(this.domain_id).subscribe(
+            (response) => {
+                console.log('Promociones API Response:', response);
+                // Ahora accede a response.data para mapear las promociones
+                this.promocionesList = response.data.map((promocion: any) => {
+                    return {
+                        name: promocion.nombre_promocion,
+                        value: promocion.id,
+                    };
+                });
+            },
+            (error) => {
+                console.error('Error obteniendo promociones', error);
+            }
+        );
+    } 
+
     getAge(dateString: string) {
         const today = new Date();
         const birthDate = new Date(dateString);
@@ -235,7 +260,7 @@ export class RegAlumnoComponent {
                 this.alumnoForm.get('carreraId')?.value
             );
             formData.append('cicloId', this.alumnoForm.get('cicloId')?.value);
-            // formData.append('edad', this.alumnoForm.get('edad')?.value);
+            formData.append('promocionId', this.alumnoForm.get('promocionId')?.value);
             formData.append('email', this.alumnoForm.get('email')?.value);
             formData.append(
                 'direccion',
