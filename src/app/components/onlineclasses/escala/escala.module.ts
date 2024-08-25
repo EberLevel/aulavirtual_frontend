@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EscalaComponent } from './escala.component';
 import { PanelModule } from 'primeng/panel';
 import { EscalaRoutingModule } from './escala-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
 import { RatingModule } from 'primeng/rating';
@@ -25,12 +25,17 @@ import { EditorModule } from 'primeng/editor';
 import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { AeEscalaComponent } from './ae-escala/ae-escala.component';
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @NgModule({
   declarations: [
-    EscalaComponent
+    EscalaComponent,
+    AeEscalaComponent
   ],
   imports: [
+    ColorPickerModule,
+    ReactiveFormsModule,
     CommonModule,
     PanelModule,
     EscalaRoutingModule,

@@ -25,12 +25,16 @@ import { EditorModule } from 'primeng/editor';
 import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { AeVinculosLaboralesComponent } from './ae-vinculos-laborales/ae-vinculos-laborales.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    VinculosLaboralesComponent
+    VinculosLaboralesComponent,
+    AeVinculosLaboralesComponent
   ],
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     PanelModule,
     VinculosLaboralesRoutingModule,

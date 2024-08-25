@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProfesionesComponent } from './profesiones.component';
 import { PanelModule } from 'primeng/panel';
 import { ProfesionesRoutingModule } from './profesiones-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
 import { RatingModule } from 'primeng/rating';
@@ -25,12 +25,15 @@ import { EditorModule } from 'primeng/editor';
 import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { AeProfesionesComponent } from './ae-profesiones/ae-profesiones.component';
 
 @NgModule({
   declarations: [
-    ProfesionesComponent
+    ProfesionesComponent,
+    AeProfesionesComponent
   ],
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     PanelModule,
     ProfesionesRoutingModule,

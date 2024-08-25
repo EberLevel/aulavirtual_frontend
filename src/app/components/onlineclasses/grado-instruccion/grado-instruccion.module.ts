@@ -25,16 +25,20 @@ import { EditorModule } from 'primeng/editor';
 import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { AeGradoInstruccionComponent } from './ae-grado-instruccion/ae-grado-instruccion.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    GradoInstruccionComponent
+    GradoInstruccionComponent,
+    AeGradoInstruccionComponent
   ],
   imports: [
     CommonModule,
     PanelModule,
     GradoInstruccionRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     CalendarModule,
     TableModule,
     RatingModule,
