@@ -263,9 +263,54 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-play',
                                 items: [
                                     {
+                                        label: 'Año',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/afiliado-partido']
+                                    },
+                                    {
                                         label: 'Gestiones',
                                         icon: 'pi pi-users',
                                         routerLink: ['/pl-virtual/mantenimiento-gestiones']
+                                    },
+                                    {
+                                        label: 'Grado de instruccion',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/grado-de-instruccion']
+                                    },
+                                    {
+                                        label: 'Vinculos laborales',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/vinculos-laborales']
+                                    },
+                                    {
+                                        label: 'Niveles de Puesto',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/nivel-de-puesto']
+                                    },
+                                    {
+                                        label: 'Modalidad de Puesto',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/modalidad-de-puesto']
+                                    },
+                                    {
+                                        label: 'Profesiones',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/profesiones']
+                                    },
+                                    {
+                                        label: 'Estado de avance',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/estado-de-avance']
+                                    },
+                                    {
+                                        label: 'Escala',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/escala']
+                                    },
+                                    {
+                                        label: 'Ocupacion Actual',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/ocupacion-actual']
                                     },
                                 ]
                             },

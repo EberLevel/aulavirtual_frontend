@@ -1,0 +1,58 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">
+            {{ acciones === 'add' ? 'Agregar Escala' : (acciones === 'ver' ? 'Ver Escala' : 'Editar Escala') }}
+        </span>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <form [formGroup]="escalaForm" (ngSubmit)="guardarEscala()">
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-12">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="nombre" [disabled]="acciones === 'ver'">
+                            <label class="required">Nombre</label>
+                        </span>
+                        <small *ngIf="escalaForm.get('nombre')?.invalid && escalaForm.get('nombre')?.touched"
+                               class="p-error">El nombre es obligatorio</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-6">
+                        <span class="p-float-label color-picker-wrapper">
+                            <input type="color" [value]="escalaForm.get('color')?.value" (input)="onColorChange($event)">
+                            <label class="required">Color</label>
+                        </span>
+                        <small *ngIf="escalaForm.get('color')?.invalid && escalaForm.get('color')?.touched"
+                               class="p-error">El color es obligatorio</small>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="c" [disabled]="acciones === 'ver'">
+                            <label>C</label>
+                        </span>
+                        <small *ngIf="escalaForm.get('c')?.invalid && escalaForm.get('c')?.touched"
+                               class="p-error">Este campo es opcional</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="flex justify-content-end flex-column sm:flex-row">
+                    <div class="flex flex-wrap gap-2">
+                        <button *ngIf="acciones === 'add'" pButton icon="pi pi-plus" label="Guardar" iconPos="right"
+                                class="p-button-success p-button-sm" type="submit"></button>
+                        <button *ngIf="acciones === 'actualizar'" pButton icon="pi pi-refresh" label="Actualizar"
+                                iconPos="right" class="p-button-warning p-button-sm" type="submit"></button>
+                        <button pButton label="Cerrar" icon="pi pi-times" iconPos="right"
+                                class="p-button-close-clean" (click)="closeModal($event)"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</p-panel>

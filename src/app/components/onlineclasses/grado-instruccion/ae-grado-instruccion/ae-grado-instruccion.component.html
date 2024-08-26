@@ -1,0 +1,58 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">
+            {{ acciones === 'add' ? 'Agregar grado de instrucción' : (acciones === 'ver' ? 'Ver grado de instrucción' : 'Editar grado de instrucción') }}
+        </span>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <form [formGroup]="parametroForm" (ngSubmit)="guardarGradoInstruccion()">
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-12">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="nombre">
+                            <label class="required">Nombre</label>
+                        </span>
+                        <small *ngIf="parametroForm.get('nombre')?.invalid && parametroForm.get('nombre')?.touched"
+                               class="p-error">El nombre es obligatorio</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="nivel">
+                            <label class="required">Nivel</label>
+                        </span>
+                        <small *ngIf="parametroForm.get('nivel')?.invalid && parametroForm.get('nivel')?.touched"
+                               class="p-error">El nivel es obligatorio</small>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="number" pInputText formControlName="porcentaje">
+                            <label class="required">Porcentaje</label>
+                        </span>
+                        <small *ngIf="parametroForm.get('porcentaje')?.invalid && parametroForm.get('porcentaje')?.touched"
+                               class="p-error">El porcentaje es obligatorio</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="flex justify-content-end flex-column sm:flex-row">
+                    <div class="flex flex-wrap gap-2">
+                        <button *ngIf="acciones === 'add'" pButton icon="pi pi-plus" label="Guardar" iconPos="right"
+                                class="p-button-success p-button-sm" type="submit"></button>
+                        <button *ngIf="acciones === 'actualizar'" pButton icon="pi pi-refresh" label="Actualizar"
+                                iconPos="right" class="p-button-warning p-button-sm" type="submit"></button>
+                        <button pButton label="Cerrar" icon="pi pi-times" iconPos="right"
+                                class="p-button-close-clean" (click)="closeModal($event)"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</p-panel>
