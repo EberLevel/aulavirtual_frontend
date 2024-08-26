@@ -35,13 +35,28 @@ export class BandejaDocenteComponent {
   ) { }
 
   ngOnInit() {
+    this.loading=true
     this.domain_id = this.helpersService.getDominioId();
     this.rolId = this.helpersService.getRolId();
+
+    const docenteId = this.helpersService.getDocenteId();
+
+    if (this.rolId === 17 && docenteId) {
+        // Si el rol es 17 y hay un docente logueado, navegar a editar automáticamente
+        this.docenteService.getLoggedDocente(docenteId, this.domain_id).subscribe(
+            (res: any) => {
+              this.loading=false
+              this.actualizarDocente(res);
+            },
+            (error: any) => {
+              this.loading=false
+                console.log('Error al obtener el docente logueado:', error);
+            }
+        );
+    }
+    // Llamar a listarDocente() para cargar los datos iniciales
     this.listarDocente();
-    this.editarDocente();
-    console.log("first")
-    console.log(this.domain_id)
-  }
+}
 
   listarDocente() {
     const rolId = this.helpersService.getRolId(); // Obtén el rol del docente logueado
@@ -181,17 +196,6 @@ export class BandejaDocenteComponent {
     });
   }
 
-  editarDocente(){
-    this.ref = this.dialogService.open(EditDocenteComponent, {  
-      width: '60%',
-      styleClass: 'custom-dialog-header'
-    });
-
-    // this.ref.onClose.subscribe((data: any) => {
-    //   this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    //   this.router.onSameUrlNavigation = 'reload';
-    // });
-  }
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal(
       (event.target as HTMLInputElement).value,
