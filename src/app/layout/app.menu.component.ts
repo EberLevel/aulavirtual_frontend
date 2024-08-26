@@ -307,6 +307,11 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-users',
                                         routerLink: ['/pl-virtual/escala']
                                     },
+                                    {
+                                        label: 'Ocupacion Actual',
+                                        icon: 'pi pi-users',
+                                        routerLink: ['/pl-virtual/ocupacion-actual']
+                                    },
                                 ]
                             },
                             {

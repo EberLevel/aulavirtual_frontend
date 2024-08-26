@@ -7,6 +7,7 @@ import { RegAlumnoComponent } from '../dialog/reg-alumno/reg-alumno.component';
 import { AlumnoService } from '../../service/alumno.service';
 import Swal from 'sweetalert2';
 import { HelpersService } from 'src/app/helpers.service';
+import { cl } from '@fullcalendar/core/internal-common';
 @Component({
     selector: 'app-bandeja-alumno',
     templateUrl: './bandeja-alumno.component.html',
@@ -29,9 +30,20 @@ export class BandejaAlumnoComponent {
 
     ngOnInit() {
         this.domain_id = this.helpersService.getDominioId();
-
-        this.cargaInicial();
+    
+        // Obtener el ID del alumno dinámicamente al iniciar
+        const alumnoId = this.helpersService.getAlumnoId();
+        
+        if (alumnoId) {
+            const alumno = {
+                domain_id: this.domain_id,
+                id: alumnoId,
+            };
+                this.navigateToEditar(alumno);
+        }
+            this.cargaInicial();
     }
+    
 
     cargaInicial(): void {
         const esAlumno = this.helpersService.getRolId() === 12; // Rol 12 como alumno

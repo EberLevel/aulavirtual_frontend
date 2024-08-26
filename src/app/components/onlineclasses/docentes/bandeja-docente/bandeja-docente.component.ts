@@ -38,6 +38,7 @@ export class BandejaDocenteComponent {
     this.domain_id = this.helpersService.getDominioId();
     this.rolId = this.helpersService.getRolId();
     this.listarDocente();
+    this.editarDocente();
     console.log("first")
     console.log(this.domain_id)
   }

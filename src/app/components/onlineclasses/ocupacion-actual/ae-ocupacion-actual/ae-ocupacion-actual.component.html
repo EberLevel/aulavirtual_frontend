@@ -1,0 +1,38 @@
+<p-panel>
+    <ng-template pTemplate="header">
+      <span class="text-primary font-semibold text-xl">
+        {{ acciones === 'add' ? 'Agregar Ocupación Actual' : (acciones === 'ver' ? 'Ver Ocupación Actual' : 'Editar Ocupación Actual') }}
+      </span>
+    </ng-template>
+  
+    <ng-template pTemplate="content">
+      <form [formGroup]="ocupacionForm" (ngSubmit)="guardarOcupacion()">
+        <div class="row">
+          <div class="grid p-fluid">
+            <div class="field col-12">
+              <span class="p-float-label">
+                <input type="text" pInputText formControlName="nombre" [disabled]="acciones === 'ver'">
+                <label class="required">Nombre</label>
+              </span>
+              <small *ngIf="ocupacionForm.get('nombre')?.invalid && ocupacionForm.get('nombre')?.touched"
+                     class="p-error">El nombre es obligatorio</small>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="flex justify-content-end flex-column sm:flex-row">
+            <div class="flex flex-wrap gap-2">
+              <button *ngIf="acciones === 'add'" pButton icon="pi pi-plus" label="Guardar" iconPos="right"
+                      class="p-button-success p-button-sm" type="submit"></button>
+              <button *ngIf="acciones === 'actualizar'" pButton icon="pi pi-refresh" label="Actualizar"
+                      iconPos="right" class="p-button-warning p-button-sm" type="submit"></button>
+              <button pButton label="Cerrar" icon="pi pi-times" iconPos="right"
+                      class="p-button-close-clean" (click)="closeModal($event)"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-template>
+  </p-panel>
+  
