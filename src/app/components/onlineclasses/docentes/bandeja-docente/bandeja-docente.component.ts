@@ -42,10 +42,8 @@ export class BandejaDocenteComponent {
     const docenteId = this.helpersService.getDocenteId();
 
     if (this.rolId === 17 && docenteId) {
-        // Si el rol es 17 y hay un docente logueado, navegar a editar automáticamente
         this.docenteService.getLoggedDocente(docenteId, this.domain_id).subscribe(
             (res: any) => {
-              this.loading=false
               this.actualizarDocente(res);
             },
             (error: any) => {
@@ -54,7 +52,7 @@ export class BandejaDocenteComponent {
             }
         );
     }
-    // Llamar a listarDocente() para cargar los datos iniciales
+    this.loading=false
     this.listarDocente();
 }
 
