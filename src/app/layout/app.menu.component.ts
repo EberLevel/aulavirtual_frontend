@@ -442,11 +442,11 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/apps/calendar']
                                     },
 
-                                    {
-                                        label: 'Foros',
-                                        icon: 'pi pi-comment',
-                                        routerLink: ['/pl-virtual/foro-alumnos']
-                                    },
+                                    // {
+                                    //     label: 'Foros',
+                                    //     icon: 'pi pi-comment',
+                                    //     routerLink: ['/pl-virtual/foro-alumnos']
+                                    // },
                                     // {
                                     //     label: 'Record de pago',
                                     //     icon: 'pi pi-money-bill',
@@ -488,13 +488,13 @@ export class AppMenuComponent implements OnInit {
                                         // routerLink: ['/pl-virtual/cursos-docente']
                                         routerLink: ['/pl-virtual/cursos-docente']
                                     },
-                                    {
-                                        label: 'Evaluaciones',
-                                        icon: 'pi pi-fw pi-calendar',
-                                        // routerLink: ['/pl-virtual/evaluacion-docente']
-                                        routerLink: ['/pl-virtual/']
+                                    // {
+                                    //     label: 'Evaluaciones',
+                                    //     icon: 'pi pi-fw pi-calendar',
+                                    //     // routerLink: ['/pl-virtual/evaluacion-docente']
+                                    //     routerLink: ['/pl-virtual/']
 
-                                    },
+                                    // },
                                     // {
                                     //     label: 'Foros',
                                     //     icon: 'pi pi-comment',
