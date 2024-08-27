@@ -1,157 +1,292 @@
-
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl">Actualizar Docente</span>
+        <span class="text-primary font-semibold text-xl"
+            >Actualizar Docente</span
+        >
     </ng-template>
     <ng-template pTemplate="content">
         <form [formGroup]="DocenteForm">
             <div class="row mb-4">
-                <div class="grid p-fluid ">                
+                <div class="grid p-fluid">
                     <div class="field md:col-6">
                         <span class="p-float-label p-input-icon-left">
                             <i class="pi pi-user-edit"></i>
-                            <input type="text" id="codigo" formControlName="codigo" pInputText>
+                            <input
+                                type="text"
+                                id="codigo"
+                                formControlName="codigo"
+                                pInputText
+                            />
                             <label for="codigo">Código</label>
                         </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('codigo')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
                     </div>
                     <div class="field md:col-6">
                         <span class="p-float-label p-input-icon-left">
                             <i class="pi pi-user-edit"></i>
-                            <input type="text" id="nombres" formControlName="nombres" pInputText>
+                            <input
+                                type="text"
+                                id="nombres"
+                                formControlName="nombres"
+                                pInputText
+                            />
                             <label for="nombres">Nombres y Apellidos</label>
                         </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('nombres')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
                     </div>
-                    
                 </div>
             </div>
 
+            <!-- Campo para la clave -->
             <div class="row mb-4">
-                <div class="grid p-fluid ">                
+                <div class="grid p-fluid">
                     <div class="field md:col-6">
                         <span class="p-float-label p-input-icon-left">
                             <i class="pi pi-user-edit"></i>
-                            <input type="text" id="usuario" formControlName="usuario" pInputText>
-                            <label for="usuario">Usuario</label>
-                        </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <i class="pi pi-user-edit"></i>
-                            <input type="text" id="clave" formControlName="clave" pInputText>
+                            <input
+                                type="password"
+                                id="clave"
+                                formControlName="clave"
+                                pInputText
+                            />
                             <label for="clave">Clave</label>
                         </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="row mb-4">           
-                <div class="grid p-fluid ">
-                   
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <i class="pi pi-user-edit"></i>
-                            <input type="text" id="celular" formControlName="celular" pInputText>
-                            <label for="celular">Celular</label>
-                        </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <i class="pi pi-user-edit"></i>
-                            <input type="text" id="profesion" formControlName="profesion" pInputText>
-                            <label for="profesion">Profesión</label>
-                        </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                    
-                </div>
-            </div>         
-            <div class="row">
-                <div class="grid p-fluid"> 
-                    <div class="field md:col-6">
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="tipodocu"
-                                [(ngModel)]="tipoDocumentoSeleccionado" optionLabel="name" [ngModelOptions]="{standalone: true}" ></p-dropdown>
-                            <label for="dropdown">Tipo de documento </label>
-                            <small style="color: brown;">Campo obligatorio * </small>
-                        </span>
-                    </div>         
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <i class="pi pi-user-edit"></i>
-                            <input type="text" id="doc_identidad" formControlName="doc_identidad" pInputText>
-                            <label for="doc_identidad">Doc. de Identidad</label>
-                        </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="tipoGenero"
-                                [(ngModel)]="tipoGeneroSeleccionado" optionLabel="name" [ngModelOptions]="{standalone: true}" ></p-dropdown>
-                            <label for="dropdown">Genero </label>
-                            <small style="color: brown;">Campo obligatorio * </small>
-                        </span>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('clave')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="grid p-fluid">
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <i class="pi pi-user-edit"></i>
-                            <input type="text" id="vinculo_laboral" formControlName="vinculo_laboral" pInputText>
-                            <label for="vinculo_laboral">Vinculo laboral</label>
-                        </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <i class="pi pi-user-edit"></i>
-                            <input type="text" id="edad" formControlName="edad" pInputText>
-                            <label for="edad">Edad</label>
-                        </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                    <div class="field md:col-6">
-                        <span class="p-float-label p-input-icon-left">
-                            <i class="pi pi-user-edit"></i>
-                            <input type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento" pInputText>
-                            <label for="fecha_nacimiento">Fecha nacimiento</label>
-                        </span>
-                        <small style="color: brown;">Campo obligatorio *</small>
-                    </div>
-                </div>
-            </div>         
+
+            <!-- Campo para el email -->
             <div class="row mb-4">
                 <div class="grid p-fluid">
-                        <div class="field md:col-6">                
-                             <p-toast />
-                              <p-fileUpload 
-                            mode="basic" 
-                            chooseLabel="Subir foto" 
+                    <div class="field md:col-6">
+                        <span class="p-float-label p-input-icon-left">
+                            <i class="pi pi-envelope"></i>
+                            <input
+                                type="email"
+                                id="email"
+                                formControlName="email"
+                                pInputText
+                            />
+                            <label for="email">Email</label>
+                        </span>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('email')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campos para celular, profesión -->
+            <div class="row mb-4">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <span class="p-float-label p-input-icon-left">
+                            <i class="pi pi-phone"></i>
+                            <input
+                                type="text"
+                                id="celular"
+                                formControlName="celular"
+                                pInputText
+                            />
+                            <label for="celular">Celular</label>
+                        </span>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('celular')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
+                    </div>
+                    <div class="field md:col-6">
+                        <span class="p-float-label p-input-icon-left">
+                            <i class="pi pi-briefcase"></i>
+                            <input
+                                type="text"
+                                id="profesion"
+                                formControlName="profesion"
+                                pInputText
+                            />
+                            <label for="profesion">Profesión</label>
+                        </span>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('profesion')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dropdown para Tipo de Documento -->
+            <div class="row mb-4">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="false"
+                                [options]="tipodocu"
+                                [(ngModel)]="tipoDocumentoSeleccionado"
+                                optionLabel="name"
+                                [ngModelOptions]="{ standalone: true }"
+                            >
+                            </p-dropdown>
+                            <label for="dropdown">Tipo de documento</label>
+                            <small
+                                style="color: brown"
+                                *ngIf="
+                                    formSubmitted && !tipoDocumentoSeleccionado
+                                "
+                                >Campo obligatorio *</small
+                            >
+                        </span>
+                    </div>
+
+                    <!-- Campo para Documento de Identidad -->
+                    <div class="field md:col-6">
+                        <span class="p-float-label p-input-icon-left">
+                            <i class="pi pi-id-card"></i>
+                            <input
+                                type="text"
+                                id="doc_identidad"
+                                formControlName="doc_identidad"
+                                pInputText
+                            />
+                            <label for="doc_identidad">Doc. de Identidad</label>
+                        </span>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('doc_identidad')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dropdown para Género -->
+            <div class="row mb-4">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdown"
+                                [autoDisplayFirst]="false"
+                                [options]="tipoGenero"
+                                [(ngModel)]="tipoGeneroSeleccionado"
+                                optionLabel="name"
+                                [ngModelOptions]="{ standalone: true }"
+                            >
+                            </p-dropdown>
+                            <label for="dropdown">Género</label>
+                            <small
+                                style="color: brown"
+                                *ngIf="formSubmitted && !tipoGeneroSeleccionado"
+                                >Campo obligatorio *</small
+                            >
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fecha de Nacimiento -->
+            <div class="row mb-4">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <span class="p-float-label p-input-icon-left">
+                            <i class="pi pi-calendar"></i>
+                            <input
+                                type="date"
+                                id="fecha_nacimiento"
+                                formControlName="fecha_nacimiento"
+                                pInputText
+                            />
+                            <label for="fecha_nacimiento"
+                                >Fecha nacimiento</label
+                            >
+                        </span>
+                        <small
+                            style="color: brown"
+                            *ngIf="
+                                formSubmitted &&
+                                DocenteForm.get('fecha_nacimiento')?.invalid
+                            "
+                            >Campo obligatorio *</small
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subir Foto -->
+            <div class="row mb-4">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <p-toast></p-toast>
+                        <p-fileUpload
+                            mode="basic"
+                            chooseLabel="Subir foto"
                             chooseIcon="pi pi-upload"
-                            name="demo[]" 
-                            url="https://www.primefaces.org/cdn/api/upload.php" 
-                            accept="image/*"                        
-                            (onSelect)="onFileChange($event)" />                
-                 
-                        </div>
-                </div>            
+                            name="demo[]"
+                            accept="image/*"
+                            (onSelect)="onFileChange($event)"
+                        >
+                        </p-fileUpload>
+                    </div>
+                </div>
             </div>
         </form>
-        
-        <div class="row mb-5 text-right">               
-                    <button pButton label="Guardar" (click)="actualizarDocente()" icon="pi pi-plus" id="btnGuardar" class="p-button-success mr-2"></button>
-                    <button pButton label="Cancelar" (click)="closeModal()" icon="pi pi-times" id="btnCancelar" class="p-button-danger"></button>          
+
+        <div class="row mb-5 text-right">
+            <button
+                pButton
+                label="Guardar"
+                (click)="actualizarDocente()"
+                icon="pi pi-plus"
+                id="btnGuardar"
+                class="p-button-success mr-2"
+            ></button>
+            <button
+                pButton
+                label="Cancelar"
+                (click)="closeModal()"
+                icon="pi pi-times"
+                id="btnCancelar"
+                class="p-button-danger"
+            ></button>
         </div>
-        
     </ng-template>
-    
 </p-panel>
-
-

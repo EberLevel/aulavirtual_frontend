@@ -101,72 +101,66 @@ export class RegDocenteComponent {
 }
 
 
-registrarDocente(){
-  this.DocenteForm.patchValue(
-    {
-      // foto: this.config.data.foto,
-      tipo_documento: this.tipoDocumentoSeleccionado?.name,
-      genero: this.tipoGeneroSeleccionado?.name
-    })
-  if(this.DocenteForm.invalid){
-    console.log(this.DocenteForm)
+registrarDocente() {
+  this.DocenteForm.patchValue({
+    tipo_documento: this.tipoDocumentoSeleccionado?.name,
+    genero: this.tipoGeneroSeleccionado?.name
+  });
+
+  if (this.DocenteForm.invalid) {
     return;
   }
 
-  const formData = new FormData();
-  formData.append('codigo', this.DocenteForm.get('codigo')?.value);
-  formData.append('nombres', this.DocenteForm.get('nombres')?.value);
-  formData.append('usuario', this.DocenteForm.get('usuario')?.value);
-  formData.append('contraseña', this.DocenteForm.get('contraseña')?.value);
-  formData.append('celular', this.DocenteForm.get('celular')?.value);
-  formData.append('profesion', this.DocenteForm.get('profesion')?.value);
-  formData.append('tipo_documento', this.DocenteForm.get('tipo_documento')?.value);
-  formData.append('doc_identidad', this.DocenteForm.get('doc_identidad')?.value);
-  formData.append('fecha_nacimiento', this.DocenteForm.get('fecha_nacimiento')?.value);
-  formData.append('genero', this.DocenteForm.get('genero')?.value);
-  formData.append('foto', this.DocenteForm.get('foto')?.value);
-  formData.append('roles', 'seguridad,aula_virtual');
-  formData.append('email', this.DocenteForm.get('email')?.value);
-  formData.append('domain_id', this.domain_id.toString());
+  const docenteData = {
+    codigo: this.DocenteForm.get('codigo')?.value,
+    nombres: this.DocenteForm.get('nombres')?.value,
+    contraseña: this.DocenteForm.get('contraseña')?.value,
+    celular: this.DocenteForm.get('celular')?.value,
+    profesion: this.DocenteForm.get('profesion')?.value,
+    tipo_documento: this.DocenteForm.get('tipo_documento')?.value,
+    doc_identidad: this.DocenteForm.get('doc_identidad')?.value,
+    fecha_nacimiento: this.DocenteForm.get('fecha_nacimiento')?.value,
+    genero: this.DocenteForm.get('genero')?.value,
+    roles: 'seguridad,aula_virtual',
+    email: this.DocenteForm.get('email')?.value,
+    domain_id: this.domain_id,
+    foto: this.DocenteForm.get('foto')?.value // La imagen en base64
+  };
 
+  // Mostrar el JSON en la consola para verificar
+  console.log('JSON enviado al backend:', JSON.stringify(docenteData, null, 2));
 
-  this.docenteService.registrarDocentes(formData).subscribe(
-    (res:any)=>{
-      
-        console.log(res);
-        if(res.status == 200){
-          this.helpersService.showErrorMessage(res.message);
-          this.closeModal();
-        }
-      
-
-      // if(res.Exito){
-      //   Swal.fire({
-      //     title: "Registrado correctamente!",
-      //     // text: ".",
-      //     icon: "success"
-      //   });         
-      //   console.log(res);
-      //   this.closeModal();
-      // }
-   
-    },(error:any)=>{
-      console.log(error);
+  // Enviar los datos como JSON
+  this.docenteService.registrarDocentes(docenteData).subscribe(
+    (res: any) => {
+      if (res.Exito) {
+        Swal.fire({
+          title: 'Registrado correctamente!',
+          icon: 'success'
+        });
+        this.closeModal();
+      }
+    },
+    (error: any) => {
+      console.error('Error en la solicitud HTTP:', error);
       this.helpersService.showErrorMessage('Error al registrar');
-
-    })
-  console.log(this.DocenteForm.value);
-  
+    }
+  );
 }
 
-onFileChange(event: any) {
-  console.log(event)
-  const file = event.files[0];
-  //save file in variable
-  this.DocenteForm.patchValue({
-    foto: file
-  });
 
+
+onFileChange(event: any) {
+  const file = event.files[0];
+  const reader = new FileReader();
+  
+  reader.onload = () => {
+    this.DocenteForm.patchValue({
+      foto: reader.result
+    });
+  };
+  
+  reader.readAsDataURL(file);
 }
 
 cambiarIdioma() {

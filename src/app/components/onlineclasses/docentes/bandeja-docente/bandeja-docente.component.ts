@@ -38,7 +38,7 @@ export class BandejaDocenteComponent {
     this.loading=true
     this.domain_id = this.helpersService.getDominioId();
     this.rolId = this.helpersService.getRolId();
-
+    console.log("Dominio" + this.domain_id)
     const docenteId = this.helpersService.getDocenteId();
 
     if (this.rolId === 17 && docenteId) {
@@ -158,6 +158,7 @@ export class BandejaDocenteComponent {
         "clave": datos.clave,
         "celular": datos.celular,
         "profesion": datos.profesion,
+        "email": datos.email,
         "vinculo_laboral": datos.vinculo_laboral,
         "tipo_documento": datos.tipo_documento,
         "doc_identidad": datos.doc_identidad,
