@@ -39,8 +39,6 @@ export class BandejaDocenteComponent {
     this.rolId = this.helpersService.getRolId();
     this.listarDocente();
     this.editarDocente();
-    console.log("first")
-    console.log(this.domain_id)
   }
 
   listarDocente() {

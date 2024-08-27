@@ -20,7 +20,7 @@
                                     </span>
                                 </div>
                                 <div class="mb-2">
-                                    <button pButton label="Nuevo" icon="pi pi-user-plus" id="btnNuevo" class="p-button-primary mr-2" (click)="navigateToNuevo()" style="border-radius: 30px;"></button>
+                                    <button *ngIf="!esAlumno" pButton label="Nuevo" icon="pi pi-user-plus" id="btnNuevo" class="p-button-primary mr-2" (click)="navigateToNuevo()" style="border-radius: 30px;"></button>
                                 </div>
                             </div>
                         </ng-template>
@@ -64,7 +64,7 @@
                                 <td>
                                     <div class="flex justify-content-between align-items-center">
                                         <button pButton icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="navigateToEditar(miembro)"></button>
-                                        <button pButton icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="eliminarAlumno(miembro)"></button>
+                                        <button *ngIf="!esAlumno" pButton icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="eliminarAlumno(miembro)"></button>
                                     </div>
                                 </td>
                                 
