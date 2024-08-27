@@ -128,23 +128,32 @@ export class EditDocenteComponent {
 
 actualizarDocente() {
   this.formSubmitted = true; // Se ha intentado guardar
-
-  const docenteData = {
+  
+  const docenteData: any = {
     id: this.DocenteForm.get('id')?.value,
     codigo: this.DocenteForm.get('codigo')?.value,
     nombres: this.DocenteForm.get('nombres')?.value,
-    clave: this.DocenteForm.get('clave')?.value,
     celular: this.DocenteForm.get('celular')?.value,
     profesion: this.DocenteForm.get('profesion')?.value,
     tipo_documento: this.tipoDocumentoSeleccionado?.name,
     doc_identidad: this.DocenteForm.get('doc_identidad')?.value,
     fecha_nacimiento: this.DocenteForm.get('fecha_nacimiento')?.value,
     genero: this.tipoGeneroSeleccionado?.name,
-    foto: this.base64,
     roles: 'seguridad,aula_virtual',
     email: this.DocenteForm.get('email')?.value,
     domain_id: this.domain_id
   };
+
+  // Solo agregar la clave si está presente
+  const claveValue = this.DocenteForm.get('clave')?.value;
+  if (claveValue) {
+    docenteData.clave = claveValue;
+  }
+
+  // Solo agregar la foto si está presente
+  if (this.base64) {
+    docenteData.foto = this.base64;
+  }
 
   this.docenteService.actualizarDocentes(docenteData).subscribe(
     (res: any) => {
@@ -156,6 +165,7 @@ actualizarDocente() {
     }
   );
 }
+
 
   cambiarIdioma() {
     this.translateService.use('es');

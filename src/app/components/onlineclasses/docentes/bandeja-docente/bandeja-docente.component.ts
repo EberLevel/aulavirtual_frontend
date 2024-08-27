@@ -159,13 +159,11 @@ export class BandejaDocenteComponent {
         "celular": datos.celular,
         "profesion": datos.profesion,
         "email": datos.email,
-        "vinculo_laboral": datos.vinculo_laboral,
         "tipo_documento": datos.tipo_documento,
         "doc_identidad": datos.doc_identidad,
         "fecha_nacimiento": datos.fecha_nacimiento,
         "edad": datos.edad,
         "genero": datos.genero,
-        "foto": datos.foto,
         "roles": 'seguridad,aula_virtual'
       }
     });
