@@ -34,10 +34,10 @@ export class AlumnoService{
     deleteAlumno(data:any):Observable<any>{
         return this.http.delete(`${this.baseUrl}alumnos/${data.id}/${data.domain_id}`);
     }
-    editAlumno(formData:FormData,data:any):Observable<any>{
-             
-         return this.http.put(`${this.baseUrl}alumnos/${data.id}/${data.domain_id}`,formData);
-    }
+    editAlumno(alumnoData: any, id: number, domain_id: number): Observable<any> {
+        return this.http.put(`${this.baseUrl}alumnos/${id}/${domain_id}`, alumnoData);
+      }
+      
     showAlumno(data:any):Observable<any>{
         return this.http.get(`${this.baseUrl}alumnos/${data.id}/${data.domain_id}`);
     }

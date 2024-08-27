@@ -34,8 +34,8 @@ export class DocenteService {
         return this.http.get(`${this.baseUrl}docentes/listar/${id}`);
     }
 
-    registrarDocentes(data:any):Observable<any>{
-        return this.http.post<any>(`${this.baseUrl}docentes/registrar`,data);
+    registrarDocentes(docenteData:any):Observable<any>{
+        return this.http.post<any>(`${this.baseUrl}docentes/registrar`,docenteData);
     }
 
     actualizarDocentes(data:any):Observable<any>{
@@ -44,7 +44,6 @@ export class DocenteService {
     }
 
     eliminarDocentes(id:number):Observable<any>{
-        // let response = JSON.stringify(data);
-        return this.http.get<any>(`${this.baseUrl}docentes/eliminar/${id}`);
+        return this.http.delete<any>(`${this.baseUrl}docentes/eliminar/${id}`);
     }
 }

@@ -234,95 +234,133 @@ export class RegAlumnoComponent {
             detail: 'Archivo cargado correctamente',
         });
     }
-    saveAlumno() {
+
+    actualizarAlumno() {
         if (this.alumnoForm.valid) {
-            const formData = new FormData();
-            formData.append('codigo', this.alumnoForm.get('codigo')?.value);
-            formData.append(
-                'tipoDocumento',
-                this.alumnoForm.get('tipoDocumento')?.value
-            );
-            formData.append(
-                'numeroDocumento',
-                this.alumnoForm.get('numeroDocumento')?.value
-            );
-            formData.append('nombres', this.alumnoForm.get('nombres')?.value);
-            formData.append(
-                'apellidos',
-                this.alumnoForm.get('apellidos')?.value
-            );
-            formData.append(
-                'nroCelular',
-                this.alumnoForm.get('nroCelular')?.value
-            );
-            formData.append(
-                'carreraId',
-                this.alumnoForm.get('carreraId')?.value
-            );
-            formData.append('cicloId', this.alumnoForm.get('cicloId')?.value);
-            formData.append('promocionId', this.alumnoForm.get('promocionId')?.value);
-            formData.append('email', this.alumnoForm.get('email')?.value);
-            formData.append(
-                'direccion',
-                this.alumnoForm.get('direccion')?.value
-            );
-
-            if (this.alumnoForm.get('fotoCarnet')?.value) {
-                formData.append(
-                    'fotoCarnet',
-                    this.alumnoForm.get('fotoCarnet')?.value
-                );
-            }
-            if (this.alumnoForm.get('fotoPerfil')?.value) {
-                formData.append(
-                    'fotoPerfil',
-                    this.alumnoForm.get('fotoPerfil')?.value
-                );
-            }
-            if (this.alumno) {
-                formData.append('id', this.alumno.id);
-                formData.append('domain_id', this.domain_id.toString());
-                const fechaNacimiento =
-                    this.alumnoForm.get('fechaNacimiento')?.value;
-                if (fechaNacimiento instanceof Date) {
-                    const formattedDate = fechaNacimiento
-                        .toISOString()
-                        .split('T')[0];
-                    formData.append('fechaNacimiento', formattedDate);
-                } else {
-                    console.error(
-                        'Fecha de nacimiento no es una instancia de Date'
-                    );
-                }
-            } else {
-                formData.append('domain_id', this.domain_id.toString());
-
-            }
+            // Crear un objeto JSON normal en lugar de FormData
+            const alumnoData = {
+                codigo: this.alumnoForm.get('codigo')?.value,
+                tipoDocumento: this.alumnoForm.get('tipoDocumento')?.value,
+                dni: this.alumnoForm.get('numeroDocumento')?.value,
+                nombres: this.alumnoForm.get('nombres')?.value,
+                apellidos: this.alumnoForm.get('apellidos')?.value,
+                email: this.alumnoForm.get('email')?.value,
+                nroCelular: this.alumnoForm.get('nroCelular')?.value,
+                carreraId: this.alumnoForm.get('carreraId')?.value,
+                cicloId: this.alumnoForm.get('cicloId')?.value,
+                direccion: this.alumnoForm.get('direccion')?.value,
+                fechaNacimiento: this.alumnoForm.get('fechaNacimiento')?.value.toISOString().split('T')[0],
+                promocionId: this.alumnoForm.get('promocionId')?.value
+            };
+    
+            console.log('Datos enviados como JSON:', alumnoData); // Para depuración
+    
             this.loading = true;
             this.spinner.show();
-            this.alumnoService.saveAlumno(formData).subscribe(
+    
+            const id = this.alumno.id; // Asegúrate de que el ID del alumno esté disponible
+            const domain_id = this.domain_id; // Asegúrate de que el domain_id esté disponible
+    
+            // Llamar al servicio con los datos en formato JSON
+            this.alumnoService.editAlumno(alumnoData, id, domain_id).subscribe(
                 (response) => {
                     this.loading = false;
                     this.spinner.hide();
                     this.ref.close({ register: true });
                     Swal.fire({
                         title: '¡Éxito!',
-                        text: 'Los Datos se registraron correctamente',
+                        text: 'Alumno actualizado correctamente',
                         icon: 'success',
-                        confirmButtonText: 'Aceptar',
-                    }).then(() => {
-
+                        confirmButtonText: 'Aceptar'
                     });
                 },
                 (error) => {
                     this.loading = false;
                     this.spinner.hide();
-                    this.helpersService.showErrorMessage(error.error.message);
+                    Swal.fire({
+                        title: '¡Error!',
+                        text: 'Hubo un error actualizando al alumno',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
             );
         } else {
+            Swal.fire({
+                title: '¡Error!',
+                text: 'Por favor, complete todos los campos obligatorios.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    }
+    
+    
+    
+    
+
+    saveAlumno() {
+        if (this.alumnoForm.valid) {
+            const formData = new FormData();
+            formData.append('codigo', this.alumnoForm.get('codigo')?.value);
+            formData.append('tipoDocumento', this.alumnoForm.get('tipoDocumento')?.value);
+            formData.append('dni', this.alumnoForm.get('numeroDocumento')?.value);
+            formData.append('nombres', this.alumnoForm.get('nombres')?.value);
+            formData.append('apellidos', this.alumnoForm.get('apellidos')?.value);
+            formData.append('nroCelular', this.alumnoForm.get('nroCelular')?.value);
+            formData.append('carreraId', this.alumnoForm.get('carreraId')?.value);
+            formData.append('cicloId', this.alumnoForm.get('cicloId')?.value);
+            formData.append('promocionId', this.alumnoForm.get('promocionId')?.value);
+            formData.append('email', this.alumnoForm.get('email')?.value);
+            formData.append('direccion', this.alumnoForm.get('direccion')?.value);
+    
+            if (this.alumnoForm.get('fotoCarnet')?.value) {
+                formData.append('fotoCarnet', this.alumnoForm.get('fotoCarnet')?.value);
+            }
+            if (this.alumnoForm.get('fotoPerfil')?.value) {
+                formData.append('fotoPerfil', this.alumnoForm.get('fotoPerfil')?.value);
+            }
+    
+            // Verifica si se está editando o creando un nuevo registro
+            if (this.alumno) {
+                // Editar alumno existente
+                formData.append('id', this.alumno.id);
+                formData.append('domain_id', this.domain_id.toString());
+                const fechaNacimiento = this.alumnoForm.get('fechaNacimiento')?.value;
+                if (fechaNacimiento instanceof Date) {
+                    formData.append('fechaNacimiento', fechaNacimiento.toISOString().split('T')[0]);
+                }
+            } else {
+                // Registrar nuevo alumno
+                formData.append('domain_id', this.domain_id.toString());
+                this.registrarAlumno(formData);
+            }
+        } else {
             console.error('Formulario inválido');
         }
+    }
+    
+    registrarAlumno(formData: FormData) {
+        this.loading = true;
+        this.spinner.show();
+        this.alumnoService.saveAlumno(formData).subscribe(
+            (response) => {
+                this.loading = false;
+                this.spinner.hide();
+                this.ref.close({ register: true });
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Alumno registrado correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                });
+            },
+            (error) => {
+                this.loading = false;
+                this.spinner.hide();
+                this.helpersService.showErrorMessage(error.error.message);
+            }
+        );
     }
     capturarFecha(event: any) {
         console.log('Fecha', event);

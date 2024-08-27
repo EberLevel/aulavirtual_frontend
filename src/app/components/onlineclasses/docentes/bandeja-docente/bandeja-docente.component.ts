@@ -38,7 +38,7 @@ export class BandejaDocenteComponent {
     this.loading=true
     this.domain_id = this.helpersService.getDominioId();
     this.rolId = this.helpersService.getRolId();
-
+    console.log("Dominio" + this.domain_id)
     const docenteId = this.helpersService.getDocenteId();
 
     if (this.rolId === 17 && docenteId) {
@@ -54,7 +54,7 @@ export class BandejaDocenteComponent {
     }
     this.loading=false
     this.listarDocente();
-}
+  }
 
   listarDocente() {
     const rolId = this.helpersService.getRolId(); // Obtén el rol del docente logueado
@@ -158,13 +158,12 @@ export class BandejaDocenteComponent {
         "clave": datos.clave,
         "celular": datos.celular,
         "profesion": datos.profesion,
-        "vinculo_laboral": datos.vinculo_laboral,
+        "email": datos.email,
         "tipo_documento": datos.tipo_documento,
         "doc_identidad": datos.doc_identidad,
         "fecha_nacimiento": datos.fecha_nacimiento,
         "edad": datos.edad,
         "genero": datos.genero,
-        "foto": datos.foto,
         "roles": 'seguridad,aula_virtual'
       }
     });

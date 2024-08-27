@@ -20,6 +20,7 @@ export class BandejaAlumnoComponent {
     loading: boolean = false;
     ref: DynamicDialogRef | undefined;
     domain_id: number = 1;
+    esAlumno: boolean = false;
     constructor(
         private dialogService: DialogService,
         private maestroService: GeneralService,
@@ -41,6 +42,7 @@ export class BandejaAlumnoComponent {
             };
                 this.navigateToEditar(alumno);
         }
+        this.esAlumno = this.helpersService.getRolId() === 12; 
             this.cargaInicial();
     }
     
