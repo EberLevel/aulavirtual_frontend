@@ -8,6 +8,7 @@ import { AlumnoService } from '../../service/alumno.service';
 import Swal from 'sweetalert2';
 import { HelpersService } from 'src/app/helpers.service';
 import { cl } from '@fullcalendar/core/internal-common';
+import { EditAlumnoComponent } from '../dialog/edit-alumno/edit-alumno.component';
 @Component({
     selector: 'app-bandeja-alumno',
     templateUrl: './bandeja-alumno.component.html',
@@ -135,7 +136,7 @@ export class BandejaAlumnoComponent {
         };
         this.alumnoService.showAlumno(data).subscribe(
             (data: any) => {
-                this.ref = this.dialogService.open(RegAlumnoComponent, {
+                this.ref = this.dialogService.open(EditAlumnoComponent, {
                     data: {
                         alumno: data,
                     },

@@ -95,16 +95,17 @@ export class RegAlumnoComponent {
             direccion: [''],
             fechaNacimiento: [this.fechanacimiento, Validators.required],
             promocionId: ['', Validators.required],
-            fotoPerfil: [null],
-            fotoCarnet: [null],
+            fotoPerfil: [null as string | null],
+            fotoCarnet: [null as string | null],
         });
-        this.domain_id = this.helpersService.getDominioId();
     }
     onGlobalFilter(table: Table, event: any) {
         table.filterGlobal(event.target.value, 'contains');
     }
 
     ngOnInit() {
+        this.domain_id = this.helpersService.getDominioId();
+
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
             { name: 'PASAPORTE', value: 2, code: 'RM' },
@@ -241,7 +242,7 @@ export class RegAlumnoComponent {
             const alumnoData = {
                 codigo: this.alumnoForm.get('codigo')?.value,
                 tipoDocumento: this.alumnoForm.get('tipoDocumento')?.value,
-                dni: this.alumnoForm.get('numeroDocumento')?.value,
+                numeroDocumento: this.alumnoForm.get('numeroDocumento')?.value,
                 nombres: this.alumnoForm.get('nombres')?.value,
                 apellidos: this.alumnoForm.get('apellidos')?.value,
                 email: this.alumnoForm.get('email')?.value,
@@ -250,7 +251,7 @@ export class RegAlumnoComponent {
                 cicloId: this.alumnoForm.get('cicloId')?.value,
                 direccion: this.alumnoForm.get('direccion')?.value,
                 fechaNacimiento: this.alumnoForm.get('fechaNacimiento')?.value.toISOString().split('T')[0],
-                promocionId: this.alumnoForm.get('promocionId')?.value
+                promocion_id: this.alumnoForm.get('promocionId')?.value
             };
     
             console.log('Datos enviados como JSON:', alumnoData); // Para depuración
@@ -286,12 +287,7 @@ export class RegAlumnoComponent {
                 }
             );
         } else {
-            Swal.fire({
-                title: '¡Error!',
-                text: 'Por favor, complete todos los campos obligatorios.',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
+
         }
     }
     
@@ -301,49 +297,103 @@ export class RegAlumnoComponent {
 
     saveAlumno() {
         if (this.alumnoForm.valid) {
-            const formData = new FormData();
-            formData.append('codigo', this.alumnoForm.get('codigo')?.value);
-            formData.append('tipoDocumento', this.alumnoForm.get('tipoDocumento')?.value);
-            formData.append('dni', this.alumnoForm.get('numeroDocumento')?.value);
-            formData.append('nombres', this.alumnoForm.get('nombres')?.value);
-            formData.append('apellidos', this.alumnoForm.get('apellidos')?.value);
-            formData.append('nroCelular', this.alumnoForm.get('nroCelular')?.value);
-            formData.append('carreraId', this.alumnoForm.get('carreraId')?.value);
-            formData.append('cicloId', this.alumnoForm.get('cicloId')?.value);
-            formData.append('promocionId', this.alumnoForm.get('promocionId')?.value);
-            formData.append('email', this.alumnoForm.get('email')?.value);
-            formData.append('direccion', this.alumnoForm.get('direccion')?.value);
+            const alumnoData: {
+                codigo: string;
+                tipoDocumento: string;
+                numeroDocumento: string;
+                nombres: string;
+                apellidos: string;
+                nroCelular: string;
+                carreraId: number;
+                cicloId: number;
+                promocion_id: number;
+                email: string;
+                direccion: string;
+                fechaNacimiento: string;
+                fotoPerfil: string | null;
+                fotoCarnet: string | null;
+                domain_id: number;
+            } = {
+                codigo: this.alumnoForm.get('codigo')?.value,
+                tipoDocumento: this.alumnoForm.get('tipoDocumento')?.value,
+                numeroDocumento: this.alumnoForm.get('numeroDocumento')?.value,
+                nombres: this.alumnoForm.get('nombres')?.value,
+                apellidos: this.alumnoForm.get('apellidos')?.value,
+                nroCelular: this.alumnoForm.get('nroCelular')?.value,
+                carreraId: this.alumnoForm.get('carreraId')?.value,
+                cicloId: this.alumnoForm.get('cicloId')?.value,
+                promocion_id: this.alumnoForm.get('promocionId')?.value,
+                email: this.alumnoForm.get('email')?.value,
+                direccion: this.alumnoForm.get('direccion')?.value,
+                fechaNacimiento: this.alumnoForm.get('fechaNacimiento')?.value.toISOString().split('T')[0],
+                fotoPerfil: null,
+                fotoCarnet: null,
+                domain_id: this.domain_id 
+            };
+    
+            // Variables para saber cuándo ambas imágenes estén listas (si es que existen)
+            let fotoPerfilLista = false;
+            let fotoCarnetLista = false;
+    
+            // Función para registrar solo cuando ambas imágenes estén listas
+            const intentarRegistrar = () => {
+                if (fotoPerfilLista && fotoCarnetLista) {
+                    this.registrarAlumno(alumnoData);
+                }
+            };
+    
+            // Convertir imágenes seleccionadas a base64 si existen
+            if (this.alumnoForm.get('fotoPerfil')?.value) {
+                this.convertImageToBase64(this.alumnoForm.get('fotoPerfil')?.value, (base64Image: string) => {
+                    alumnoData.fotoPerfil = base64Image;
+                    fotoPerfilLista = true;
+                    intentarRegistrar();
+                });
+            } else {
+                fotoPerfilLista = true;
+                intentarRegistrar();
+            }
     
             if (this.alumnoForm.get('fotoCarnet')?.value) {
-                formData.append('fotoCarnet', this.alumnoForm.get('fotoCarnet')?.value);
-            }
-            if (this.alumnoForm.get('fotoPerfil')?.value) {
-                formData.append('fotoPerfil', this.alumnoForm.get('fotoPerfil')?.value);
+                this.convertImageToBase64(this.alumnoForm.get('fotoCarnet')?.value, (base64Image: string) => {
+                    alumnoData.fotoCarnet = base64Image;
+                    fotoCarnetLista = true;
+                    intentarRegistrar();
+                });
+            } else {
+                fotoCarnetLista = true; // Si no hay imagen, marcamos como lista
+                intentarRegistrar();
             }
     
-            // Verifica si se está editando o creando un nuevo registro
-            if (this.alumno) {
-                // Editar alumno existente
-                formData.append('id', this.alumno.id);
-                formData.append('domain_id', this.domain_id.toString());
-                const fechaNacimiento = this.alumnoForm.get('fechaNacimiento')?.value;
-                if (fechaNacimiento instanceof Date) {
-                    formData.append('fechaNacimiento', fechaNacimiento.toISOString().split('T')[0]);
-                }
-            } else {
-                // Registrar nuevo alumno
-                formData.append('domain_id', this.domain_id.toString());
-                this.registrarAlumno(formData);
-            }
         } else {
-            console.error('Formulario inválido');
+            Swal.fire({
+                title: '¡Error!',
+                text: 'Por favor, complete todos los campos obligatorios.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+            });
         }
     }
     
-    registrarAlumno(formData: FormData) {
+    
+    
+    convertImageToBase64(file: File, callback: (base64Image: string) => void): void {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            callback(reader.result as string); // Llamar a la función de callback con la imagen base64
+        };
+        reader.onerror = (error) => {
+            console.error('Error al convertir imagen a base64:', error);
+        };
+    }
+    
+    
+    registrarAlumno(alumnoData: any) {
         this.loading = true;
         this.spinner.show();
-        this.alumnoService.saveAlumno(formData).subscribe(
+        console.log('Datos enviados:', alumnoData);
+        this.alumnoService.saveAlumno(alumnoData).subscribe(
             (response) => {
                 this.loading = false;
                 this.spinner.hide();
@@ -362,6 +412,7 @@ export class RegAlumnoComponent {
             }
         );
     }
+    
     capturarFecha(event: any) {
         console.log('Fecha', event);
         let fecha: Date = new Date(event);

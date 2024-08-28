@@ -120,7 +120,10 @@
                                 <td>{{docente.doc_identidad}}</td>
                                 <td>{{docente.fecha_nacimiento}}</td>
                                 <td>{{docente.edad}}</td>
-                                <td><img [src]="docente.foto" alt="" width="50" height="50"></td>
+                                <td><img style="
+                                    width: 7rem;
+                                " [src]="docente.foto" alt="Foto del docente">
+                                </td>
 
                             </tr>
                         </ng-template>
