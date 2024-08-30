@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ListaPostulantesComponent } from './lista-postulantes.component';
 import { PanelModule } from 'primeng/panel';
 import { ListaPostulantesRoutingModule } from './lista-postulantes-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
 import { RatingModule } from 'primeng/rating';
@@ -25,14 +25,17 @@ import { EditorModule } from 'primeng/editor';
 import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
+import { AeListaPostulantesComponent } from './ae-lista-postulantes/ae-lista-postulantes.component';
 
 
 
 @NgModule({
   declarations: [
-    ListaPostulantesComponent
+    ListaPostulantesComponent,
+    AeListaPostulantesComponent
   ],
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     PanelModule,
     ListaPostulantesRoutingModule,
