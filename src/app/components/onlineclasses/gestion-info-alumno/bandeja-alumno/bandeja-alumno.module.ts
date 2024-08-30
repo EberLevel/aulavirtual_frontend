@@ -34,13 +34,15 @@ import { RegAlumnoComponent } from '../dialog/reg-alumno/reg-alumno.component';
 import { RegDocumentosAlumnoComponent } from '../dialog/reg-documentos-alumno/reg-documentos-alumno.component';
 import { EditorModule } from 'primeng/editor';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { EditAlumnoComponent } from '../dialog/edit-alumno/edit-alumno.component';
 
 
 @NgModule({
   declarations: [
    BandejaAlumnoComponent, 
    RegAlumnoComponent,
-   RegDocumentosAlumnoComponent
+   RegDocumentosAlumnoComponent,
+   EditAlumnoComponent,
 
   ],
   imports: [

@@ -21,8 +21,6 @@ export class AppSidebarComponent {
 
         this.domain_id = this.helpersService.getDominioId();
         this.generalService.getCompany(this.domain_id).subscribe((response: any) => {
-          console.log("response", response);
-            //save in local storage
             if(localStorage.getItem('company')){
                 localStorage.removeItem('company');
             }

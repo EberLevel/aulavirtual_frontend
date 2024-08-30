@@ -127,44 +127,58 @@ export class EditDocenteComponent {
 }
 
 actualizarDocente() {
-  this.formSubmitted = true; // Se ha intentado guardar
-  
+  this.formSubmitted = true;
+
   const docenteData: any = {
-    id: this.DocenteForm.get('id')?.value,
-    codigo: this.DocenteForm.get('codigo')?.value,
-    nombres: this.DocenteForm.get('nombres')?.value,
-    celular: this.DocenteForm.get('celular')?.value,
-    profesion: this.DocenteForm.get('profesion')?.value,
-    tipo_documento: this.tipoDocumentoSeleccionado?.name,
-    doc_identidad: this.DocenteForm.get('doc_identidad')?.value,
-    fecha_nacimiento: this.DocenteForm.get('fecha_nacimiento')?.value,
-    genero: this.tipoGeneroSeleccionado?.name,
-    roles: 'seguridad,aula_virtual',
-    email: this.DocenteForm.get('email')?.value,
-    domain_id: this.domain_id
+      id: this.DocenteForm.get('id')?.value,
+      codigo: this.DocenteForm.get('codigo')?.value,
+      nombres: this.DocenteForm.get('nombres')?.value,
+      celular: this.DocenteForm.get('celular')?.value,
+      profesion: this.DocenteForm.get('profesion')?.value,
+      tipo_documento: this.tipoDocumentoSeleccionado?.name,
+      doc_identidad: this.DocenteForm.get('doc_identidad')?.value,
+      fecha_nacimiento: this.DocenteForm.get('fecha_nacimiento')?.value,
+      genero: this.tipoGeneroSeleccionado?.name,
+      roles: 'seguridad,aula_virtual',
+      email: this.DocenteForm.get('email')?.value,
+      domain_id: this.domain_id
   };
 
   // Solo agregar la clave si está presente
   const claveValue = this.DocenteForm.get('clave')?.value;
   if (claveValue) {
-    docenteData.clave = claveValue;
+      docenteData.clave = claveValue;
   }
 
-  // Solo agregar la foto si está presente
+  // Solo agregar la foto si se ha seleccionado una nueva o ya existe una imagen base64
   if (this.base64) {
-    docenteData.foto = this.base64;
+      docenteData.foto = this.base64;
   }
 
   this.docenteService.actualizarDocentes(docenteData).subscribe(
-    (res: any) => {
-      Swal.fire('Éxito', 'Docente actualizado correctamente', 'success');
-      this.closeModal();
-    },
-    (error: any) => {
-      Swal.fire('Error', 'Error al actualizar el docente', 'error');
-    }
+      (res: any) => {
+          Swal.fire('Éxito', 'Docente actualizado correctamente', 'success');
+          this.closeModal();
+      },
+      (error: any) => {
+          Swal.fire('Error', 'Error al actualizar el docente', 'error');
+      }
   );
 }
+
+
+onFileChange(event: any) {
+  const file = event.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.base64 = reader.result as string; // Convertir a base64
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+
 
 
   cambiarIdioma() {
@@ -187,14 +201,4 @@ actualizarDocente() {
     this.ref.close({ mensaje: 'cerrando' });
   }
 
-  onFileChange(event: any) {
-    const file = event.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.base64 = reader.result as string; // Convertir a base64
-      };
-      reader.readAsDataURL(file);
-    }
-  }
 }

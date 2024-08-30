@@ -8,6 +8,7 @@ import { DocenteService } from '../../service/docentes.service';
 import { EditDocenteComponent } from '../dialog/edit-docente/edit-docente.component';
 import Swal from 'sweetalert2';
 import { HelpersService } from 'src/app/helpers.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-bandeja-docente',
@@ -27,6 +28,7 @@ export class BandejaDocenteComponent {
   ref: DynamicDialogRef | undefined;
   domain_id: number = 1;
   constructor(
+    private http: HttpClient,
     private dialogService: DialogService,
     private maestroService: GeneralService,
     private router: Router,
@@ -55,33 +57,33 @@ export class BandejaDocenteComponent {
     this.loading=false
     this.listarDocente();
   }
-
   listarDocente() {
-    const rolId = this.helpersService.getRolId(); // Obtén el rol del docente logueado
+    this.loading = true;
+    const rolId = this.helpersService.getRolId();
     
     if (rolId === 17) {
-      // Si el rol es 17, obtén solo el docente logueado
-      const docenteId = this.helpersService.getDocenteId(); // Aquí debes obtener el id del docente logueado
+      const docenteId = this.helpersService.getDocenteId(); 
       this.docenteService.getLoggedDocente(docenteId, this.domain_id).subscribe(
         (res: any) => {
-          this.docentes = [res]; // Asegúrate de que es un solo docente y lo asignas en un array
+          this.docentes = [res]; 
           console.log(res);
         }, 
         (error: any) => {
           console.log(error);
         }
       );
+      this.loading = false;
     } else {
-      // Si el rol es diferente de 17, lista todos los docentes
-      this.docenteService.listarDocentes(this.domain_id).subscribe(
-        (res: any) => {
-          this.docentes = res.Datos; // Lista todos los docentes
-          console.log(res);
-        }, 
-        (error: any) => {
-          console.log(error);
+      this.docenteService.listarDocentes(this.domain_id).subscribe({
+        next: (response) => {
+          this.docentes = response.Datos;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error al listar docentes:', error);
+          this.loading = false;
         }
-      );
+      });
     }
   
     // Convertir las imágenes a base64

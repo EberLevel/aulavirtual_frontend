@@ -242,15 +242,10 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-play',
                                 items: [
                                     {
-                                        label: 'Postulantes 1',
+                                        label: 'Egresados',
                                         icon: 'pi pi-users',
                                         routerLink: ['/pl-virtual/lista-postulantes']
-                                    },
-                                    {
-                                        label: 'Postulantes 2',
-                                        icon: 'pi pi-users',
-                                        routerLink: ['/pl-virtual/lista-postulantes']
-                                    },
+                                    }
                                 ]
                             },
                             {

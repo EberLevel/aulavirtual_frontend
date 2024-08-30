@@ -1,9 +1,9 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl">Registrar Alumno</span>
+        <span class="text-primary font-semibold text-xl">Actualizar Alumno</span>
     </ng-template>
     <ng-template pTemplate="content">
-        <form [formGroup]="alumnoForm" (ngSubmit)="saveAlumno()">
+        <form [formGroup]="alumnoForm">
             <div class="row mb-4">
                 <div class="grid p-fluid">
                     <div class="field md:col-6">
@@ -174,7 +174,7 @@
                 </div>
             </div>
             <div class="row mb-5 text-right">
-                <button pButton label="Guardar" icon="pi pi-plus" id="btnGuardar" class="p-button-success mr-2" type="submit" ></button>
+                <button pButton label="Actualizar" icon="pi pi-refresh" id="btnActualizar" class="p-button-info mr-2" (click)="actualizarAlumno()" type="button"></button>
                 <button pButton label="Cancelar" (click)="closeModal()" icon="pi pi-times" id="btnCancelar" class="p-button-danger"></button>
             </div>
         </form>
