@@ -23,6 +23,8 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { DropdownModule } from 'primeng/dropdown';
 //import colorPicker from 'angular2-color-picker';
 import { ColorPickerModule } from 'primeng/colorpicker';
+import { InformacionAcademicaComponent } from './informacion-academica/informacion-academica.component';
+import { AeInformacionAcademicaComponent } from './informacion-academica/ae-informacion-academica/ae-informacion-academica.component';
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, './assets/i18n/', '.json')
 }
@@ -32,7 +34,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
   declarations: [
 
     ConfiguracionEmpresaComponent,
-    ForoAlumnosComponent,
+    ForoAlumnosComponent
     
   ],
   providers: [DialogService,

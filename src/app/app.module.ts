@@ -41,8 +41,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         HttpClientModule,
         TableModule,
         CalendarModule,
-        ReactiveFormsModule 
-
+        ReactiveFormsModule,
 
 
     ],

@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
                             this.router.navigate(['/pl-virtual']);
                         }
                         else{
-                            this.router.navigate(['/formulario-oi']);
+                            this.router.navigate(['/pl-virtual']);
                         }
 
 					} else {
