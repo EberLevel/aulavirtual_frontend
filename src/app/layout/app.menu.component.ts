@@ -168,21 +168,21 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Capacitasciones',
                                         icon: 'pi pi-users',
                                         routerLink: [
-                                            '/pl-virtual/lista-postulantes',
+                                            '/pl-virtual/capacitacion-postulante',
                                         ],
                                     },
                                     {
                                         label: 'Referencia familiares',
                                         icon: 'pi pi-users',
                                         routerLink: [
-                                            '/pl-virtual/lista-postulantes',
+                                            '/pl-virtual/referencias-familiares',
                                         ],
                                     },
                                     {
                                         label: 'Referencia laborales',
                                         icon: 'pi pi-users',
                                         routerLink: [
-                                            '/pl-virtual/lista-postulantes',
+                                            '/pl-virtual/referencias-laborales',
                                         ],
                                     },
                                 ],

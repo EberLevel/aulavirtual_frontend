@@ -17,6 +17,7 @@ export class InformacionAcademicaComponent {
     informacionAcademicaList: any[] = [];
     originalInformacionAcademicaList: any[] = [];
     ref: DynamicDialogRef | undefined;
+    domain_id: any;
 
     constructor(
         private dialogService: DialogService,
@@ -26,7 +27,8 @@ export class InformacionAcademicaComponent {
     ) {}
 
     ngOnInit(): void {
-        this.informacionAcademicaService.getDataCreate().subscribe(() => {
+        this.domain_id = this.helpersService.getDominioId();
+        this.informacionAcademicaService.getDataCreate(this.domain_id).subscribe(() => {
             this.listarInformacionAcademica();
         });
     }

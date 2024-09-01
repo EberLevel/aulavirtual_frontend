@@ -28,8 +28,8 @@ export class InformacionAcademicaService {
     }
 
     // Método para obtener los datos necesarios para el formulario de creación y almacenarlos
-    getDataCreate(): Observable<any> {
-        return this.http.get(`${this.baseUrl}informacion-academica/data-create`).pipe(
+    getDataCreate(domainId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}informacion-academica/data-create/${domainId}`).pipe(
             tap((data: any) => {
                 this.gradosInstruccion = data.gradosInstruccion;
                 this.profesiones = data.profesiones;

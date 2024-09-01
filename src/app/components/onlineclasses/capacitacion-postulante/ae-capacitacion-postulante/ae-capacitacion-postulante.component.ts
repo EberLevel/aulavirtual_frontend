@@ -2,40 +2,36 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
-import { GeneralService } from '../../service/general.service';
-import { InformacionAcademicaService } from '../../service/informacion-academica.service';
+import { CapacitacionesPostulanteService } from '../../service/capacitaciones-postulante.service';
 import { HelpersService } from 'src/app/helpers.service';
-import { MessageService } from 'primeng/api';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
-    selector: 'app-ae-informacion-academica',
-    templateUrl: './ae-informacion-academica.component.html',
-    styleUrls: ['./ae-informacion-academica.component.scss'],
+    selector: 'app-ae-capacitacion-postulante',
+    templateUrl: './ae-capacitacion-postulante.component.html',
+    styleUrls: ['./ae-capacitacion-postulante.component.scss'],
 })
-export class AeInformacionAcademicaComponent {
+export class AeCapacitacionPostulanteComponent {
     loading: boolean = false;
-    informacionAcademicaForm: FormGroup;
-    gradosInstruccion: any[] = [];
-    profesiones: any[] = [];
-    estadoAvances: any[] = [];
+    capacitacionForm: FormGroup;
+    estados: any[] = [];
     acciones: any;
     domain_id!: number;
+    tiempo: string = '';
+
     constructor(
         private fb: FormBuilder,
         private ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        private informacionAcademicaService: InformacionAcademicaService,
+        private capacitacionesPostulanteService: CapacitacionesPostulanteService,
         private helpersService: HelpersService,
-        private messageService: MessageService,
         private sanitizer: DomSanitizer
     ) {
         this.acciones = this.config.data.acciones;
 
-        this.informacionAcademicaForm = this.fb.group({
-            grado_instruccion_id: ['', Validators.required],
-            profesion_id: ['', Validators.required],
-            estado_avance_id: ['', Validators.required],
+        this.capacitacionForm = this.fb.group({
+            nombre: ['', Validators.required],
+            estado: ['', Validators.required],
             institucion: ['', Validators.required],
             fecha_inicio: ['', Validators.required],
             fecha_termino: ['', Validators.required],
@@ -50,70 +46,83 @@ export class AeInformacionAcademicaComponent {
 
         if (this.acciones === 'ver' || this.acciones === 'actualizar') {
             const data = this.config.data.data;
-
-            // Convertir fechas a objetos Date
+            
+            console.log('Datos recibidos en el modal:', data);
             const fecha_inicio = new Date(data.fecha_inicio);
             const fecha_termino = new Date(data.fecha_termino);
 
-            // Actualizar el formulario con los datos recibidos
-            this.informacionAcademicaForm.patchValue({
+            this.capacitacionForm.patchValue({
                 ...data,
+                estado: data.estado_ano ? data.estado_ano.id : null,
                 fecha_inicio: fecha_inicio,
                 fecha_termino: fecha_termino,
             });
         }
+        this.calcularTiempo();
+    }
+    calcularTiempo(): void {
+        const fechaInicio = this.capacitacionForm.get('fecha_inicio')?.value;
+        const fechaTermino = this.capacitacionForm.get('fecha_termino')?.value;
+
+        if (fechaInicio && fechaTermino) {
+            const diffInMs =
+                new Date(fechaTermino).getTime() -
+                new Date(fechaInicio).getTime();
+            const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+            const years = Math.floor(diffInDays / 365);
+            const months = Math.floor((diffInDays % 365) / 30);
+
+            this.tiempo = `${years} años, ${months} meses`;
+        } else {
+            this.tiempo = '';
+        }
     }
 
+    // Método que se ejecuta al cambiar la fecha de inicio o término
+    onDateChange(): void {
+        this.calcularTiempo();
+    }
     cargarDatos() {
-        this.domain_id = this.helpersService.getDominioId();
-        this.informacionAcademicaService
-            .getDataCreate(this.domain_id)
-            .subscribe(
-                (data) => {
-                    setTimeout(() => {
-                        this.gradosInstruccion = data.gradosInstruccion;
-                        this.profesiones = data.profesiones;
-                        this.estadoAvances = data.estadoAvances;
-                    });
-                },
-                (error) => {
-                    console.error('Error al cargar los datos', error);
-                }
-            );
+        this.capacitacionesPostulanteService.getDataCreate(this.domain_id).subscribe(
+            (data) => {
+                this.estados = data.estados;
+            },
+            (error) => {
+                console.error('Error al cargar los datos', error);
+            }
+        );
     }
 
-    guardarInformacionAcademica() {
-        if (this.informacionAcademicaForm.valid) {
+    guardarCapacitacion() {
+        if (this.capacitacionForm.valid) {
             const domain_id = this.helpersService.getDominioId();
             const idPostulante = this.helpersService.getPostulanteId();
-            const informacionAcademica = {
-                ...this.informacionAcademicaForm.value,
+            const capacitacion = {
+                ...this.capacitacionForm.value,
                 fecha_inicio: this.formatDate(
-                    this.informacionAcademicaForm.value.fecha_inicio
+                    this.capacitacionForm.value.fecha_inicio
                 ),
                 fecha_termino: this.formatDate(
-                    this.informacionAcademicaForm.value.fecha_termino
+                    this.capacitacionForm.value.fecha_termino
                 ),
                 domain_id: domain_id,
                 id_postulante: idPostulante,
             };
-            console.log(informacionAcademica);
-            // Asegurarse de que la imagen_certificado sea una cadena de texto base64 válida
-            if (informacionAcademica.imagen_certificado) {
-                informacionAcademica.imagen_certificado =
-                    informacionAcademica.imagen_certificado
+            console.log(capacitacion);
+            if (capacitacion.imagen_certificado) {
+                capacitacion.imagen_certificado =
+                    capacitacion.imagen_certificado
                         .changingThisBreaksApplicationSecurity ||
-                    informacionAcademica.imagen_certificado;
+                    capacitacion.imagen_certificado;
             }
 
             if (this.acciones === 'actualizar') {
                 const params = {
-                    ...informacionAcademica,
+                    ...capacitacion,
                     id: this.config.data.data.id,
                 };
-                console.log(params);
-                this.informacionAcademicaService
-                    .actualizarInformacionAcademica(params)
+                this.capacitacionesPostulanteService
+                    .actualizarCapacitacion(params)
                     .subscribe(
                         () => {
                             this.ref?.close();
@@ -132,8 +141,8 @@ export class AeInformacionAcademicaComponent {
                         }
                     );
             } else {
-                this.informacionAcademicaService
-                    .guardarInformacionAcademica(informacionAcademica)
+                this.capacitacionesPostulanteService
+                    .guardarCapacitacion(capacitacion)
                     .subscribe(
                         () => {
                             this.ref?.close();
@@ -161,7 +170,7 @@ export class AeInformacionAcademicaComponent {
         const file = event.files[0];
         const reader = new FileReader();
         reader.onload = (e: any) => {
-            this.informacionAcademicaForm.patchValue({
+            this.capacitacionForm.patchValue({
                 imagen_certificado:
                     this.sanitizer.bypassSecurityTrustResourceUrl(
                         e.target.result

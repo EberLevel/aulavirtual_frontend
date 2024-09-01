@@ -1,0 +1,130 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">
+            {{
+                acciones === "add"
+                    ? "Agregar Capacitación"
+                    : acciones === "ver"
+                    ? "Ver Capacitación"
+                    : "Editar Capacitación"
+            }}
+        </span>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <form
+            [formGroup]="capacitacionForm"
+            (ngSubmit)="guardarCapacitacion()"
+        >
+            <div class="grid p-fluid">
+                <div class="field col-6">
+                    <label for="nombre">Nombre</label>
+                    <input
+                        pInputText
+                        id="nombre"
+                        formControlName="nombre"
+                        [disabled]="acciones === 'ver'"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label for="estado">Año</label>
+                    <p-dropdown
+                    [options]="estados"
+                    optionLabel="nombre"
+                    optionValue="id"
+                    id="estado"
+                    formControlName="estado"
+                    [disabled]="acciones === 'ver'"
+                  ></p-dropdown>
+                </div>
+                <div class="field col-6">
+                    <label for="institucion">Institución</label>
+                    <input
+                        pInputText
+                        id="institucion"
+                        formControlName="institucion"
+                        [disabled]="acciones === 'ver'"
+                    />
+                </div>
+                <div class="field col-6">
+                    <label for="fecha_inicio">Fecha de Inicio</label>
+                    <p-calendar
+                        id="fecha_inicio"
+                        formControlName="fecha_inicio"
+                        dateFormat="dd/mm/yy"
+                        (onSelect)="onDateChange()"
+                        [disabled]="acciones === 'ver'"
+                    ></p-calendar>
+                </div>
+                <div class="field col-6">
+                    <label for="fecha_termino">Fecha de Término</label>
+                    <p-calendar
+                        id="fecha_termino"
+                        formControlName="fecha_termino"
+                        (onSelect)="onDateChange()"
+                        dateFormat="dd/mm/yy"
+                        [disabled]="acciones === 'ver'"
+                    ></p-calendar>
+                </div>
+                <div class="field col-6">
+                    <label for="observaciones">Observaciones</label>
+                    <textarea
+                        pInputTextarea
+                        id="observaciones"
+                        formControlName="observaciones"
+                        [disabled]="acciones === 'ver'"
+                    ></textarea>
+                </div>
+                <div
+                    class="field col-6"
+                    style="display: grid; align-items: center"
+                >
+                    <p-fileUpload
+                        mode="basic"
+                        chooseLabel="Adjunte imagen de certificado"
+                        chooseIcon="pi pi-upload"
+                        name="demo[]"
+                        url="https://www.primefaces.org/cdn/api/upload.php"
+                        accept="image/*"
+                        (onSelect)="onFileChange($event)"
+                    ></p-fileUpload>
+                </div>
+                <div class="field col-6">
+                    <label for="tiempo">Tiempo</label>
+                    <input pInputText id="tiempo" [value]="tiempo" readonly />
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="flex justify-content-end">
+                    <button
+                        *ngIf="acciones === 'add'"
+                        pButton
+                        icon="pi pi-plus"
+                        label="Guardar"
+                        iconPos="right"
+                        class="p-button-success p-button-sm"
+                        type="submit"
+                    ></button>
+                    <button
+                        *ngIf="acciones === 'actualizar'"
+                        pButton
+                        icon="pi pi-refresh"
+                        label="Actualizar"
+                        iconPos="right"
+                        class="p-button-warning p-button-sm"
+                        type="submit"
+                    ></button>
+                    <button
+                        pButton
+                        label="Cerrar"
+                        icon="pi pi-times"
+                        iconPos="right"
+                        class="p-button-close-clean"
+                        (click)="closeModal($event)"
+                    ></button>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</p-panel>
