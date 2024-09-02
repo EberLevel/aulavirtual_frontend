@@ -20,7 +20,6 @@ export class PostulanteService {
         return this.http.get(`${this.baseUrl}cvbanks/${id}`);
     }
     
-      
     // Obtener los postulantes por dominio
     getPostulantes(domain_id: number): Observable<any> {
         return this.http.get(`${this.baseUrl}cvbanksByDominio/${domain_id}`);

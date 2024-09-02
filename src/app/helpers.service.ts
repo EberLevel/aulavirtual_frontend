@@ -67,6 +67,17 @@ export class HelpersService {
     }
     return null
   }
+  getPostulanteId() {
+    if (localStorage.getItem('user')) {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        return user.postulante_id;
+      }
+      return null
+    }
+    return null
+  }
   getRolId() {
     if (localStorage.getItem('user')) {
       const userData = localStorage.getItem('user');

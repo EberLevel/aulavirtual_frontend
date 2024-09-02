@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/app.layout.component';
-import {FormularioOiComponent} from './formulario/organizacion-institucional/formulario-oi.component'
 const routerOptions: ExtraOptions = {
     anchorScrolling: 'enabled'
 };
@@ -16,10 +15,6 @@ const routes: Routes = [
         path: 'pl-virtual', component: AppLayoutComponent,
         loadChildren: () => import('./components/onlineclasses/online-classes.module').then(m => m.OnlineClassesModule) 
        
-    },
-    {
-        path: 'formulario-oi', component: FormularioOiComponent,
-        loadChildren: () => import('./formulario/organizacion-institucional/formulario-oi.module').then(m => m.FormularioOiModule)
     },
     {
         path: '', component: AppLayoutComponent,

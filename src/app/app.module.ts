@@ -18,6 +18,10 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
+import { CapacitacionPostulanteRoutingModule } from './components/onlineclasses/capacitacion-postulante/capacitacion-postulante-routing.module';
+import { ReferenciasLaboralesRoutingModule } from './components/onlineclasses/referencias-laborales/referencias-laborales-routing.module';
+import { ReferenciasFamiliaresRoutingModule } from './components/onlineclasses/referencias-familiares/referencias-familiares-routing.module';
+import { ExperienciaLaboralRoutingModule } from './components/onlineclasses/experiencia-laboral/experiencia-laboral-routing.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -41,8 +45,11 @@ export function HttpLoaderFactory(http: HttpClient) {
         HttpClientModule,
         TableModule,
         CalendarModule,
-        ReactiveFormsModule 
-
+        ReactiveFormsModule,
+        CapacitacionPostulanteRoutingModule,
+        ReferenciasLaboralesRoutingModule,
+        ReferenciasFamiliaresRoutingModule,
+        ExperienciaLaboralRoutingModule,
 
 
     ],

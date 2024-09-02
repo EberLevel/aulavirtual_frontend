@@ -62,8 +62,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     EditorModule,
     DialogModule,
     TooltipModule,
-    ReactiveFormsModule // Add ReactiveFormsModule to imports
-
+    ReactiveFormsModule 
   ]
 })
 export class AreaFormacionModule { }

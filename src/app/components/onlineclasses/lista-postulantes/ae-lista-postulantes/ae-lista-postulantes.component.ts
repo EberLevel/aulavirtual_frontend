@@ -13,6 +13,7 @@ import { PostulanteService } from '../../service/postulante.service';
 })
 export class AeListaPostulantesComponent {
     postulanteForm: FormGroup;
+    rolId!: number;
     acciones: string;
     generoOptions: any[] = [
         { label: 'Masculino', value: 'M' },
@@ -22,6 +23,7 @@ export class AeListaPostulantesComponent {
     ocupacionOptions: any[] = []; // Llenar con opciones del backend
     estadoActualOptions: any[] = []; // Llenar con opciones del backend
     domain_id: any;
+    postulanteId: any;
 
     constructor(
         private fb: FormBuilder,
@@ -32,7 +34,12 @@ export class AeListaPostulantesComponent {
         private cd: ChangeDetectorRef
     ) {
         this.acciones = this.config.data.acciones;
-
+        this.rolId = this.helpersService.getRolId(); // Obtén el rol desde el servicio
+        if (this.rolId === 8) {
+            this.postulanteId = this.config.data.postulanteId; // Solo asigna el ID del postulante si el rolId es 8
+          } else if (this.rolId !== 8) {
+            this.rolId = 21; // Si el rol no es 8, lo asigna como 21
+          }
         // Definir las validaciones del formulario
         this.postulanteForm = this.fb.group({
             code: [{ value: '', disabled: true }],
@@ -138,6 +145,7 @@ export class AeListaPostulantesComponent {
     }
 
     ngOnInit(): void {
+        this.rolId = this.helpersService.getRolId();
         this.domain_id = this.helpersService.getDominioId();
 
         this.loadDropdownOptions();

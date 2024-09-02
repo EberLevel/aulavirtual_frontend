@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 import { AeListaPostulantesComponent } from './ae-lista-postulantes/ae-lista-postulantes.component';
 import { PostulanteService } from '../service/postulante.service';
 
-
 @Component({
   selector: 'app-lista-postulantes',
   templateUrl: './lista-postulantes.component.html',
@@ -17,18 +16,36 @@ export class ListaPostulantesComponent {
   originalPostulanteList: any[] = [];
   ref: DynamicDialogRef | undefined;
   domain_id!: number;
+  postulante_id: any;
 
   constructor(
     private dialogService: DialogService,
-    private helpersService: HelpersService,
+    public helpersService: HelpersService,
     private postulanteService: PostulanteService
   ) {}
 
   ngOnInit(): void {
     this.domain_id = this.helpersService.getDominioId();
-    this.listarPostulantes();
+    this.postulante_id = this.helpersService.getPostulanteId();
+    
+    const rol_id = this.helpersService.getRolId();
+    if (rol_id === 8) {
+      this.listarPostulantes();
+    } else {
+      this.listarPostulanteLogueado();
+      
+    }
   }
-
+  
+  listarPostulanteLogueado() {
+    this.loading = true;
+    this.postulanteService.getPostulanteById(this.postulante_id).subscribe((response: any) => {
+      this.postulanteList = [response.cvBank]; // Asigna el postulante a la lista
+      this.originalPostulanteList = [response.cvBank]; // Guarda una copia original por si es necesario
+      this.loading = false;
+    });
+  }
+  
   listarPostulantes() {
     this.loading = true;
     this.postulanteService.getPostulantes(this.domain_id).subscribe((response: any) => {
@@ -46,7 +63,7 @@ export class ListaPostulantesComponent {
     });
 
     this.ref.onClose.subscribe(() => {
-      this.listarPostulantes();
+      this.listarPostulantes(); // Asegúrate de volver a listar correctamente
     });
   }
 
@@ -56,21 +73,14 @@ export class ListaPostulantesComponent {
       styleClass: 'custom-dialog-header',
       data: { acciones: 'ver', data: data },
     });
-
-    this.ref.onClose.subscribe(() => {
-      this.listarPostulantes();
-    });
   }
 
   navigateToEdit(data: any) {
     this.ref = this.dialogService.open(AeListaPostulantesComponent, {
       width: '60%',
       styleClass: 'custom-dialog-header',
-      data: { acciones: 'actualizar', data: data },
-    });
+      data: { acciones: 'actualizar', data: data,postulanteId: data.id },
 
-    this.ref.onClose.subscribe(() => {
-      this.listarPostulantes();
     });
   }
 
@@ -87,7 +97,7 @@ export class ListaPostulantesComponent {
       if (result.isConfirmed) {
         this.postulanteService.eliminarPostulante(id).subscribe(() => {
           Swal.fire('Eliminado', 'El registro ha sido eliminado.', 'success');
-          this.listarPostulantes();
+          this.listarPostulantes(); // Asegúrate de volver a listar correctamente
         }, (error) => {
           Swal.fire('Error', 'Hubo un problema al eliminar el registro.', 'error');
         });

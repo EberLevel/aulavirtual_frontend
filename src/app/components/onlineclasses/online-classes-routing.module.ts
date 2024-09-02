@@ -227,6 +227,46 @@ const routes: Routes = [];
                     ).then((m) => m.ListaPostulantesModule),
             },
             {
+                path: 'capacitacion-postulante',
+                data: { breadcrumb: 'Capacitacion' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/capacitacion-postulante/capacitacion-postulante.module'
+                    ).then((m) => m.CapacitacionPostulanteModule),
+            },
+            {
+                path: 'informacion-academica',
+                data: { breadcrumb: 'Informacion Academica' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/informacion-academica/informacion-academica.module'
+                    ).then((m) => m.InformacionAcademicaModule),
+            },
+            {
+                path: 'referencias-laborales',
+                data: { breadcrumb: 'Referencias Laborales' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/referencias-laborales/referencias-laborales.module'
+                    ).then((m) => m.ReferenciasLaboralesModule),
+            },
+            {
+                path: 'referencias-familiares',
+                data: { breadcrumb: 'Referencias Familiares' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/referencias-familiares/referencias-familiares.module'
+                    ).then((m) => m.ReferenciasFamiliaresModule),
+            },
+            {
+                path: 'experiencia-laboral',
+                data: { breadcrumb: 'Experiencia Laboral' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/experiencia-laboral/experiencia-laboral.module'
+                    ).then((m) => m.ExperienciaLaboralModule),
+            },
+            {
                 path: 'lista-instituciones',
                 data: { breadcrumb: 'Instituciones' },
                 loadChildren: () =>
@@ -345,14 +385,6 @@ const routes: Routes = [];
                     import(
                         '../onlineclasses/ocupacion-actual/ocupacion-actual.module'
                     ).then((m) => m.OcupacionActualModule),
-            },
-            {
-                path: 'areas-de-formacion',
-                data: { breadcrumb: 'Areas de formación' },
-                loadChildren: () =>
-                    import(
-                        '../onlineclasses/areas-formacion/areas-formacion.module'
-                    ).then((m) => m.AreasFormacionModule),
             },
             {
                 path: 'u-formativas',

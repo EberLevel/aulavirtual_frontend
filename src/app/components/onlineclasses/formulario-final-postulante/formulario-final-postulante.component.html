@@ -1,0 +1,64 @@
+<div class="field col-12">
+    <h3 class="text-primary font-semibold text-xl">Formulario Final</h3>
+</div>
+<form [formGroup]="formularioFinalForm" (ngSubmit)="guardarFormulario()">
+  <div class="p-fluid grid">
+      <div class="field col-12">
+          <label for="observaciones">Observaciones</label>
+          <textarea id="observaciones" formControlName="observaciones" pInputTextarea rows="3"></textarea>
+      </div>
+
+      <div class="field col-6">
+          <label for="estado_actual_id">Estado Actual</label>
+          <p-dropdown
+              [options]="estados"
+              optionLabel="nombre"
+              optionValue="id"
+              id="estado_actual_id"
+              formControlName="estado_actual_id"
+          ></p-dropdown>
+      </div>
+
+      <div class="field col-6">
+          <label for="aceptacion_id">Aceptación</label>
+          <p-dropdown
+              [options]="aceptaciones"
+              optionLabel="nombre"
+              optionValue="id"
+              id="aceptacion_id"
+              formControlName="aceptacion_id"
+          ></p-dropdown>
+      </div>
+
+      <div class="field col-6">
+          <label for="nivel_cargo_final_id">Nivel de Cargo Final</label>
+          <p-dropdown
+              [options]="nivelesCargo"
+              optionLabel="nombre"
+              optionValue="id"
+              id="nivel_cargo_final_id"
+              formControlName="nivel_cargo_final_id"
+          ></p-dropdown>
+      </div>
+
+      <div class="field col-6">
+          <label for="puntaje_id">Puntaje</label>
+          <p-dropdown
+              [options]="puntajes"
+              optionLabel="nombre"
+              optionValue="id"
+              id="puntaje_id"
+              formControlName="puntaje_id"
+          ></p-dropdown>
+      </div>
+
+      <div class="field col-12">
+          <label for="institucion">Institución</label>
+          <input id="institucion" formControlName="institucion" pInputText />
+      </div>
+
+      <div class="field col-12">
+          <button pButton type="submit" label="Guardar" class="p-button-primary" [disabled]="formularioFinalForm.invalid"></button>
+      </div>
+  </div>
+</form>
