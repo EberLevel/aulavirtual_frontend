@@ -62,6 +62,8 @@ import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/
     TooltipModule,
     ReactiveFormsModule,
     FormularioFinalPostulanteModule
-],
+],    exports: [
+    ReferenciasFamiliaresComponent 
+  ]
 })
 export class ReferenciasFamiliaresModule {}

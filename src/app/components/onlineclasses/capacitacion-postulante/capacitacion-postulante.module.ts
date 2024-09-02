@@ -63,5 +63,8 @@ import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/
     ReactiveFormsModule,
     FormularioFinalPostulanteModule
 ],
+exports: [
+  CapacitacionPostulanteComponent 
+]
 })
 export class CapacitacionPostulanteModule { }

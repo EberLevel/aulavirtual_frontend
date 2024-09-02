@@ -60,5 +60,8 @@ import { FormularioFinalPostulanteModule } from '../formulario-final-postulante/
         TooltipModule,
         ReactiveFormsModule,
     ],
+    exports: [
+        ExperienciaLaboralComponent 
+      ]
 })
 export class ExperienciaLaboralModule {}

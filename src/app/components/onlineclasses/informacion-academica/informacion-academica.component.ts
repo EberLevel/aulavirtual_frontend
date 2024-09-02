@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AeInformacionAcademicaComponent } from './ae-informacion-academica/ae-informacion-academica.component';
 import { DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
@@ -18,69 +18,110 @@ export class InformacionAcademicaComponent {
     originalInformacionAcademicaList: any[] = [];
     ref: DynamicDialogRef | undefined;
     domain_id: any;
+    @Input() postulanteId!: number;
 
     constructor(
         private dialogService: DialogService,
         private informacionAcademicaService: InformacionAcademicaService,
         private helpersService: HelpersService,
-        private sanitizer: DomSanitizer,
+        private sanitizer: DomSanitizer
     ) {}
 
     ngOnInit(): void {
+        // Verifica si el postulanteId se ha pasado como Input, si no, lo obtiene desde HelpersService
+        if (!this.postulanteId) {
+            this.postulanteId = this.helpersService.getPostulanteId(); // Fallback en caso de que no se reciba como Input
+        }
+
         this.domain_id = this.helpersService.getDominioId();
-        this.informacionAcademicaService.getDataCreate(this.domain_id).subscribe(() => {
-            this.listarInformacionAcademica();
-        });
+        this.informacionAcademicaService
+            .getDataCreate(this.domain_id)
+            .subscribe(() => {
+                this.listarInformacionAcademica();
+            });
     }
     sanitizarImagen(imagenBase64: string) {
-      return this.sanitizer.bypassSecurityTrustUrl(imagenBase64);
+        return this.sanitizer.bypassSecurityTrustUrl(imagenBase64);
     }
-// Usar en la lista de información académica
-listarInformacionAcademica() {
-  const idPostulante = this.helpersService.getPostulanteId(); 
+    // Usar en la lista de información académica
+    listarInformacionAcademica() {
+        this.loading = true;
+        if (this.postulanteId) {
+            this.loading = true;
+            this.informacionAcademicaService
+                .getInformacionAcademicaByPostulante(this.postulanteId)
+                .subscribe(
+                    (response: any) => {
+                        this.loading = true;
+                        this.informacionAcademicaList = response.data.map(
+                            (item: any) => {
+                                const grado = this.obtenerGradoInstruccion(
+                                    item.grado_instruccion_id
+                                );
+                                return {
+                                    ...item,
+                                    gradoEstudios: grado
+                                        ? grado.nombre
+                                        : 'Desconocido',
+                                    profesion: this.obtenerDescripcionProfesion(
+                                        item.profesion_id
+                                    ),
+                                    estadoEstudios:
+                                        this.obtenerDescripcionEstadoAvance(
+                                            item.estado_avance_id
+                                        ),
+                                    avance: grado
+                                        ? `${Math.round(grado.porcentaje)}%`
+                                        : 'N/A',
+                                    fechaInicio: new Date(item.fecha_inicio),
+                                    fechaTermino: new Date(item.fecha_termino),
+                                    imagen_certificado: this.sanitizarImagen(
+                                        item.imagen_certificado || ''
+                                    ),
+                                };
+                            }
+                        );
+                        this.originalInformacionAcademicaList = [
+                            ...this.informacionAcademicaList,
+                        ];
+                        this.loading = false;
+                    },
+                    (error) => {
+                        this.loading = false;
+                    }
+                );
+            this.loading = false;
+        } else {
+            Swal.fire(
+                'Error',
+                'No se pudo obtener el ID del postulante.',
+                'error'
+            );
+        }
+    }
 
-  if (idPostulante) {
-      this.informacionAcademicaService.getInformacionAcademicaByPostulante(idPostulante).subscribe((response: any) => {
-          this.informacionAcademicaList = response.data.map((item: any) => {
-              const grado = this.obtenerGradoInstruccion(item.grado_instruccion_id);
-              return {
-                  ...item,
-                  gradoEstudios: grado ? grado.nombre : 'Desconocido',
-                  profesion: this.obtenerDescripcionProfesion(item.profesion_id),
-                  estadoEstudios: this.obtenerDescripcionEstadoAvance(item.estado_avance_id),
-                  avance: grado ? `${Math.round(grado.porcentaje)}%` : 'N/A',
-                  fechaInicio: new Date(item.fecha_inicio),
-                  fechaTermino: new Date(item.fecha_termino),
-                  imagen_certificado: this.sanitizarImagen(item.imagen_certificado || ''),
-              };
-          });
-          this.originalInformacionAcademicaList = [...this.informacionAcademicaList];
-      }, error => {
-      });
-  } else {
-      Swal.fire('Error', 'No se pudo obtener el ID del usuario.', 'error');
-  }
-}
-  
-  convertImageToBase64(url: string, callback: (base64: string) => void): void {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      const reader = new FileReader();
-      reader.onloadend = function() {
-        callback(reader.result as string);
-      };
-      reader.readAsDataURL(xhr.response);
-    };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-  }
-  
-  obtenerGradoInstruccion(id: number): any {
-      return this.informacionAcademicaService.gradosInstruccion.find(g => g.id === id);
-  }
-  
-  
+    convertImageToBase64(
+        url: string,
+        callback: (base64: string) => void
+    ): void {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                callback(reader.result as string);
+            };
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
+    }
+
+    obtenerGradoInstruccion(id: number): any {
+        return this.informacionAcademicaService.gradosInstruccion.find(
+            (g) => g.id === id
+        );
+    }
 
     obtenerDescripcionGradoInstruccion(id: number): string {
         const grado = this.informacionAcademicaService.gradosInstruccion.find(
@@ -109,10 +150,6 @@ listarInformacionAcademica() {
             styleClass: 'custom-dialog-header',
             data: { acciones: 'add' },
         });
-
-        this.ref.onClose.subscribe(() => {
-            this.listarInformacionAcademica();
-        });
     }
 
     navigateToDetalle(data: any) {
@@ -120,10 +157,6 @@ listarInformacionAcademica() {
             width: '80%',
             styleClass: 'custom-dialog-header',
             data: { acciones: 'ver', data: data },
-        });
-
-        this.ref.onClose.subscribe(() => {
-            this.listarInformacionAcademica();
         });
     }
 
@@ -133,10 +166,6 @@ listarInformacionAcademica() {
             width: '60%',
             styleClass: 'custom-dialog-header',
             data: { acciones: 'actualizar', data: data },
-        });
-
-        this.ref.onClose.subscribe(() => {
-            this.listarInformacionAcademica();
         });
     }
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
 import { ExperienciaLaboralService } from '../service/experiencia-laboral.service';
@@ -17,7 +17,8 @@ export class ExperienciaLaboralComponent {
   originalExperienciasList: any[] = [];
   ref: DynamicDialogRef | undefined;
   domain_id: any;
-
+  @Input() postulanteId!: number;
+  
   constructor(
       private dialogService: DialogService,
       private experienciaLaboralService: ExperienciaLaboralService,
@@ -26,6 +27,11 @@ export class ExperienciaLaboralComponent {
   ) {}
 
   ngOnInit(): void {
+      // Verifica si el postulanteId se ha pasado como Input, si no, lo obtiene desde HelpersService
+      if (!this.postulanteId) {
+        this.postulanteId = this.helpersService.getPostulanteId(); // Fallback en caso de que no se reciba como Input
+      }
+
       this.domain_id = this.helpersService.getDominioId();
       this.experienciaLaboralService.getDataCreate(this.domain_id).subscribe(() => {
           this.listarExperiencias();
@@ -38,11 +44,9 @@ export class ExperienciaLaboralComponent {
   }
 
   listarExperiencias() {
-    const idPostulante = this.helpersService.getPostulanteId(); 
-
-    if (idPostulante) {
-        this.loading = true
-        this.experienciaLaboralService.getExperienciasByPostulante(idPostulante).subscribe((response: any) => {
+    if (this.postulanteId) {  // Ahora usa el postulanteId que fue recibido o obtenido
+        this.loading = true;
+        this.experienciaLaboralService.getExperienciasByPostulante(this.postulanteId).subscribe((response: any) => {
             this.experienciasList = response.data.map((item: any) => {
                 return {
                     ...item,
@@ -52,14 +56,14 @@ export class ExperienciaLaboralComponent {
                 };
             });
             this.originalExperienciasList = [...this.experienciasList];
+            this.loading = false;
         }, error => {
-            Swal.fire('Error', 'Hubo un problema al cargar las experiencias laborales.', 'error');
+            this.loading = false;
         });
     } else {
-        Swal.fire('Error', 'No se pudo obtener el ID del usuario.', 'error');
+        Swal.fire('Error', 'No se pudo obtener el ID del postulante.', 'error');
     }
-    this.loading = false
-}
+  }
 
   navigateAdd() {
       this.ref = this.dialogService.open(AeExperienciaLaboralComponent, {

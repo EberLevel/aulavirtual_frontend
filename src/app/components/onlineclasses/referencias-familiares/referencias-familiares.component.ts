@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
 import { HelpersService } from 'src/app/helpers.service';
@@ -15,7 +15,7 @@ export class ReferenciasFamiliaresComponent {
   referenciasList: any[] = [];
   ref: DynamicDialogRef | undefined;
   domain_id: any;
-
+  @Input() postulanteId!: number;
   constructor(
       private dialogService: DialogService,
       private referenciasFamiliaresService: ReferenciasFamiliaresService,
@@ -23,34 +23,31 @@ export class ReferenciasFamiliaresComponent {
   ) {}
 
   ngOnInit(): void {
-      this.domain_id = this.helpersService.getDominioId();
-      this.listarReferencias();
-  }
+    // Verifica si el postulanteId se ha pasado como Input, si no, lo obtiene desde HelpersService
+    if (!this.postulanteId) {
+      this.postulanteId = this.helpersService.getPostulanteId(); // Fallback en caso de que no se reciba como Input
+    }
+    
+    this.domain_id = this.helpersService.getDominioId();
+    this.listarReferencias();
+}
 
-  listarReferencias() {
-    const idPostulante = this.helpersService.getPostulanteId(); 
-
-    if (idPostulante) {
-        this.referenciasFamiliaresService.getReferenciasByPostulante(idPostulante).subscribe((response: any) => {
+listarReferencias() {
+    if (this.postulanteId) {
+        this.referenciasFamiliaresService.getReferenciasByPostulante(this.postulanteId).subscribe((response: any) => {
             this.referenciasList = response.data;
             console.log('Referencias cargadas:', this.referenciasList);
         }, error => {
-            Swal.fire('Error', 'Hubo un problema al cargar las referencias.', 'error');
         });
     } else {
-        Swal.fire('Error', 'No se pudo obtener el ID del usuario.', 'error');
+        Swal.fire('Error', 'No se pudo obtener el ID del postulante.', 'error');
     }
   }
-
   navigateAdd() {
       this.ref = this.dialogService.open(AeReferenciasFamiliaresComponent, {
           width: '60%',
           styleClass: 'custom-dialog-header',
           data: { acciones: 'add' },
-      });
-
-      this.ref.onClose.subscribe(() => {
-          this.listarReferencias();
       });
   }
 
@@ -59,10 +56,6 @@ export class ReferenciasFamiliaresComponent {
           width: '60%',
           styleClass: 'custom-dialog-header',
           data: { acciones: 'actualizar', data: data },
-      });
-
-      this.ref.onClose.subscribe(() => {
-          this.listarReferencias();
       });
   }
 
