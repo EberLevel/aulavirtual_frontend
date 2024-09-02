@@ -1987,4 +1987,135 @@ export class GeneralService {
                 })
             );
     }
+
+    getOfertasLaborales() {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}ofertas-empleo`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+    // eliminarOfertaLaboral
+    eliminarOfertaLaboral(id: number): Observable<ApiResponse> {
+        return this.http
+            .delete<ApiResponse>(`${this.urlparametro}ofertas-empleo/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    console.log('Response body:', response.body);
+                    if (response.status === 204) {
+                        return {} as ApiResponse;
+                    } else if (response.status === 204 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                }),
+                catchError((error) => {
+                    console.error('Error occurred:', error);
+                    return throwError(error);
+                })
+            );
+    }
+
+    guardarOfertaLaboral(parametro: any): Observable<ApiResponse> {
+        return this.http
+            .post<ApiResponse>(
+                `${this.urlparametro}ofertas-empleo`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    console.log('Response body:', response.body);
+                    if (response.status === 201 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+    // getOfertaLaboral
+    getOfertaLaboral(id: number) {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}ofertas-empleo/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    // actualizarOfertaLaboral
+    actualizarOfertaLaboral(parametro: any, id: number): Observable<ApiResponse> {
+        return this.http
+            .put<ApiResponse>(
+                `${this.urlparametro}ofertas-empleo/${id}`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
 }
