@@ -25,8 +25,7 @@ export class RegCapacitacionesComponent implements OnInit {
     estadoGroupItemList: SelectDocente[] = [];
     itemSeleccionadoEstado?: SelectDocente | null;
     dateValue: Date | undefined;
-    public Editor = ClassicEditor;
-
+    public Editor = ClassicEditor as any;
     @ViewChild('ckeditor', { static: false }) ckeditor!: ElementRef;
     @ViewChild('ckeditor1', { static: false }) ckeditor1!: ElementRef;
 

@@ -515,6 +515,14 @@ const routes: Routes = [];
                         '../onlineclasses/configuracion-empresa/configuracion-empresa.module'
                     ).then((m) => m.ConfiguracionEmpresaModule),
             },
+            {
+                path: 'bolsa-trabajo',
+                data: { breadcrumb: 'Bolsa de Trabajo' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/bolsa-trabajo/bolsa-trabajo.module'
+                    ).then((m) => m.BolsaTrabajoModule),
+            },
         ]),
     ],
 
