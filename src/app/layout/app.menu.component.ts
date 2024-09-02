@@ -312,6 +312,7 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Bolsa de trabajo',
                                 icon: 'pi pi-play',
+                                routerLink: ['/pl-virtual/bolsa-trabajo']
                             },
                         ]
                     }
