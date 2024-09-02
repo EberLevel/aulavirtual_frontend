@@ -259,6 +259,14 @@ const routes: Routes = [];
                     ).then((m) => m.ReferenciasFamiliaresModule),
             },
             {
+                path: 'experiencia-laboral',
+                data: { breadcrumb: 'Experiencia Laboral' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/experiencia-laboral/experiencia-laboral.module'
+                    ).then((m) => m.ExperienciaLaboralModule),
+            },
+            {
                 path: 'lista-instituciones',
                 data: { breadcrumb: 'Instituciones' },
                 loadChildren: () =>

@@ -161,11 +161,11 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Experiencia Laboral',
                                         icon: 'pi pi-users',
                                         routerLink: [
-                                            '/pl-virtual/informacion-academica',
+                                            '/pl-virtual/experiencia-laboral',
                                         ],
                                     },
                                     {
-                                        label: 'Capacitasciones',
+                                        label: 'Capacitaciones',
                                         icon: 'pi pi-users',
                                         routerLink: [
                                             '/pl-virtual/capacitacion-postulante',

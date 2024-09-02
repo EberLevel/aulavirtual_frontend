@@ -25,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { CapacitacionPostulanteRoutingModule } from './capacitacion-postulante-routing.module';
+import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/formulario-final-postulante.module";
 
 
 
@@ -34,7 +35,7 @@ import { CapacitacionPostulanteRoutingModule } from './capacitacion-postulante-r
   imports: [
     CommonModule,
     CapacitacionPostulanteRoutingModule,
-    CalendarModule,   
+    CalendarModule,
     RatingModule,
     ButtonModule,
     SliderModule,
@@ -45,10 +46,10 @@ import { CapacitacionPostulanteRoutingModule } from './capacitacion-postulante-r
     MultiSelectModule,
     DropdownModule,
     PanelModule,
-    ProgressBarModule,   
+    ProgressBarModule,
     FileUploadModule,
     TooltipModule,
-    ToastModule,   
+    ToastModule,
     TableModule,
     ConfirmPopupModule,
     ConfirmDialogModule,
@@ -59,7 +60,8 @@ import { CapacitacionPostulanteRoutingModule } from './capacitacion-postulante-r
     EditorModule,
     DialogModule,
     TooltipModule,
-    ReactiveFormsModule 
-    ],
+    ReactiveFormsModule,
+    FormularioFinalPostulanteModule
+],
 })
 export class CapacitacionPostulanteModule { }

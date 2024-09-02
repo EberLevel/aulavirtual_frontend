@@ -56,7 +56,6 @@ listarInformacionAcademica() {
           });
           this.originalInformacionAcademicaList = [...this.informacionAcademicaList];
       }, error => {
-          Swal.fire('Error', 'Hubo un problema al cargar la información académica.', 'error');
       });
   } else {
       Swal.fire('Error', 'No se pudo obtener el ID del usuario.', 'error');

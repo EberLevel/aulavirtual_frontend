@@ -26,6 +26,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { AeListaPostulantesComponent } from './ae-lista-postulantes/ae-lista-postulantes.component';
+import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/formulario-final-postulante.module";
 
 
 
@@ -39,7 +40,7 @@ import { AeListaPostulantesComponent } from './ae-lista-postulantes/ae-lista-pos
     CommonModule,
     PanelModule,
     ListaPostulantesRoutingModule,
-    FormsModule,     
+    FormsModule,
     CalendarModule,
     TableModule,
     RatingModule,
@@ -62,11 +63,12 @@ import { AeListaPostulantesComponent } from './ae-lista-postulantes/ae-lista-pos
     ConfirmDialogModule,
     FileUploadModule,
     EditorModule,
-    DialogModule,    
-    DynamicDialogModule,      
+    DialogModule,
+    DynamicDialogModule,
     TranslateModule,
     InputTextModule,
     MultiSelectModule,
-  ]
+    FormularioFinalPostulanteModule
+]
 })
 export class ListaPostulantesModule { }

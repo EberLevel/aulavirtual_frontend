@@ -25,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { InformacionAcademicaRoutingModule } from './informacion-academica-routing.module';
+import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/formulario-final-postulante.module";
 
 @NgModule({
     declarations: [
@@ -34,7 +35,7 @@ import { InformacionAcademicaRoutingModule } from './informacion-academica-routi
     imports: [CommonModule,
     FormsModule,
     InformacionAcademicaRoutingModule,
-    CalendarModule,   
+    CalendarModule,
     RatingModule,
     ButtonModule,
     SliderModule,
@@ -45,10 +46,10 @@ import { InformacionAcademicaRoutingModule } from './informacion-academica-routi
     MultiSelectModule,
     DropdownModule,
     PanelModule,
-    ProgressBarModule,   
+    ProgressBarModule,
     FileUploadModule,
     TooltipModule,
-    ToastModule,   
+    ToastModule,
     TableModule,
     ConfirmPopupModule,
     ConfirmDialogModule,
@@ -59,7 +60,6 @@ import { InformacionAcademicaRoutingModule } from './informacion-academica-routi
     EditorModule,
     DialogModule,
     TooltipModule,
-    ReactiveFormsModule 
-    ],
+    ReactiveFormsModule, FormularioFinalPostulanteModule],
 })
 export class InformacionAcademicaModule {}

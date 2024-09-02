@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReferenciasFamiliaresComponent } from './referencias-familiares.component';
-import { AeReferenciasFamiliaresComponent } from './ae-referencias-familiares/ae-referencias-familiares.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormularioFinalPostulanteComponent } from './formulario-final-postulante.component';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -24,44 +23,41 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TooltipModule } from 'primeng/tooltip';
-import { ReferenciasFamiliaresRoutingModule } from './referencias-familiares-routing.module';
-import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/formulario-final-postulante.module";
 
 @NgModule({
-    declarations: [
-        ReferenciasFamiliaresComponent,
-        AeReferenciasFamiliaresComponent,
-    ],
+    declarations: [FormularioFinalPostulanteComponent],
     imports: [
-    CommonModule,
-    ReferenciasFamiliaresRoutingModule,
-    CalendarModule,
-    RatingModule,
-    ButtonModule,
-    SliderModule,
-    InputTextModule,
-    InputTextareaModule,
-    ToggleButtonModule,
-    RippleModule,
-    MultiSelectModule,
-    DropdownModule,
-    PanelModule,
-    ProgressBarModule,
-    FileUploadModule,
-    TooltipModule,
-    ToastModule,
-    TableModule,
-    ConfirmPopupModule,
-    ConfirmDialogModule,
-    MultiSelectModule,
-    InputTextareaModule,
-    InputTextModule,
-    FieldsetModule,
-    EditorModule,
-    DialogModule,
-    TooltipModule,
-    ReactiveFormsModule,
-    FormularioFinalPostulanteModule
-],
+        CommonModule,
+        ReactiveFormsModule,
+        CalendarModule,
+        RatingModule,
+        ButtonModule,
+        SliderModule,
+        InputTextModule,
+        InputTextareaModule,
+        ToggleButtonModule,
+        RippleModule,
+        MultiSelectModule,
+        DropdownModule,
+        PanelModule,
+        ProgressBarModule,
+        FileUploadModule,
+        TooltipModule,
+        ToastModule,
+        TableModule,
+        ConfirmPopupModule,
+        ConfirmDialogModule,
+        MultiSelectModule,
+        InputTextareaModule,
+        InputTextModule,
+        FieldsetModule,
+        EditorModule,
+        DialogModule,
+        TooltipModule,
+        ReactiveFormsModule,
+    ],
+    exports: [
+      FormularioFinalPostulanteComponent 
+    ]
 })
-export class ReferenciasFamiliaresModule {}
+export class FormularioFinalPostulanteModule {}
