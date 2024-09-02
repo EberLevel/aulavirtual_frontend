@@ -64,7 +64,6 @@ export class SeleccionarHorarioCarreraTecnicaComponent implements OnInit {
   ngOnInit() {
     this.getAulas();
     this.getCursoHorarios();
-
   }
 
   getAulas() {
@@ -120,11 +119,11 @@ export class SeleccionarHorarioCarreraTecnicaComponent implements OnInit {
         title: 'Disponibilidad',
         backendId: d.id,
         backgroundColor: 'green',
-        borderColor: 'green', // Si quieres que el borde sea del mismo color
-        display: "background", // Esto hará que el evento sea un fondo
-        allDay: false, // Asegúrate de que no esté configurado como "todo el día"
+        borderColor: 'green', 
+        allDay: false, 
         aula_id: d.aula_id,
-        availability_id: d.id
+        availability_id: d.id,
+        display: 'block' // 
       })}),
       ...this.cursoHorarios.map(h => {
         let fechaInicio = new Date(`${h.fecha_inicio}T${h.hora_inicio}`);
@@ -172,7 +171,7 @@ export class SeleccionarHorarioCarreraTecnicaComponent implements OnInit {
         newEvent
       ];
     } else {
-      this.helpersService.showErrorMessage('El horario seleccionado no está dentro de la disponibilidad del aula');
+      this.helpersService.showErrorMessage('El horario seleccionado no está dentro de la disponibilidad del aula o esta seleccionando un dia entero');
     }
   }
   

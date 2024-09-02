@@ -41,7 +41,7 @@ this.spinner.show();
 
 this.eventService.getEventsDocente(data).subscribe({
   next: (events) => {
-    console.log(events); 
+    console.log('Eventos obtenidos:', events);
     this.events = this.getEventsAlumno(events);
     this.calendarOptions = { ...this.calendarOptions, events: this.events };
 
@@ -92,7 +92,7 @@ this.eventService.getEventsDocente(data).subscribe({
       return this.generateEventDetails(horariosParsed);
     });
     // Flatten the array of events if necessary
-    console.log(eventData.flat());
+    console.log('Eventos procesados:', eventData.flat());
     return eventData.flat();
   }
 
@@ -200,6 +200,7 @@ this.eventService.getEventsDocente(data).subscribe({
         this.events = [...this.events, { ...this.clickedEvent, id: Math.floor(Math.random() * 10000) }];
       }
       this.calendarOptions = { ...this.calendarOptions, events: this.events };
+      console.log('Eventos en el calendario:', this.calendarOptions.events);
       this.clickedEvent = null;
     }
   }
