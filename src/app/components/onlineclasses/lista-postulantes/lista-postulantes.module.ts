@@ -27,6 +27,11 @@ import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { AeListaPostulantesComponent } from './ae-lista-postulantes/ae-lista-postulantes.component';
 import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/formulario-final-postulante.module";
+import { InformacionAcademicaModule } from "../informacion-academica/informacion-academica.module";
+import { CapacitacionPostulanteModule } from "../capacitacion-postulante/capacitacion-postulante.module";
+import { ExperienciaLaboralModule } from "../experiencia-laboral/experiencia-laboral.module";
+import { ReferenciasLaboralesModule } from "../referencias-laborales/referencias-laborales.module";
+import { ReferenciasFamiliaresModule } from "../referencias-familiares/referencias-familiares.module";
 
 
 
@@ -68,7 +73,12 @@ import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/
     TranslateModule,
     InputTextModule,
     MultiSelectModule,
-    FormularioFinalPostulanteModule
+    FormularioFinalPostulanteModule,
+    InformacionAcademicaModule,
+    CapacitacionPostulanteModule,
+    ExperienciaLaboralModule,
+    ReferenciasLaboralesModule,
+    ReferenciasFamiliaresModule
 ]
 })
 export class ListaPostulantesModule { }

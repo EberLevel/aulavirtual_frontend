@@ -61,5 +61,8 @@ import { FormularioFinalPostulanteModule } from "../formulario-final-postulante/
     DialogModule,
     TooltipModule,
     ReactiveFormsModule, FormularioFinalPostulanteModule],
+    exports: [
+        InformacionAcademicaComponent 
+      ]
 })
 export class InformacionAcademicaModule {}

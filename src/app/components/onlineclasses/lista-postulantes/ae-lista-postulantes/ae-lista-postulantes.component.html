@@ -260,6 +260,26 @@
                 </div>
             </div>
         </form>
+        <app-informacion-academica
+            *ngIf="acciones === 'actualizar' && rolId === 8"
+            [postulanteId]="postulanteId"
+        ></app-informacion-academica>
+        <app-capacitacion-postulante
+            *ngIf="acciones === 'actualizar' && rolId === 8"
+            [postulanteId]="postulanteId"
+        ></app-capacitacion-postulante>
+        <app-experiencia-laboral
+            *ngIf="acciones === 'actualizar' && rolId === 8"
+            [postulanteId]="postulanteId"
+        ></app-experiencia-laboral>
+        <app-referencias-laborales
+            *ngIf="acciones === 'actualizar' && rolId === 8"
+            [postulanteId]="postulanteId"
+        ></app-referencias-laborales>
+        <app-referencias-familiares
+            *ngIf="acciones === 'actualizar' && rolId === 8"
+            [postulanteId]="postulanteId"
+        ></app-referencias-familiares>
         <app-formulario-final-postulante
             *ngIf="acciones === 'actualizar' && rolId === 8"
             tablaReferencia="datos_personales_postulante"

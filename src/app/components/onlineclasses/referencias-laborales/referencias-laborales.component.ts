@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
 import { ReferenciasLaboralesService } from '../service/referencias-laborales.service';
@@ -15,6 +15,7 @@ export class ReferenciasLaboralesComponent {
   referenciasList: any[] = [];
   ref: DynamicDialogRef | undefined;
   domain_id: any;
+  @Input() postulanteId!: number;
 
   constructor(
       private dialogService: DialogService,
@@ -23,22 +24,24 @@ export class ReferenciasLaboralesComponent {
   ) {}
 
   ngOnInit(): void {
+        // Verifica si el postulanteId se ha pasado como Input, si no, lo obtiene desde HelpersService
+        if (!this.postulanteId) {
+            this.postulanteId = this.helpersService.getPostulanteId(); // Fallback en caso de que no se reciba como Input
+          }
+          
       this.domain_id = this.helpersService.getDominioId();
       this.listarReferencias();
   }
 
   listarReferencias() {
-    const idPostulante = this.helpersService.getPostulanteId(); 
-
-    if (idPostulante) {
-        this.referenciasLaboralesService.getReferenciasByPostulante(idPostulante).subscribe((response: any) => {
+    if (this.postulanteId) {  // Ahora usa el postulanteId que fue recibido o obtenido
+        this.referenciasLaboralesService.getReferenciasByPostulante(this.postulanteId).subscribe((response: any) => {
             this.referenciasList = response.data;
             console.log('Referencias cargadas:', this.referenciasList);
         }, error => {
-            Swal.fire('Error', 'Hubo un problema al cargar las referencias laborales.', 'error');
         });
     } else {
-        Swal.fire('Error', 'No se pudo obtener el ID del usuario.', 'error');
+        Swal.fire('Error', 'No se pudo obtener el ID del postulante.', 'error');
     }
   }
 
@@ -48,10 +51,6 @@ export class ReferenciasLaboralesComponent {
           styleClass: 'custom-dialog-header',
           data: { acciones: 'add' },
       });
-
-      this.ref.onClose.subscribe(() => {
-          this.listarReferencias();
-      });
   }
 
   navigateToEdit(data: any) {
@@ -59,10 +58,6 @@ export class ReferenciasLaboralesComponent {
           width: '60%',
           styleClass: 'custom-dialog-header',
           data: { acciones: 'actualizar', data: data },
-      });
-
-      this.ref.onClose.subscribe(() => {
-          this.listarReferencias();
       });
   }
 

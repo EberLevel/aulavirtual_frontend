@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DynamicDialogRef, DialogService } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
 import { CapacitacionesPostulanteService } from '../service/capacitaciones-postulante.service';
@@ -17,7 +17,8 @@ export class CapacitacionPostulanteComponent {
   originalCapacitacionesList: any[] = [];
   ref: DynamicDialogRef | undefined;
   domain_id: any;
-
+  @Input() postulanteId!: number; 
+  
   constructor(
       private dialogService: DialogService,
       private capacitacionesPostulanteService: CapacitacionesPostulanteService,
@@ -26,22 +27,26 @@ export class CapacitacionPostulanteComponent {
   ) {}
 
   ngOnInit(): void {
-      this.domain_id = this.helpersService.getDominioId();
-      this.capacitacionesPostulanteService.getDataCreate(this.domain_id).subscribe(() => {
-          this.listarCapacitaciones();
-      });
-      console.log('Datos al iniciar:', this.capacitacionesList);
-  }
+    // Verifica si el postulanteId se ha pasado como Input, si no, lo obtiene desde HelpersService
+    if (!this.postulanteId) {
+        this.postulanteId = this.helpersService.getPostulanteId(); // Fallback en caso de que no se reciba como Input
+    }
+
+    this.domain_id = this.helpersService.getDominioId();
+    this.capacitacionesPostulanteService.getDataCreate(this.domain_id).subscribe(() => {
+        this.listarCapacitaciones();
+    });
+    console.log('Datos al iniciar:', this.capacitacionesList);
+}
 
   sanitizarImagen(imagenBase64: string) {
       return this.sanitizer.bypassSecurityTrustUrl(imagenBase64);
   }
 
   listarCapacitaciones() {
-    const idPostulante = this.helpersService.getPostulanteId(); 
-
-    if (idPostulante) {
-        this.capacitacionesPostulanteService.getCapacitacionesByPostulante(idPostulante).subscribe((response: any) => {
+    if (this.postulanteId) {  // Ahora usa el postulanteId que fue recibido o obtenido
+        this.loading = true;
+        this.capacitacionesPostulanteService.getCapacitacionesByPostulante(this.postulanteId).subscribe((response: any) => {
             this.capacitacionesList = response.data.map((item: any) => {
                 return {
                     ...item,
@@ -54,11 +59,12 @@ export class CapacitacionPostulanteComponent {
             });
             this.originalCapacitacionesList = [...this.capacitacionesList];
             console.log('Capacitaciones cargadas:', this.capacitacionesList);
+            this.loading = false;
         }, error => {
-            Swal.fire('Error', 'Hubo un problema al cargar las capacitaciones.', 'error');
+            this.loading = false;
         });
     } else {
-        Swal.fire('Error', 'No se pudo obtener el ID del usuario.', 'error');
+        Swal.fire('Error', 'No se pudo obtener el ID del postulante.', 'error');
     }
 }
 
@@ -70,10 +76,6 @@ export class CapacitacionPostulanteComponent {
           styleClass: 'custom-dialog-header',
           data: { acciones: 'add' },
       });
-
-      this.ref.onClose.subscribe(() => {
-          this.listarCapacitaciones();
-      });
   }
 
   navigateToDetalle(data: any) {
@@ -81,10 +83,6 @@ export class CapacitacionPostulanteComponent {
           width: '80%',
           styleClass: 'custom-dialog-header',
           data: { acciones: 'ver', data: data },
-      });
-
-      this.ref.onClose.subscribe(() => {
-          this.listarCapacitaciones();
       });
   }
 
@@ -95,10 +93,6 @@ export class CapacitacionPostulanteComponent {
           width: '60%',
           styleClass: 'custom-dialog-header',
           data: { acciones: 'actualizar', data: data },
-      });
-
-      this.ref.onClose.subscribe(() => {
-          this.listarCapacitaciones();
       });
   }
 
