@@ -1,22 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventService } from 'src/app/demo/service/event.service';
+// @fullcalendar plugins
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { HelpersService } from 'src/app/helpers.service';
 
 @Component({
-  selector: 'app-horario',
   templateUrl: './horario.component.html',
   styleUrls: ['./horario.component.scss']
 })
-export class HorarioComponent {
+export class HorarioComponent implements OnInit {
   events: any[] = [];
   today: string = '';
   calendarOptions: any = {
     initialView: 'dayGridMonth'
   };
-  isLoading: boolean = false;
   showDialog: boolean = false;
   clickedEvent: any = null;
   dateClicked: boolean = false;
@@ -26,46 +25,26 @@ export class HorarioComponent {
   changedEvent: any;
   courseStyles: { [key: string]: { backgroundColor: string; borderColor: string; textColor: string } } = {};
 
-  constructor(private eventService: EventService,
-    private spinner: NgxSpinnerService,
-
-  ) { }
+  constructor(private eventService: EventService, private helpersService: HelpersService) {}
 
   ngOnInit(): void {
     this.today = new Date().toISOString().split('T')[0];
     const data = {
-      docente_id: 1
+      docente_id: this.helpersService.getDocenteId() ?? 1,
+      domain_id: this.helpersService.getDominioId()
     };
-    this.isLoading = true;
-this.spinner.show();
-
-this.eventService.getEventsDocente(data).subscribe({
-  next: (events) => {
-    console.log(events); 
-    this.events = this.getEventsAlumno(events);
-    this.calendarOptions = { ...this.calendarOptions, events: this.events };
-
-    // Mapeo para obtener tags únicos
-    this.tags = this.events.map(item => {
-      // Not repeated tags
-      if (!this.tags.includes(item.tag)) {
-        return item.tag;
-      }
-    }).filter(tag => tag !== undefined); // Elimina cualquier valor undefined
-
-    // Oculta el spinner después de recibir la respuesta
-    this.spinner.hide();
-    this.isLoading = false;
-  },
-  error: (err) => {
-    console.error('Error al obtener eventos:', err);
     
-    // Oculta el spinner en caso de error
-    this.spinner.hide();
-    this.isLoading = false;
-  }
-});
+    this.eventService.getEventsDocente(data).subscribe(events => {
+      this.events = this.getEventsDocente(events);
+      this.calendarOptions = { ...this.calendarOptions, events: this.events };
 
+      // Mapeo para obtener tags únicos
+      this.tags = this.events.map(item => {
+        if (!this.tags.includes(item.tag)) {
+          return item.tag;
+        }
+      }).filter(tag => tag !== undefined); // Elimina cualquier valor undefined
+    });
 
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -86,55 +65,56 @@ this.eventService.getEventsDocente(data).subscribe({
     };
   }
 
-  getEventsAlumno(data: any): any {
+  getEventsDocente(data: any): any {
     const eventData = data.map((item: any) => {
       const horariosParsed = JSON.parse(item.horarios);
-      return this.generateEventDetails(horariosParsed);
+      return this.generateEventDetails(horariosParsed, item.nombre);
     });
-    // Flatten the array of events if necessary
-    console.log(eventData.flat());
+    console.log('Eventos procesados:', eventData.flat());
     return eventData.flat();
   }
 
-  generateEventDetails(horarios: any): any {
+  generateEventDetails(horarios: any, nombreCurso: string): any {
     const horarioData: {
-      day_name: string; date: string;
-      start: any; end: any;
-        tag: { color: string; name: string };
-        title: string;
-        borderColor: string;
-        backgroundColor: string;
-        textColor: string;
+      day_name: string;
+      date: string;
+      start: any;
+      end: any;
+      tag: { color: string; name: string };
+      title: string;
+      borderColor: string;
+      backgroundColor: string;
+      textColor: string;
+      extendedProps?: any;
     }[] = [];
 
+    const styles = this.getCourseStyles(nombreCurso);
+
     horarios.forEach((horario: any) => {
-      const styles = this.getCourseStyles(horario.cursoNombre);
-
-      const startDate = new Date(horario.fecha_inicio);
-      const endDate = new Date(horario.fecha_fin);
+      const start = new Date(`${horario.fecha_inicio}T${horario.hora_inicio}`);
+      const endDate = new Date(`${horario.fecha_fin}T${horario.hora_fin}`);
       const dayId = horario.day_id;
-
-      for (let date = new Date(startDate); date <= endDate; date = this.addDays(date, 1)) {
-        if (date.getDay() === dayId % 7) {
-            const startDateTime = `${date.toISOString().split('T')[0]}T${horario.hora_inicio}`;
-            const endDateTime = `${date.toISOString().split('T')[0]}T${horario.hora_fin}`;
-            horarioData.push({
-            day_name: this.getDayName(dayId),
-            date: date.toISOString().split('T')[0], // Format as YYYY-MM-DD
-            end: endDateTime,
-            start: startDateTime,
-            tag: { color: '#FFD700', name: horario.cursoNombre },
-            title: horario.cursoNombre,
-            borderColor: styles.borderColor,
-            backgroundColor: styles.backgroundColor,
-            textColor: styles.textColor
-          });
+      horarioData.push({
+        day_name: this.getDayName(dayId),
+        date: this.addDays(start, dayId).toISOString().split('T')[0],
+        start: start,
+        end: endDate,
+        tag: { color: styles.backgroundColor, name: nombreCurso },
+        title: nombreCurso,
+        borderColor: styles.borderColor,
+        backgroundColor: styles.backgroundColor,
+        textColor: styles.textColor,
+        extendedProps: {
+          docente: horario.docente_name,
+          aulaUbicacion: horario.aula_ubication,
+          aulaName: horario.aula_name
         }
-      }
+      });
     });
 
     return horarioData;
   }
+
   getCourseStyles(nombreCurso: string) {
     // Si el curso ya tiene estilos, retorna esos estilos
     if (this.courseStyles[nombreCurso]) {
@@ -146,6 +126,7 @@ this.eventService.getEventsDocente(data).subscribe({
     this.courseStyles[nombreCurso] = newStyles;
     return newStyles;
   }
+
   getDayName(dayId: number) {
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     return days[dayId % 7];
@@ -156,26 +137,28 @@ this.eventService.getEventsDocente(data).subscribe({
     result.setDate(result.getDate() + days);
     return result;
   }
+
   generateStyles() {
     const backgroundColor = '#212121';
     const borderColors = ['#f9e79f', '#a3e4d7', '#abebc6', '#f5b041', '#ec7063', '#cacfd2'];
-    const textColors = [ '#000000'];
+    const textColors = ['#000000'];
 
     const randomBorderColor = borderColors[Math.floor(Math.random() * borderColors.length)];
     const randomTextColor = textColors[Math.floor(Math.random() * textColors.length)];
 
     return {
-      backgroundColor:randomBorderColor,
+      backgroundColor: randomBorderColor,
       borderColor: randomBorderColor,
       textColor: randomTextColor
     };
   }
+
   onEventClick(e: any) {
     this.clickedEvent = e.event;
     let plainEvent = e.event.toPlainObject({ collapseExtendedProps: true, collapseColor: true });
     this.view = 'display';
     this.showDialog = true;
-
+    console.log(plainEvent);
     this.changedEvent = { ...plainEvent, ...this.clickedEvent };
     this.changedEvent.start = this.clickedEvent.start;
     this.changedEvent.end = this.clickedEvent.end ? this.clickedEvent.end : this.clickedEvent.start;

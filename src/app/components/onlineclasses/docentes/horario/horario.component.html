@@ -1,6 +1,6 @@
 <div class="card">
     <full-calendar [options]="calendarOptions"></full-calendar>
-    <ngx-spinner *ngIf="isLoading" bdColor="rgba(0,0,0,0.5)" size="large" color="#fff" type="ball-spin"></ngx-spinner>
+    <ngx-spinner bdColor="rgba(0,0,0,0.5)" size="large" color="#fff" type="ball-spin"></ngx-spinner>
 
     <p-dialog #dd [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '90vw'}" [style]="{width: '36rem'}" [modal]="true" [closable]="true" (onHide)="view = ''">
         <ng-template pTemplate="header">

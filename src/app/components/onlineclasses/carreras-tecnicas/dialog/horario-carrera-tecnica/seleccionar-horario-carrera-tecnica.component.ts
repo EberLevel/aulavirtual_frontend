@@ -64,7 +64,6 @@ export class SeleccionarHorarioCarreraTecnicaComponent implements OnInit {
   ngOnInit() {
     this.getAulas();
     this.getCursoHorarios();
-
   }
 
   getAulas() {
