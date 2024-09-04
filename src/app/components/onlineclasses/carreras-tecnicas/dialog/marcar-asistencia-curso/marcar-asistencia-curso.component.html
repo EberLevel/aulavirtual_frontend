@@ -8,8 +8,8 @@
                 <div class="field md:col-12">
                     <label for="fechaFilter">Fecha:</label>
                     <select id="fechaFilter" (change)="onFilterDateChange($event)">
-                        <option *ngFor="let fecha of fechas" [value]="fecha">{{ fecha }}</option>
-                    </select>
+                      <option *ngFor="let fecha of fechas" [value]="fecha">{{ fecha }}</option>
+                    </select>                                 
                     <p-table #dt1 [value]="asistenciaCursoList" [rows]="10" [loading]="loading" [rowHover]="true"
                         styleClass="p-datatable-gridlines"  responsiveLayout="scroll"
                         class="custom-search-input">
