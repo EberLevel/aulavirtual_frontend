@@ -29,9 +29,14 @@ export class MarcarAsistenciaCursoComponent {
         this.curso = this.config.data.cursoId;
         this.domainId = this.helpersService.getDominioId();
         this.docente_id = this.config.data.docenteId;
-        this.aulaId = this.config.data.aulaId; // Añadir aulaId desde la configuración
         this.cursoNombre = this.config.data.cursoNombre;
         this.fechas = [];
+
+        console.log("DATA")
+        console.log(this.curso)
+        console.log(this.domainId)
+        console.log(this.docente_id)
+
 
         // Llamar al método para obtener las fechas del curso horario
         this.cargarFechasCursoHorario();
