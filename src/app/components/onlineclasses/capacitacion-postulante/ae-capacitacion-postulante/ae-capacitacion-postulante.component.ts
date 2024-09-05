@@ -14,10 +14,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class AeCapacitacionPostulanteComponent {
     loading: boolean = false;
     capacitacionForm: FormGroup;
-    estados: any[] = [];
     acciones: any;
     domain_id!: number;
     tiempo: string = '';
+    idPostulante!: number;
 
     constructor(
         private fb: FormBuilder,
@@ -29,9 +29,9 @@ export class AeCapacitacionPostulanteComponent {
     ) {
         this.acciones = this.config.data.acciones;
 
+        // Eliminar el control 'estado' del formulario
         this.capacitacionForm = this.fb.group({
             nombre: ['', Validators.required],
-            estado: ['', Validators.required],
             institucion: ['', Validators.required],
             fecha_inicio: ['', Validators.required],
             fecha_termino: ['', Validators.required],
@@ -42,18 +42,27 @@ export class AeCapacitacionPostulanteComponent {
 
     ngOnInit(): void {
         this.domain_id = this.helpersService.getDominioId();
+
+        // Verificamos si se pasa el idPostulante desde la configuración del modal
+        this.idPostulante = this.config.data.postulanteId
+            ? this.config.data.postulanteId
+            : this.helpersService.getPostulanteId();
+
+        if (!this.idPostulante) {
+            console.error('No se encontró idPostulante');
+            return;
+        }
+
         this.cargarDatos();
 
         if (this.acciones === 'ver' || this.acciones === 'actualizar') {
             const data = this.config.data.data;
-            
-            console.log('Datos recibidos en el modal:', data);
+
             const fecha_inicio = new Date(data.fecha_inicio);
             const fecha_termino = new Date(data.fecha_termino);
 
             this.capacitacionForm.patchValue({
                 ...data,
-                estado: data.estado_ano ? data.estado_ano.id : null,
                 fecha_inicio: fecha_inicio,
                 fecha_termino: fecha_termino,
             });
@@ -78,49 +87,57 @@ export class AeCapacitacionPostulanteComponent {
         }
     }
 
-    // Método que se ejecuta al cambiar la fecha de inicio o término
     onDateChange(): void {
         this.calcularTiempo();
     }
     cargarDatos() {
-        this.capacitacionesPostulanteService.getDataCreate(this.domain_id).subscribe(
-            (data) => {
-                this.estados = data.estados;
-            },
-            (error) => {
-                console.error('Error al cargar los datos', error);
-            }
-        );
+        // Puedes eliminar la llamada al servicio si no necesitas cargar más datos
+        this.capacitacionesPostulanteService
+            .getDataCreate(this.domain_id)
+            .subscribe(
+                (data) => {
+                    console.log('Datos cargados:', data);
+                },
+                (error) => {
+                    console.error('Error al cargar los datos', error);
+                }
+            );
     }
 
     guardarCapacitacion() {
         if (this.capacitacionForm.valid) {
             const domain_id = this.helpersService.getDominioId();
-            const idPostulante = this.helpersService.getPostulanteId();
+    
+            const idPostulante = this.config.data.postulanteId
+                ? this.config.data.postulanteId
+                : this.helpersService.getPostulanteId();
+    
+            console.log("idPostulante:", idPostulante);
+    
+            // Verificar si la imagen es un objeto y extraer la cadena base64 si es necesario
+            let imagenCertificado = this.capacitacionForm.value.imagen_certificado;
+    
+            if (imagenCertificado && typeof imagenCertificado === 'object' && imagenCertificado.changingThisBreaksApplicationSecurity) {
+                imagenCertificado = imagenCertificado.changingThisBreaksApplicationSecurity; // Extraer la cadena base64
+            }
+    
             const capacitacion = {
                 ...this.capacitacionForm.value,
-                fecha_inicio: this.formatDate(
-                    this.capacitacionForm.value.fecha_inicio
-                ),
-                fecha_termino: this.formatDate(
-                    this.capacitacionForm.value.fecha_termino
-                ),
+                fecha_inicio: this.formatDate(this.capacitacionForm.value.fecha_inicio),
+                fecha_termino: this.formatDate(this.capacitacionForm.value.fecha_termino),
                 domain_id: domain_id,
-                id_postulante: idPostulante,
+                id_postulante: idPostulante, // Asignar el postulanteId al guardar
+                imagen_certificado: imagenCertificado || '', // Asegurarse de que se envía una cadena o vacía
             };
-            console.log(capacitacion);
-            if (capacitacion.imagen_certificado) {
-                capacitacion.imagen_certificado =
-                    capacitacion.imagen_certificado
-                        .changingThisBreaksApplicationSecurity ||
-                    capacitacion.imagen_certificado;
-            }
-
+    
+            console.log('Datos enviados al backend:', capacitacion);
+    
             if (this.acciones === 'actualizar') {
                 const params = {
                     ...capacitacion,
-                    id: this.config.data.data.id,
+                    id: this.config.data.data.id, // ID del registro para actualizar
                 };
+    
                 this.capacitacionesPostulanteService
                     .actualizarCapacitacion(params)
                     .subscribe(
@@ -134,10 +151,7 @@ export class AeCapacitacionPostulanteComponent {
                             });
                         },
                         (error: any) => {
-                            console.error(
-                                'Error al actualizar el registro',
-                                error
-                            );
+                            console.error('Error al actualizar el registro', error);
                         }
                     );
             } else {
@@ -154,17 +168,14 @@ export class AeCapacitacionPostulanteComponent {
                             });
                         },
                         (error: any) => {
-                            console.error(
-                                'Error al guardar el registro',
-                                error
-                            );
+                            console.error('Error al guardar el registro', error);
                         }
                     );
             }
         } else {
             console.error('Formulario inválido');
         }
-    }
+    }    
 
     onFileChange(event: any) {
         const file = event.files[0];

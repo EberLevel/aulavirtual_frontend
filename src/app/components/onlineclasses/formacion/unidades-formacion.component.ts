@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-areas-formacion',
-  templateUrl: './areas-formacion.component.html',
-  styleUrls: ['./areas-formacion.component.scss']
+  templateUrl: './unidades-formacion.component.html',
+  styleUrls: ['./unidades-formacion.component.scss']
 })
 export class AreasFormacionComponent {
   // datos = []

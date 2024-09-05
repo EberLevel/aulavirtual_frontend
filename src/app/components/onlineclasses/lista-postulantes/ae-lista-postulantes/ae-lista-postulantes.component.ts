@@ -148,6 +148,7 @@ export class AeListaPostulantesComponent {
         this.rolId = this.helpersService.getRolId();
         this.domain_id = this.helpersService.getDominioId();
 
+
         this.loadDropdownOptions();
 
         if (this.acciones === 'ver' || this.acciones === 'actualizar') {
@@ -178,12 +179,9 @@ export class AeListaPostulantesComponent {
                         estado_actual: data.cvBank.estado_actual_id || '',
                         fecha_afiliacion: this.convertToDate(data.cvBank.date_affiliation) || '',
                     });
-
-                    this.cd.detectChanges(); // Forzar la detección de cambios si es necesario
                 });
         }
 
-        // Recalcular la edad cuando la fecha de nacimiento cambie
         this.postulanteForm
             .get('fecha_nacimiento')
             ?.valueChanges.subscribe((birthdate) => {

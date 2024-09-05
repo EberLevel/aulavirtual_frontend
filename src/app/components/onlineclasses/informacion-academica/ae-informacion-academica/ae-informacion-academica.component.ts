@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
-import { GeneralService } from '../../service/general.service';
 import { InformacionAcademicaService } from '../../service/informacion-academica.service';
 import { HelpersService } from 'src/app/helpers.service';
 import { MessageService } from 'primeng/api';
@@ -21,6 +20,8 @@ export class AeInformacionAcademicaComponent {
     estadoAvances: any[] = [];
     acciones: any;
     domain_id!: number;
+    idPostulante!: number;  // Declaramos idPostulante
+
     constructor(
         private fb: FormBuilder,
         private ref: DynamicDialogRef,
@@ -46,6 +47,19 @@ export class AeInformacionAcademicaComponent {
 
     ngOnInit(): void {
         this.domain_id = this.helpersService.getDominioId();
+
+        // Verificamos si se pasa el idPostulante desde la configuración del modal
+        this.idPostulante = this.config.data.postulanteId 
+            ? this.config.data.postulanteId 
+            : this.helpersService.getPostulanteId();
+
+        if (!this.idPostulante) {
+            console.error('No se encontró idPostulante');
+            return;
+        }
+
+        console.log('ID del postulante en AeInformacionAcademicaComponent:', this.idPostulante);
+
         this.cargarDatos();
 
         if (this.acciones === 'ver' || this.acciones === 'actualizar') {
@@ -65,7 +79,6 @@ export class AeInformacionAcademicaComponent {
     }
 
     cargarDatos() {
-        this.domain_id = this.helpersService.getDominioId();
         this.informacionAcademicaService
             .getDataCreate(this.domain_id)
             .subscribe(
@@ -85,35 +98,37 @@ export class AeInformacionAcademicaComponent {
     guardarInformacionAcademica() {
         if (this.informacionAcademicaForm.valid) {
             const domain_id = this.helpersService.getDominioId();
-            const idPostulante = this.helpersService.getPostulanteId();
+            const idPostulante = this.config.data.postulanteId 
+                ? this.config.data.postulanteId 
+                : this.helpersService.getPostulanteId();
+    
+            // Si la imagen está presente, asegurar que es una cadena base64
+            let imagenCertificado = this.informacionAcademicaForm.value.imagen_certificado;
+    
+            if (imagenCertificado && typeof imagenCertificado === 'object' && imagenCertificado.changingThisBreaksApplicationSecurity) {
+                imagenCertificado = imagenCertificado.changingThisBreaksApplicationSecurity;
+            }
+    
             const informacionAcademica = {
                 ...this.informacionAcademicaForm.value,
-                fecha_inicio: this.formatDate(
-                    this.informacionAcademicaForm.value.fecha_inicio
-                ),
-                fecha_termino: this.formatDate(
-                    this.informacionAcademicaForm.value.fecha_termino
-                ),
+                fecha_inicio: this.formatDate(this.informacionAcademicaForm.value.fecha_inicio),
+                fecha_termino: this.formatDate(this.informacionAcademicaForm.value.fecha_termino),
                 domain_id: domain_id,
                 id_postulante: idPostulante,
+                imagen_certificado: imagenCertificado // Asignar la cadena base64 correctamente
             };
-            console.log(informacionAcademica);
-            // Asegurarse de que la imagen_certificado sea una cadena de texto base64 válida
-            if (informacionAcademica.imagen_certificado) {
-                informacionAcademica.imagen_certificado =
-                    informacionAcademica.imagen_certificado
-                        .changingThisBreaksApplicationSecurity ||
-                    informacionAcademica.imagen_certificado;
-            }
-
+    
+            console.log('Datos enviados al backend:', informacionAcademica);
+    
+            // Manejo de actualización
             if (this.acciones === 'actualizar') {
                 const params = {
                     ...informacionAcademica,
                     id: this.config.data.data.id,
                 };
-                console.log(params);
-                this.informacionAcademicaService
-                    .actualizarInformacionAcademica(params)
+                console.log('Datos para actualización:', params);
+    
+                this.informacionAcademicaService.actualizarInformacionAcademica(params)
                     .subscribe(
                         () => {
                             this.ref?.close();
@@ -125,15 +140,13 @@ export class AeInformacionAcademicaComponent {
                             });
                         },
                         (error: any) => {
-                            console.error(
-                                'Error al actualizar el registro',
-                                error
-                            );
+                            console.error('Error al actualizar el registro', error);
                         }
                     );
-            } else {
-                this.informacionAcademicaService
-                    .guardarInformacionAcademica(informacionAcademica)
+            } 
+            else {
+                console.log('Datos para creación:', informacionAcademica);
+                this.informacionAcademicaService.guardarInformacionAcademica(informacionAcademica)
                     .subscribe(
                         () => {
                             this.ref?.close();
@@ -145,17 +158,14 @@ export class AeInformacionAcademicaComponent {
                             });
                         },
                         (error: any) => {
-                            console.error(
-                                'Error al guardar el registro',
-                                error
-                            );
+                            console.error('Error al guardar el registro', error);
                         }
                     );
             }
         } else {
             console.error('Formulario inválido');
         }
-    }
+    }   
 
     onFileChange(event: any) {
         const file = event.files[0];

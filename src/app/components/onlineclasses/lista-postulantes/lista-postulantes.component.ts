@@ -6,114 +6,129 @@ import { AeListaPostulantesComponent } from './ae-lista-postulantes/ae-lista-pos
 import { PostulanteService } from '../service/postulante.service';
 
 @Component({
-  selector: 'app-lista-postulantes',
-  templateUrl: './lista-postulantes.component.html',
-  styleUrls: ['./lista-postulantes.component.scss']
+    selector: 'app-lista-postulantes',
+    templateUrl: './lista-postulantes.component.html',
+    styleUrls: ['./lista-postulantes.component.scss'],
 })
 export class ListaPostulantesComponent {
-  loading: boolean = false;
-  postulanteList: any[] = [];
-  originalPostulanteList: any[] = [];
-  ref: DynamicDialogRef | undefined;
-  domain_id!: number;
-  postulante_id: any;
+    loading: boolean = false;
+    postulanteList: any[] = [];
+    originalPostulanteList: any[] = [];
+    ref: DynamicDialogRef | undefined;
+    domain_id!: number;
+    postulante_id: any;
 
-  constructor(
-    private dialogService: DialogService,
-    public helpersService: HelpersService,
-    private postulanteService: PostulanteService
-  ) {}
+    constructor(
+        private dialogService: DialogService,
+        public helpersService: HelpersService,
+        private postulanteService: PostulanteService
+    ) {}
 
-  ngOnInit(): void {
-    this.domain_id = this.helpersService.getDominioId();
-    this.postulante_id = this.helpersService.getPostulanteId();
-    
-    const rol_id = this.helpersService.getRolId();
-    if (rol_id === 8) {
-      this.listarPostulantes();
-    } else {
-      this.listarPostulanteLogueado();
-      
+    ngOnInit(): void {
+        this.domain_id = this.helpersService.getDominioId();
+        this.postulante_id = this.helpersService.getPostulanteId();
+
+        this.listarPostulantesSegunRol();
     }
-  }
-  
-  listarPostulanteLogueado() {
-    this.loading = true;
-    this.postulanteService.getPostulanteById(this.postulante_id).subscribe((response: any) => {
-      this.postulanteList = [response.cvBank]; // Asigna el postulante a la lista
-      this.originalPostulanteList = [response.cvBank]; // Guarda una copia original por si es necesario
-      this.loading = false;
-    });
-  }
-  
-  listarPostulantes() {
-    this.loading = true;
-    this.postulanteService.getPostulantes(this.domain_id).subscribe((response: any) => {
-      this.postulanteList = response.data;
-      this.originalPostulanteList = [...response.data];
-      this.loading = false;
-    });
-  }
+    listarPostulantesSegunRol() {
+        this.loading = true;
 
-  navigateAddPostulante() {
-    this.ref = this.dialogService.open(AeListaPostulantesComponent, {
-      width: '60%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'add' },
-    });
+        const rol_id = this.helpersService.getRolId();
 
-    this.ref.onClose.subscribe(() => {
-      this.listarPostulantes(); // Asegúrate de volver a listar correctamente
-    });
-  }
+        if (rol_id === 8) {
+            // Si el rol es 8, listar todos los postulantes
+            this.postulanteService
+                .getPostulantes(this.domain_id)
+                .subscribe((response: any) => {
+                    this.postulanteList = response.data;
+                    this.originalPostulanteList = [...response.data];
+                    this.loading = false;
+                });
+        } else {
+            // Si no, listar solo el postulante logueado
+            this.postulanteService
+                .getPostulanteById(this.postulante_id)
+                .subscribe((response: any) => {
+                    this.postulanteList = [response.cvBank];
+                    this.originalPostulanteList = [response.cvBank];
+                    this.loading = false;
+                });
+        }
+    }
 
-  navigateToDetalle(data: any) {
-    this.ref = this.dialogService.open(AeListaPostulantesComponent, {
-      width: '80%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'ver', data: data },
-    });
-  }
-
-  navigateToEdit(data: any) {
-    this.ref = this.dialogService.open(AeListaPostulantesComponent, {
-      width: '60%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'actualizar', data: data,postulanteId: data.id },
-
-    });
-  }
-
-  navigateToDelete(id: number) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'No podrás revertir esto',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarlo',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.postulanteService.eliminarPostulante(id).subscribe(() => {
-          Swal.fire('Eliminado', 'El registro ha sido eliminado.', 'success');
-          this.listarPostulantes(); // Asegúrate de volver a listar correctamente
-        }, (error) => {
-          Swal.fire('Error', 'Hubo un problema al eliminar el registro.', 'error');
+    navigateAddPostulante() {
+        this.ref = this.dialogService.open(AeListaPostulantesComponent, {
+            width: '60%',
+            styleClass: 'custom-dialog-header',
+            data: { acciones: 'add' },
         });
-      }
-    });
-  }
-
-  onGlobalFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
-    if (!filterValue) {
-      this.postulanteList = [...this.originalPostulanteList];
-      return;
+        this.ref.onClose.subscribe(() => {
+            this.listarPostulantesSegunRol();
+        });
     }
 
-    this.postulanteList = this.originalPostulanteList.filter((postulante) =>
-      postulante.nombre.toLowerCase().includes(filterValue)
-    );
-  }
+    navigateToDetalle(data: any) {
+        this.ref = this.dialogService.open(AeListaPostulantesComponent, {
+            width: '80%',
+            styleClass: 'custom-dialog-header',
+            data: { acciones: 'ver', data: data },
+        });
+    }
+
+    navigateToEdit(data: any) {
+        this.ref = this.dialogService.open(AeListaPostulantesComponent, {
+            width: '60%',
+            styleClass: 'custom-dialog-header',
+            data: { acciones: 'actualizar', data: data, postulanteId: data.id },
+        });
+        this.ref.onClose.subscribe(() => {
+            this.listarPostulantesSegunRol();
+        });
+    }
+
+    navigateToDelete(id: number) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'No podrás revertir esto',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.postulanteService.eliminarPostulante(id).subscribe(
+                    () => {
+                        Swal.fire(
+                            'Eliminado',
+                            'El registro ha sido eliminado.',
+                            'success'
+                        );
+                        this.listarPostulantesSegunRol(); // Asegúrate de volver a listar correctamente
+                    },
+                    (error) => {
+                        Swal.fire(
+                            'Error',
+                            'Hubo un problema al eliminar el registro.',
+                            'error'
+                        );
+                    }
+                );
+            }
+        });
+    }
+
+    onGlobalFilter(event: Event) {
+        const filterValue = (
+            event.target as HTMLInputElement
+        ).value.toLowerCase();
+        if (!filterValue) {
+            this.postulanteList = [...this.originalPostulanteList];
+            return;
+        }
+
+        this.postulanteList = this.originalPostulanteList.filter((postulante) =>
+            postulante.nombre.toLowerCase().includes(filterValue)
+        );
+    }
 }

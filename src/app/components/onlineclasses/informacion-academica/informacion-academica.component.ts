@@ -32,7 +32,8 @@ export class InformacionAcademicaComponent {
         if (!this.postulanteId) {
             this.postulanteId = this.helpersService.getPostulanteId(); // Fallback en caso de que no se reciba como Input
         }
-
+    
+    
         this.domain_id = this.helpersService.getDominioId();
         this.informacionAcademicaService
             .getDataCreate(this.domain_id)
@@ -90,13 +91,13 @@ export class InformacionAcademicaComponent {
                         this.loading = false;
                     }
                 );
-            this.loading = false;
         } else {
             Swal.fire(
                 'Error',
                 'No se pudo obtener el ID del postulante.',
                 'error'
             );
+            this.loading = false;
         }
     }
 
@@ -148,7 +149,10 @@ export class InformacionAcademicaComponent {
         this.ref = this.dialogService.open(AeInformacionAcademicaComponent, {
             width: '60%',
             styleClass: 'custom-dialog-header',
-            data: { acciones: 'add' },
+            data: { acciones: 'add' , postulanteId: this.postulanteId},
+        });
+        this.ref.onClose.subscribe(() => {
+            this.listarInformacionAcademica();  // Refrescar la lista
         });
     }
 
@@ -161,13 +165,31 @@ export class InformacionAcademicaComponent {
     }
 
     navigateToEdit(data: any) {
-        console.log(data);
-        this.ref = this.dialogService.open(AeInformacionAcademicaComponent, {
-            width: '60%',
-            styleClass: 'custom-dialog-header',
-            data: { acciones: 'actualizar', data: data },
-        });
+        console.log('Datos recibidos para edición:', data);
+    
+        // Cambiar de postulanteId a id_postulante, ya que el dato viene con ese nombre
+        const postulanteId = data.id_postulante ? data.id_postulante : null;
+    
+        if (postulanteId) {
+            this.ref = this.dialogService.open(AeInformacionAcademicaComponent, {
+                width: '60%',
+                styleClass: 'custom-dialog-header',
+                data: { 
+                    acciones: 'actualizar', 
+                    data: data, 
+                    postulanteId: postulanteId  // Pasar correctamente el ID del postulante
+                },
+            });
+    
+            // Re-suscribir para actualizar los datos al cerrar el modal
+            this.ref.onClose.subscribe(() => {
+                this.listarInformacionAcademica();  // Refrescar la lista
+            });
+        } else {
+            console.error('No se encontró id_postulante en los datos proporcionados.');
+        }
     }
+    
 
     navigateToDelete(id: number) {
         Swal.fire({
