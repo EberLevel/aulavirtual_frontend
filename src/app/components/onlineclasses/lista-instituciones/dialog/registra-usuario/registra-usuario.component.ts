@@ -1,36 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
-import { CalendarOptions } from '@fullcalendar/core';
-import { TranslateService } from '@ngx-translate/core';
-import { PrimeNGConfig } from 'primeng/api';
-import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import esLocale from '@fullcalendar/core/locales/es';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-
-interface carreras {
-    name: string;
-    value: number;
-    code: string;
-}
-
-interface Cantciclos {
-    name: string;
-    value: number;
-    code: string;
-}
-
-interface modellistareaformativa {
-    name: string;
-    value: number;
-    code: string;
-}
-
-interface modellistadocente {
-    name: string;
-    value: number;
-    code: string;
-}
+import { HelpersService } from 'src/app/helpers.service';
+import { InstitucionService } from '../../../service/institucion.service';
 
 @Component({
     selector: 'app-registra-usuario',
@@ -38,99 +11,93 @@ interface modellistadocente {
     styleUrls: ['./registra-usuario.component.scss'],
 })
 export class RegistraUsuarioComponent {
-    listcarrera!: carreras[];
-    seleccarrera: carreras | undefined;
-
-    listciclos!: Cantciclos[];
-    selecciclos: Cantciclos | undefined;
-
-    listareaformativa!: modellistareaformativa[];
-    selectunidadfromativa: modellistareaformativa | undefined;
-
-    lsitadocente!: modellistadocente[];
-    selectdocente: modellistadocente | undefined;
-
-    contsylabus: string = '';
-
-    fechanacimiento!: Date | null;
-    calendarOptions: CalendarOptions = {
-        initialView: 'dayGridMonth',
-        locale: esLocale,
-    };
-
-    dialogVisible: boolean = false;
-    visible: boolean = false;
+    institucionForm: FormGroup;
+    acciones: string;
+    domain_id!: number;
 
     constructor(
-        private layoutService: LayoutService,
-        private router: Router,
-        private primengConfig: PrimeNGConfig,
-        private translate: TranslateService,
-        public ref: DynamicDialogRef,
-        private translateService: TranslateService
-    ) {}
+        private fb: FormBuilder,
+        private ref: DynamicDialogRef,
+        public config: DynamicDialogConfig,
+        private institucionService: InstitucionService,
+        private helpersService: HelpersService
+    ) {
+        this.acciones = this.config.data.acciones;
 
-    ngOnInit() {
-        this.listciclos = [
-            { name: 'Administrador', value: 1, code: 'NY' },
-            { name: 'Alumno', value: 2, code: 'RM' },
-            { name: 'Docente', value: 3, code: 'NY' },
-        ];
-        this.listcarrera = [
-            { name: 'DNI', value: 1, code: 'NY' },
-            { name: 'PASAPORTE', value: 2, code: 'RM' },
-        ];
+        // Definir las validaciones del formulario
+        this.institucionForm = this.fb.group({
+            codigo: ['', Validators.required],
+            nivel: [''],
+            nombre: ['', Validators.required],
+            direccion: ['', Validators.required],
+            siglas: ['', Validators.required],
+            ubigeo: [''],
+            telefono: [''],
+            domain_id: ['']
+        });
+    }
 
-        this.listareaformativa = [
-            { name: 'Área de formación 1', value: 1, code: 'NY' },
-            { name: 'Área de formación 2', value: 2, code: 'RM' },
-            { name: 'Área de formación 3', value: 2, code: 'RM' },
-        ];
-        this.lsitadocente = [
-            { name: 'Docente 1', value: 1, code: 'NY' },
-            { name: 'Docente 2', value: 2, code: 'RM' },
-            { name: 'Docente 3', value: 2, code: 'RM' },
-        ];
-
-        if (this.translate) {
-            this.translateChange('es'); // Cambia a español como ejemplo
-        } else {
-            console.error('TranslateService is not initialized.');
+    ngOnInit(): void {
+        this.domain_id = this.helpersService.getDominioId();
+        if (this.acciones === 'ver' || this.acciones === 'actualizar') {
+            this.institucionForm.patchValue({
+                codigo: this.config.data.data.codigo,
+                nombre: this.config.data.data.nombre,
+                nivel: this.config.data.data.nivel,
+                siglas: this.config.data.data.siglas,
+                direccion: this.config.data.data.direccion,
+                telefono: this.config.data.data.telefono,
+                ubigeo: this.config.data.data.ubigeo,
+            });
         }
     }
 
-    cambiarIdioma() {
-        this.translateService.use('es');
-    }
+    guardarInstitucion() {
+        if (this.institucionForm.valid) {
+            const institucionData = {
+                ...this.institucionForm.value,
+                domain_id: this.domain_id
+            };
 
-    translateChange(lang: string): void {
-        if (this.translate) {
-            this.translate.use(lang);
+            if (this.acciones === 'actualizar') {
+                const id = this.config.data.data.id;
+                this.institucionService.actualizarInstitucion(id, institucionData).subscribe(
+                    (response: any) => {
+                        this.ref?.close();
+                        Swal.fire({
+                            title: '¡Éxito!',
+                            text: 'Los Datos se actualizaron correctamente',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    },
+                    (error: any) => {
+                        console.error('Error al actualizar la institución', error);
+                    }
+                );
+            } else {
+                this.institucionService.guardarInstitucion(institucionData).subscribe(
+                    (response: any) => {
+                        this.ref?.close();
+                        Swal.fire({
+                            title: '¡Éxito!',
+                            text: 'Los Datos se registraron correctamente',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    },
+                    (error: any) => {
+                        console.error('Error al guardar la institución', error);
+                    }
+                );
+            }
         } else {
-            console.error('TranslateService is not initialized.');
+            console.error('Formulario inválido');
         }
     }
 
-    onDropdownChangetipoDni(event: any): void {
-        // Lógica para manejar el cambio en el dropdown
-        console.log('Dropdown value changed:', event);
-    }
-
-    Guardaruser() {
-        this.ref.close();
-        Swal.fire({
-            title: '¡Éxito!',
-            text: 'Los Datos se registraron correctamente',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-        }).then(() => {});
-    }
-
-    closeDialog() {
-        this.visible = false;
-    }
-
-    closeModal() {
-        this.ref.close({ register: false });
+    closeModal(event: Event) {
+        event.preventDefault();
+        this.ref?.close();
     }
 }

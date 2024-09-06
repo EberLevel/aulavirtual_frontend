@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PanelModule } from 'primeng/panel';
-import { AreasFormacionRoutingModule } from './areas-formacion-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
@@ -25,7 +24,9 @@ import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { RegistraUsuarioComponent } from './dialog/registra-usuario/registra-usuario.component';
-import { AreasFormacionComponent } from './areas-formacion.component';
+import { AreasFormacionRoutingModule } from './unidades-formacion-routing.module';
+import { AreasFormacionComponent } from './unidades-formacion.component';
+
 
 @NgModule({
   declarations: [

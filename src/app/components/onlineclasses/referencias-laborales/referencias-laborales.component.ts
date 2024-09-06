@@ -49,16 +49,22 @@ export class ReferenciasLaboralesComponent {
       this.ref = this.dialogService.open(AeReferenciasLaboralesComponent, {
           width: '60%',
           styleClass: 'custom-dialog-header',
-          data: { acciones: 'add' },
+          data: { acciones: 'add',postulanteId: this.postulanteId },
       });
+      this.ref.onClose.subscribe(() => {
+        this.listarReferencias();
+    });
   }
 
   navigateToEdit(data: any) {
       this.ref = this.dialogService.open(AeReferenciasLaboralesComponent, {
           width: '60%',
           styleClass: 'custom-dialog-header',
-          data: { acciones: 'actualizar', data: data },
+          data: { acciones: 'actualizar', data: data, postulanteId: this.postulanteId },
       });
+      this.ref.onClose.subscribe(() => {
+        this.listarReferencias();
+    });
   }
 
   navigateToDelete(id: number) {

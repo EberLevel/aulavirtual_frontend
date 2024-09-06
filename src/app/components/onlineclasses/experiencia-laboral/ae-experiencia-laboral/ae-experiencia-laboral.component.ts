@@ -18,6 +18,7 @@ export class AeExperienciaLaboralComponent {
     modalidadesPuesto: any[] = [];
     acciones: any;
     domain_id!: number;
+    idPostulante!: number;
 
     constructor(
         private fb: FormBuilder,
@@ -51,8 +52,19 @@ export class AeExperienciaLaboralComponent {
 
     ngOnInit(): void {
         this.domain_id = this.helpersService.getDominioId();
+
+        // Verificamos si se pasa el idPostulante desde la configuración del modal
+        this.idPostulante = this.config.data.postulanteId
+            ? this.config.data.postulanteId
+            : this.helpersService.getPostulanteId();
+
+        if (!this.idPostulante) {
+            console.error('No se encontró idPostulante');
+            return;
+        }
+
         this.cargarDatos();
-    
+
         // Usar el servicio para obtener los vínculos laborales y modalidades de puesto
         this.experienciaLaboralService.getDataCreate(this.domain_id).subscribe(
             (data) => {
@@ -64,16 +76,20 @@ export class AeExperienciaLaboralComponent {
                 console.error('Error al cargar los datos', error);
             }
         );
-    
+
         if (this.acciones === 'ver' || this.acciones === 'actualizar') {
             const data = this.config.data.data;
             const fecha_ingreso = new Date(data.fecha_ingreso);
             const fecha_termino = new Date(data.fecha_termino);
-    
+
             this.experienciaForm.patchValue({
                 ...data,
-                vinculo_laboral_id: data.vinculo_laboral ? data.vinculo_laboral.id : null,
-                modalidad_puesto_id: data.modalidad_puesto ? data.modalidad_puesto.id : null,
+                vinculo_laboral_id: data.vinculo_laboral
+                    ? data.vinculo_laboral.id
+                    : null,
+                modalidad_puesto_id: data.modalidad_puesto
+                    ? data.modalidad_puesto.id
+                    : null,
                 fecha_ingreso: fecha_ingreso,
                 fecha_termino: fecha_termino,
             });
@@ -97,20 +113,32 @@ export class AeExperienciaLaboralComponent {
     guardarExperiencia() {
         if (this.experienciaForm.valid) {
             const domain_id = this.helpersService.getDominioId();
-            const idPostulante = this.helpersService.getPostulanteId();
+            const idPostulante = this.config.data.postulanteId
+                ? this.config.data.postulanteId
+                : this.helpersService.getPostulanteId();
+    
+            console.log("idPostulante:", idPostulante);
+    
+            // Verificar si la imagen es un objeto y extraer la cadena base64 si es necesario
+            let imagen = this.experienciaForm.value.imagen;
+    
+            if (imagen && typeof imagen === 'object' && imagen.changingThisBreaksApplicationSecurity) {
+                imagen = imagen.changingThisBreaksApplicationSecurity; // Extraer la cadena base64
+            }
+    
             const experiencia = {
                 ...this.experienciaForm.value,
-                fecha_ingreso: this.formatDate(
-                    this.experienciaForm.value.fecha_ingreso
-                ),
-                fecha_termino: this.experienciaForm.value.fecha_termino ? this.formatDate(
-                    this.experienciaForm.value.fecha_termino
-                ) : null,
+                fecha_ingreso: this.formatDate(this.experienciaForm.value.fecha_ingreso),
+                fecha_termino: this.experienciaForm.value.fecha_termino
+                    ? this.formatDate(this.experienciaForm.value.fecha_termino)
+                    : null,
                 domain_id: domain_id,
                 id_postulante: idPostulante,
+                imagen: imagen || '' // Enviar la cadena base64 o vacía si no hay imagen
             };
-            console.log(experiencia);
-
+    
+            console.log('Datos enviados al backend:', experiencia);
+    
             if (this.acciones === 'actualizar') {
                 const params = {
                     ...experiencia,
@@ -129,10 +157,7 @@ export class AeExperienciaLaboralComponent {
                             });
                         },
                         (error: any) => {
-                            console.error(
-                                'Error al actualizar el registro',
-                                error
-                            );
+                            console.error('Error al actualizar el registro', error);
                         }
                     );
             } else {
@@ -149,10 +174,7 @@ export class AeExperienciaLaboralComponent {
                             });
                         },
                         (error: any) => {
-                            console.error(
-                                'Error al guardar el registro',
-                                error
-                            );
+                            console.error('Error al guardar el registro', error);
                         }
                     );
             }
@@ -160,6 +182,7 @@ export class AeExperienciaLaboralComponent {
             console.error('Formulario inválido');
         }
     }
+    
 
     onFileChange(event: any) {
         const file = event.files[0];

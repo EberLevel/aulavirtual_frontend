@@ -1,194 +1,95 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl"
-            >Registrar institutos</span
-        >
+        <span class="text-primary font-semibold text-xl">
+            {{ acciones === 'add' ? 'Agregar Institución' : (acciones === 'ver' ? 'Ver Institución' : 'Editar Institución') }}
+        </span>
     </ng-template>
+
     <ng-template pTemplate="content">
-        <div class="row">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="director" pInputText />
-                        <label for="director">Código</label>
-                    </span>
-                    <small style="color: brown">Campo obligatorio *</small>
-                </div>
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="director" pInputText />
-                        <label for="director">Nombres</label>
-                    </span>
-                    <small style="color: brown">Campo obligatorio *</small>
+        <form [formGroup]="institucionForm" (ngSubmit)="guardarInstitucion()">
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-12">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="nombre" [disabled]="acciones === 'ver'">
+                            <label class="required">Nombre</label>
+                        </span>
+                        <small *ngIf="institucionForm.get('nombre')?.invalid && institucionForm.get('nombre')?.touched"
+                               class="p-error">El nombre es obligatorio</small>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="siglas" pInputText />
-                        <label for="siglas">Siglas</label>
-                    </span>
-                    <small style="color: brown">Campo obligatorio *</small>
-                </div>
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="logotipo" pInputText />
-                        <label for="logotipo">Teléfono</label>
-                    </span>
-                    <small style="color: brown">Campo obligatorio *</small>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="siglas" pInputText />
-                        <label for="siglas">Correo electrónico</label>
-                    </span>
-                    <small style="color: brown">Campo obligatorio *</small>
-                </div>
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="logotipo" pInputText />
-                        <label for="logotipo">Dirección</label>
-                    </span>
-                    <small style="color: brown">Campo obligatorio *</small>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="siglas" pInputText />
-                        <label for="siglas">Ubigeo</label>
-                    </span>
-                    <small style="color: brown">Campo obligatorio *</small>
-                </div>
-            </div>
-        </div>
 
-        <!--    <div class="row">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="listcarrera"
-                            [(ngModel)]="seleccarrera" optionLabel="name" ></p-dropdown>
-                        <label for="dropdown">Carrera técnica </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>                  
-                </div>
-                <div class="field md:col-6">
-                    <span class="p-float-label">
-                        <p-multiSelect inputId="dropdown" class="custom-multiselect" [options]="listciclos"
-                                [(ngModel)]="selecciclos" optionLabel="name" ></p-multiSelect>
-                        <label for="dropdown">Selecione ciclos </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid">
-                 <div class="field md:col-6">               
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="listareaformativa"
-                            [(ngModel)]="selectunidadfromativa" optionLabel="name" ></p-dropdown>
-                        <label for="dropdown">Área de Infomración </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>                 
-                 </div>
-                 <div class="field md:col-6">               
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="listareaformativa"
-                            [(ngModel)]="selectunidadfromativa" optionLabel="name" ></p-dropdown>
-                        <label for="dropdown">Modúlo Formativo </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>                 
-                 </div>
-              </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="siglas" pInputText>
-                        <label for="siglas">Cantidad de Credito</label>
-                    </span>
-                    <small style="color: brown;">Campo obligatorio *</small>
-                </div>
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="siglas" pInputText>
-                        <label for="siglas">% De Crédito</label>
-                    </span>
-                    <small style="color: brown;">Campo obligatorio *</small>
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="codigo" [disabled]="acciones === 'ver'">
+                            <label class="required">Código</label>
+                        </span>
+                        <small *ngIf="institucionForm.get('codigo')?.invalid && institucionForm.get('codigo')?.touched"
+                               class="p-error">El código es obligatorio</small>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="nivel" [disabled]="acciones === 'ver'">
+                            <label>Nivel</label>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid">
-                <div class="field md:col-6">
-                    <span class="p-float-label p-input-icon-left">
-                        <i class="pi pi-user-edit"></i>
-                        <input type="text" id="siglas" pInputText>
-                        <label for="siglas">Cantidad de Horas</label>
-                    </span>
-                    <small style="color: brown;">Campo obligatorio *</small>
-                </div>
-                <div class="field md:col-6">               
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="lsitadocente"
-                            [(ngModel)]="selectdocente" optionLabel="name" ></p-dropdown>
-                        <label for="dropdown">Seleccione Docente </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>                 
-                 </div>
-             
-            </div>
-        </div>
-        <div class="row">            
-                <div class="field col-12 md:col-12">
-                    <label for="">Ingrese Contenido del Sylabus</label>
-                    <p-editor 
-                    [(ngModel)]="contsylabus" 
-                    [style]="{ height: '200px' }" 
-                     placeholder="">
-                    </p-editor>
-                  
-                </div>
-            
-        </div> -->
 
-        <div class="row mb-5 text-right">
-            <button
-                pButton
-                label="Guardar"
-                icon="pi pi-plus"
-                (click)="Guardaruser()"
-                id="btnGuardar"
-                class="p-button-success mr-2"
-            ></button>
-            <button
-                pButton
-                label="Cerrar"
-                icon="pi pi-times"
-                iconPos="right"
-                class="p-button-close-clean"
-                (click)="closeModal()"
-            ></button>
-        </div>
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="direccion" [disabled]="acciones === 'ver'">
+                            <label class="required">Dirección</label>
+                        </span>
+                        <small *ngIf="institucionForm.get('direccion')?.invalid && institucionForm.get('direccion')?.touched"
+                               class="p-error">La dirección es obligatoria</small>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="telefono" [disabled]="acciones === 'ver'">
+                            <label>Teléfono</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="siglas" [disabled]="acciones === 'ver'">
+                            <label class="required">Siglas</label>
+                        </span>
+                        <small *ngIf="institucionForm.get('siglas')?.invalid && institucionForm.get('siglas')?.touched" class="p-error">
+                            Las siglas son obligatorias
+                        </small>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" pInputText formControlName="ubigeo" [disabled]="acciones === 'ver'">
+                            <label>Ubigeo</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="flex justify-content-end flex-column sm:flex-row">
+                    <div class="flex flex-wrap gap-2">
+                        <button *ngIf="acciones === 'add'" pButton icon="pi pi-plus" label="Guardar" iconPos="right"
+                                class="p-button-success p-button-sm" type="submit"></button>
+                        <button *ngIf="acciones === 'actualizar'" pButton icon="pi pi-refresh" label="Actualizar"
+                                iconPos="right" class="p-button-warning p-button-sm" type="submit"></button>
+                        <button pButton label="Cerrar" icon="pi pi-times" iconPos="right"
+                                class="p-button-close-clean" (click)="closeModal($event)"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </ng-template>
 </p-panel>

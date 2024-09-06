@@ -17,7 +17,7 @@
             (ngSubmit)="guardarCapacitacion()"
         >
             <div class="grid p-fluid">
-                <div class="field col-6">
+                <div class="field col-12">
                     <label for="nombre">Nombre</label>
                     <input
                         pInputText
@@ -25,17 +25,6 @@
                         formControlName="nombre"
                         [disabled]="acciones === 'ver'"
                     />
-                </div>
-                <div class="field col-6">
-                    <label for="estado">Año</label>
-                    <p-dropdown
-                    [options]="estados"
-                    optionLabel="nombre"
-                    optionValue="id"
-                    id="estado"
-                    formControlName="estado"
-                    [disabled]="acciones === 'ver'"
-                  ></p-dropdown>
                 </div>
                 <div class="field col-6">
                     <label for="institucion">Institución</label>
