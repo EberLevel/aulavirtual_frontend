@@ -19,6 +19,8 @@ import { SeleccionarAlumnosCursoComponent } from '../../../carreras-tecnicas/dia
 import { MarcarAsistenciaCursoComponent } from '../../../carreras-tecnicas/dialog/marcar-asistencia-curso/marcar-asistencia-curso.component';
 import { VerGrupoEvaluacionesComponent } from '../../../carreras-tecnicas/dialog/ver-curso-de-carrera/opciones/ver-g-ev/ver-g-ev.component';
 import { CrearForoCursoComponent } from '../../../carreras-tecnicas/dialog/crear-foro-curso/crear-foro-curso.component';
+import { HelpersService } from 'src/app/helpers.service';
+import { CursoService } from '../../../service/cursos.service';
 
 @Component({
     selector: 'app-cursos-docentes',
@@ -40,68 +42,67 @@ export class CursosDocentesComponent {
 
     // Define the config property
     config: any;
+    rolId: any;
+    docenteId: any;
+    domain_id: any;
 
     constructor(
         private dialogService: DialogService,
-        private cursosService: GeneralService,
+        private cursosService: GeneralService, // Uso general
+        private helpersService: HelpersService,
+        private cursoService: CursoService, // Uso exclusivo para cursos
         private router: Router
     ) {}
 
     ngOnInit(): void {
-        // Obtener el objeto 'user' del localStorage
-        const user = localStorage.getItem('user');
-
-        let docenteId = null;
-
-        // Verificar si el objeto existe en el localStorage
-        if (user) {
-            // Parsear el objeto JSON
-            const userObj = JSON.parse(user);
-
-            // Acceder a la propiedad docente_id
-            docenteId = userObj.docente_id || 8;
-        } else {
-            console.error('No se encontró el objeto user en el localStorage');
-        }
-
+        this.rolId = this.helpersService.getRolId();
+        this.docenteId = this.helpersService.getDocenteId();
+        this.domain_id = this.helpersService.getDominioId();
+    
         this.config = {
             data: {
                 data: {
-                    id: docenteId,
+                    id: this.docenteId,
                     total_creditos: 30, // Replace with actual total credits
                 },
             },
         };
-
+        console.log(this.docenteId);
         this.listarCursos();
     }
-
+    
     listarCursos() {
-        this.cursosService
-            .getCursosByDocente(this.config.data.data.id)
-            .subscribe((response: any) => {
-                this.carrerastecnicasList = response;
-                this.originalCarrerastecnicasList = [...response];
-            });
+        if (this.rolId === 8) {
+            // Si el rolId es 8, usa getCursosPorDomain
+            this.cursoService.getCursosPorDomain(this.domain_id).subscribe(
+                (response: any) => {
+                    this.carrerastecnicasList = response;
+                    this.originalCarrerastecnicasList = [...response];
+                },
+                (error) => {
+                    console.error('Error al obtener cursos por dominio', error);
+                }
+            );
+        } else {
+            // Si el rolId no es 8, usa getCursosByDocente
+            this.cursosService.getCursosByDocente(this.config.data.data.id).subscribe(
+                (response: any) => {
+                    this.carrerastecnicasList = response;
+                    this.originalCarrerastecnicasList = [...response];
+                },
+                (error) => {
+                    console.error('Error al obtener cursos por docente', error);
+                }
+            );
+        }
     }
-
-    navigateToNuevo() {
-        this.ref = this.dialogService.open(RegCarrerastecnicasComponent, {
-            width: '60%',
-            styleClass: 'custom-dialog-header',
-        });
-
-        this.ref.onClose.subscribe(() => {
-            this.listarCursos();
-        });
-    }
-
+    
     navigateAddCurso() {
         this.ref = this.dialogService.open(RegCursosComponent, {
             width: '60%',
             styleClass: 'custom-dialog-header',
             data: {
-                id: this.config.data.data.id,
+                id: this.config.data.id,
                 total_creditos: this.config.data.data.total_creditos,
                 acciones: 'add',
             },
@@ -134,9 +135,26 @@ export class CursosDocentesComponent {
             width: '60%',
             styleClass: 'custom-dialog-header',
             data: {
-                id: this.config.data.data.id,
+                id: this.config.data.id,
                 total_creditos: this.config.data.data.total_creditos,
                 acciones: 'editar',
+                data: data,
+            },
+        });
+
+        this.ref.onClose.subscribe(() => {
+            this.listarCursos();
+        });
+    }
+
+    navigateToDuplicar(data: any) {
+        this.ref = this.dialogService.open(RegCursosComponent, {
+            width: '60%',
+            styleClass: 'custom-dialog-header',
+            data: {
+                id: this.config.data.data.id,
+                total_creditos: this.config.data.data.total_creditos,
+                acciones: 'duplicar',
                 data: data,
             },
         });

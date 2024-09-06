@@ -60,6 +60,9 @@ export class RegAlumnoComponent {
     };
     translateService: any;
     loading: boolean = false;
+    estados: any[] = [];
+    estado: any = {};
+
     domain_id: number = 1;
     constructor(
         private router: Router,
@@ -143,6 +146,19 @@ export class RegAlumnoComponent {
         this.getCiclosDropdown();
         this.getPromocionesDropdown();
     }
+    
+    listarEstados(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.parametroService.getEstadoDeCurso().subscribe(
+                (response: any) => {
+                    this.estados = response;
+                    resolve();
+                },
+                (error: any) => reject(error)
+            );
+        });
+    }
+
     getPromocionesDropdown() {
         this.promocionService
             .getPromocionesByDomainId(this.domain_id)

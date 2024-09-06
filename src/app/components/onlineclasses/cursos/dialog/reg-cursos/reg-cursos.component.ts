@@ -38,6 +38,8 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
 
   subscriptions: Subscription[] = [];
   curso: any = {};
+  carrera_id: any;
+  idCurso: any;
 
   constructor(
     public ref: DynamicDialogRef,
@@ -49,20 +51,24 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.id = this.config.data.id;
+    this.id = this.config.data.id; //ID docente
+    console.log("firstaaaaaaaaa")
+    console.log(this.config.data)
+    this.idCurso = this.config.data.data.id; //ID Curso
+    console.log( "carrera_id:" , this.config.data.data.carrera_id)
     this.cantidadTotalCreditos = this.config.data.total_creditos;
     this.acciones = this.config.data.acciones;
     this.domain_id = this.helperService.getDominioId();
     
       Promise.all([
-          this.obtenerDatosCurso(this.config.data.id),
+          this.obtenerDatosCurso(this.idCurso),
           this.listarModulosFormativos(),
           this.listarAreasFormacion(),
           this.listarCiclos(),
           this.listarEstados(),
           this.listarDocentes(this.domain_id )
       ]).then(() => {
-          if (this.config.data.acciones === 'editar' || this.config.data.acciones === 'ver') {
+          if (this.config.data.acciones === 'editar' || this.config.data.acciones === 'ver' || this.config.data.acciones === 'duplicar'  ) {
               console.log(this.config.data.data);
               this.codigo = this.curso.codigo;
               this.nombreCurso = this.curso.nombre;
@@ -73,6 +79,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
               this.porcentajeCreditos = this.curso.porcentaje_de_creditos;
               this.cantidadHoras = this.curso.cantidad_de_horas;
               this.syllabus = this.curso.syllabus;
+              this.carrera_id = this.curso.carrera_id;
               this.tema = this.curso.tema;
               this.asignacionDocentes =this.curso.docente_id;
               this.estado = this.curso.estado_id;
@@ -84,6 +91,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
 
   }
 
+  
     GuardarCurso(): void {
     console.log(this.asignacionDocentes)
     const curso = {
@@ -98,11 +106,10 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
       syllabus: this.syllabus,
       tema: this.tema,
       asignacionDocentesId: this.asignacionDocentes,
-      carreraId: this.id,
+      carreraId: this.carrera_id,
       estadoId: this.estado,
       domain_id: this.domain_id
     };
-
 
     if (curso) {
       this.parametroService.guardarCurso(curso).subscribe(
@@ -123,6 +130,48 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
       console.error('Formulario inválido');
     }
   }
+
+GuardarCursoDuplicado(): void {
+    // Asegúrate de que no se está pasando un ID para el curso duplicado
+    const cursoDuplicado = {
+        id: undefined,  // No enviamos el ID ya que es un nuevo curso
+        codigo: this.codigo,
+        nombreCurso: this.nombreCurso,
+        cicloId: this.ciclo,
+        areaFormacionId: this.areaFormacion,
+        moduloFormativoId: this.moduloFormativo,
+        cantidadCreditos: this.cantidadCreditos,
+        porcentajeCreditos: this.porcentajeCreditos,
+        cantidadHoras: this.cantidadHoras,
+        syllabus: this.syllabus,
+        tema: this.tema,
+        asignacionDocentesId: this.asignacionDocentes,
+        carreraId: this.carrera_id,
+        estadoId: this.estado,
+        domain_id: this.domain_id
+    };
+
+    console.log('Datos del curso duplicado a guardar:', cursoDuplicado);
+
+    if (cursoDuplicado) {
+        this.parametroService.guardarCurso(cursoDuplicado).subscribe(
+            (response: any) => {
+                this.closeModal();
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'El curso duplicado se guardó correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {});
+            },
+            (error: any) => {
+                console.error('Error al guardar el curso duplicado', error);
+            }
+        );
+    } else {
+        console.error('Formulario inválido');
+    }
+}
   editarCurso(): void {
     const curso = {
       codigo: this.codigo,
@@ -136,7 +185,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
       syllabus: this.syllabus,
       tema: this.tema,
       asignacionDocentesId: this.asignacionDocentes?.code,
-      carreraId: this.id,
+      carreraId: this.carrera_id,
       estadoId: this.estado,
       cursoId: this.config.data.data.id,
       domain_id: this.domain_id
@@ -164,6 +213,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
       console.error('Formulario inválido');
     }
   }
+  
   onCantidadCreditosChange(newValue: number) {
     if (this.cantidadTotalCreditos === 0 || this.cantidadTotalCreditos == null) {
       this.porcentajeCreditos = 100;
@@ -195,7 +245,6 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.parametroService.getModulosFormativos().subscribe(
         (response: any) => {
-          console.log("Lista de listarModulosFormativos", response);
           this.modulosFormativos = response;
           resolve();
         },
@@ -208,7 +257,6 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.parametroService.getAreasDeFormacion().subscribe(
         (response: any) => {
-          console.log("Lista de listarAreasFormacion", response);
           this.areasFormacion = response;
           resolve();
         },
@@ -221,7 +269,6 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.parametroService.getCiclos().subscribe(
         (response: any) => {
-          console.log("Lista de listarCiclos", response);
           this.ciclos = response;
           resolve();
         },
@@ -246,7 +293,6 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     return new Promise((resolve, reject) => {
       this.commonService.getDocentesDropdown(this.domain_id).subscribe(
         (response: any) => {
-          console.log("Lista de listarDocentes", response);
           this.asignacionesDocentes= response.map((item: any) => {
             return {
               label: item.nombres,
