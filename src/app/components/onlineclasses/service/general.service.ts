@@ -1136,28 +1136,24 @@ export class GeneralService {
     }
     getAlumnosCurso(domainId: number, cursoId: number) {
         return this.http
-            .get<ApiResponse>(
-                `${this.baseUrl}participantes/${domainId}/${cursoId}`,
-                { observe: 'response' }
-            )
+            .get<any[]>(`${this.baseUrl}participantes/${domainId}/${cursoId}`, {
+                observe: 'response',
+            })
             .pipe(
-                tap((response: HttpResponse<ApiResponse>) => {
-                    // console.log('HTTP Status Code:', response.status);
+                tap((response: HttpResponse<any[]>) => {
+                    console.log('HTTP Status Code:', response.status);
                 }),
-                map((response: HttpResponse<ApiResponse>) => {
-                    // console.log('Response body:', response.body);
+                map((response: HttpResponse<any[]>) => {
+                    console.log('Response body:', response.body);
                     if (response.status === 200 && response.body) {
-                        return response.body;
+                        return response.body;  // Si la respuesta es un array, la retornamos directamente
                     } else {
-                        throw new Error(
-                            response.body
-                                ? response.body.responseMessage
-                                : 'Unknown error'
-                        );
+                        throw new Error('Error obteniendo los alumnos');
                     }
                 })
             );
     }
+    
     updateAlumnoCurso(data: any): Observable<ApiResponse> {
         return this.http
             .post<ApiResponse>(`${this.baseUrl}participantes`, data, {

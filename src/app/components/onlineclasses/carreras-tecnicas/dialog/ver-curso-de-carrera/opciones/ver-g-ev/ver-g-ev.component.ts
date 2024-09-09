@@ -36,17 +36,33 @@ export class VerGrupoEvaluacionesComponent {
   ) { }
 
   ngOnInit(): void {
-    this.grupoEvaluaciones = this.config.data.data;
-    console.log(this.grupoEvaluaciones,'car');
-    this.listarGrupoEvaluaciones();
-  }
+    // Verifica si el objeto `this.config.data.data` existe, si no, usa `this.config.data`
+    this.grupoEvaluaciones = this.config.data.data || this.config.data;
 
-  listarGrupoEvaluaciones() {
-    this.grupoEvaluacionesService.getGrupoEvaluaciones({id:this.grupoEvaluaciones.id}).subscribe((response: any) => {
-      this.grupoEvaluacionesList = response;
-      this.originalgrupoEvaluacionesList = [...response];
-    });
+    console.log('Datos recibidos en VerGrupoEvaluacionesComponent:', this.grupoEvaluaciones);
+
+    if (this.grupoEvaluaciones && this.grupoEvaluaciones.id) {
+        console.log('ID de curso recibido en VerGrupoEvaluacionesComponent:', this.grupoEvaluaciones.id);
+        this.listarGrupoEvaluaciones();
+    } else {
+        console.error('No se recibió un ID de curso válido en VerGrupoEvaluacionesComponent.');
+    }
+}
+
+listarGrupoEvaluaciones() {
+  if (this.grupoEvaluaciones && this.grupoEvaluaciones.id) {
+      this.grupoEvaluacionesService.getGrupoEvaluaciones({ id: this.grupoEvaluaciones.id })
+          .subscribe((response: any) => {
+              this.grupoEvaluacionesList = response;
+              this.originalgrupoEvaluacionesList = [...response];
+          });
+      console.log("ID de grupo para obtener evaluaciones:", this.grupoEvaluaciones.id);
+  } else {
+      console.error('No se pudo listar las evaluaciones porque el ID de grupo es inválido o no está definido.');
   }
+}
+
+
 
   calcularTotales() {
     let totalPromedio = 0;

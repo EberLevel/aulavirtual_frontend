@@ -255,7 +255,7 @@ export class CursosDocentesComponent {
             styleClass: 'custom-dialog-header',
             data: { data: evaluaciones },
         });
-
+        console.log("evaluaciones" , evaluaciones)
         this.ref.onClose.subscribe(() => {
             this.listarCursos();
         });

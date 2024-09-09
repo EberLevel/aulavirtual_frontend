@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CalendarOptions } from '@fullcalendar/core';
 import esLocale from '@fullcalendar/core/locales/es';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GeneralService } from '../../../service/general.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelpersService } from 'src/app/helpers.service';
 import { PromocionService } from '../../../service/promocion.service';
+import { BandejaAvanceCurricularComponent } from '../../avance-curricular/bandeja-avance-curricular/bandeja-avance-curricular.component';
 
 interface tipodoc {
     name: string;
@@ -71,6 +72,7 @@ export class EditAlumnoComponent {
         private cdr: ChangeDetectorRef,
         public config: DynamicDialogConfig,
         private parametroService: GeneralService,
+        private dialogService: DialogService,
         private translate: TranslateService,
         private messageService: MessageService,
         private alumnoService: AlumnoService,
@@ -154,8 +156,6 @@ export class EditAlumnoComponent {
         return new Promise((resolve, reject) => {
             this.parametroService.getEstadoDeCurso().subscribe(
                 (response: any) => {
-                    console.log("Lista de listarEstados", response);
-                    // Mapear los datos obtenidos para que el dropdown los entienda
                     this.estadosList = response.map((estado: any) => {
                         return {
                             name: estado.nombre,  
@@ -209,6 +209,43 @@ export class EditAlumnoComponent {
             );
     }
 
+    navigateToAvanceCurricular(alumno: any) {
+        const id = this.alumno.id;
+        console.log("ALUMNO" , id)
+
+        const data = {
+            domain_id: alumno.domain_id ?? 1,
+            id: this.alumno.id,
+        };
+
+        console.log("data" , data)
+
+    
+        this.alumnoService.showAlumno(data).subscribe(
+            (response: any) => {
+                this.ref = this.dialogService.open(BandejaAvanceCurricularComponent, {
+                    data: {
+                        alumno: response,
+                    },
+                    width: '60%',
+                    styleClass: 'custom-dialog-header',
+                });
+    
+                // Cuando el modal se cierra
+                this.ref.onClose.subscribe((result: any) => {
+                    if (result) {
+                        // Maneja los datos que se devuelven al cerrar el diálogo
+                        console.log('Datos recibidos al cerrar el diálogo:', result);
+                    }
+                });
+            },
+            (error: any) => {
+                console.error('Error al obtener los datos del alumno:', error);
+            }
+        );
+    }
+    
+    
     actualizarAlumno() {
         if (this.alumnoForm.valid) {
             const alumnoData = {
@@ -238,6 +275,8 @@ export class EditAlumnoComponent {
             this.spinner.show();
     
             const id = this.alumno.id;
+            console.log("ALUMNO" , id)
+        
             const domain_id = this.domain_id;
     
             this.alumnoService.editAlumno(alumnoData, id, domain_id).subscribe(
