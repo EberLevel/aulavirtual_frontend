@@ -39,7 +39,6 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {
         const isUserLogged = this.helpersService.checkIsUserLogged();
-        console.log('isUserLogged', isUserLogged);
         if (!isUserLogged) {
             this.router.navigate(['/auth/login']);
             return;
@@ -240,11 +239,13 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-fw pi-calendar',
                                         routerLink: ['/apps/calendar'],
                                     },
-                                    // {
-                                    //     label: 'Foros',
-                                    //     icon: 'pi pi-comment',
-                                    //     routerLink: ['/pl-virtual/foro-alumnos']
-                                    // }
+                                    {
+                                        label: 'Plan de Estudio',
+                                        icon: 'pi pi-id-card',
+                                        routerLink: [
+                                            '/pl-virtual/estado-cursos',
+                                        ],
+                                    },
                                 ],
                             },
                         ],
@@ -495,7 +496,7 @@ export class AppMenuComponent implements OnInit {
                                         routerLink: ['/pl-virtual/estados'],
                                     },
                                     {
-                                        label: 'Estado de Cursos',
+                                        label: 'Plan de Estudio',
                                         icon: 'pi pi-id-card',
                                         routerLink: [
                                             '/pl-virtual/estado-cursos',

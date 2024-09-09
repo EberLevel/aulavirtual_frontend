@@ -78,6 +78,8 @@ export class VerCursoDeCarreraComponent {
     }
 
     navigateAddCurso() {
+        console.log("first")
+        console.log(this.config.data.data.id,)
         this.ref = this.dialogService.open(RegCursosComponent, {
             width: '60%',
             styleClass: 'custom-dialog-header',
@@ -86,6 +88,7 @@ export class VerCursoDeCarreraComponent {
                 total_creditos: this.config.data.data.total_creditos,
                 acciones: 'add',
             },
+        
         });
 
         this.ref.onClose.subscribe((data: any) => {
@@ -128,6 +131,22 @@ export class VerCursoDeCarreraComponent {
         });
     }
 
+    navigateToDuplicar(data: any) {
+        this.ref = this.dialogService.open(RegCursosComponent, {
+            width: '60%',
+            styleClass: 'custom-dialog-header',
+            data: {
+                id: this.config.data.data.id,
+                total_creditos: this.config.data.data.total_creditos,
+                acciones: 'duplicar',
+                data: data,
+            },
+        });
+
+        this.ref.onClose.subscribe(() => {
+            this.listarCursos();
+        });
+    }
     navigateToDelete(id: number) {
         Swal.fire({
             title: '¿Estás seguro?',

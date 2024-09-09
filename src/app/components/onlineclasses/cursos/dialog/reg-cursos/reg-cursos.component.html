@@ -4,6 +4,7 @@
             <span *ngIf="acciones === 'add'">Registrar Cursos</span>
             <span *ngIf="acciones === 'ver'">Visualizar Curso</span>
             <span *ngIf="acciones === 'editar'">Editar Curso</span>
+            <span *ngIf="acciones === 'duplicar'">Duplicar Curso</span>
         </span>
     </ng-template>
 
@@ -108,7 +109,7 @@
                     <span class="p-float-label">
                         <p-dropdown inputId="dropdownEstado" [options]="estados" optionLabel="nombre" [(ngModel)]="estado"
                         optionValue="id" [disabled]="acciones === 'ver'"></p-dropdown>
-                        <label for="dropdownEstado">Estado</label>
+                        <label for="dropdownEstado">Plan de Estudios</label>
                         <small style="color: brown;">Campo obligatorio * </small>
                     </span>
                 </div>
@@ -119,6 +120,7 @@
                 <div class="flex flex-wrap gap-2">
                     <button *ngIf="acciones === 'add'" pButton icon="pi pi-plus" label="Guardar" iconPos="right" class="p-button-success p-button-sm" (click)="GuardarCurso()"></button>
                     <button *ngIf="acciones === 'editar'" pButton icon="pi pi-pencil" label="Editar Curso" iconPos="right" class="p-button-warning p-button-sm" (click)="editarCurso()"></button>
+                    <button *ngIf="acciones === 'duplicar'" pButton icon="pi pi-copy" label="Duplicar Curso" iconPos="right" class="p-button-secondary p-button-sm" (click)="GuardarCursoDuplicado()"></button>
                     <button pButton label="Cerrar" icon="pi pi-times" iconPos="right" class="p-button-close-clean" (click)="closeModal()"></button>
                 </div>
             </div>

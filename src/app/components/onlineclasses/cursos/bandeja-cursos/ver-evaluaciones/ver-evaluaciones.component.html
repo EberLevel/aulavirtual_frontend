@@ -9,6 +9,7 @@
                     <p-table #dt1 [value]="grupoEvaluacionesList" [rows]="10" [loading]="loading" [rowHover]="true"
                         styleClass="p-datatable-gridlines" [paginator]="true" responsiveLayout="scroll"
                         class="custom-search-input">
+                        
                         <ng-template pTemplate="caption">
                             <div class="flex justify-content-between flex-wrap">
                                 <div class="flex-grow-1 mb-2 mr-2">
@@ -26,10 +27,7 @@
                                 <th style="min-width: 10rem" scope="col">N Bloque</th>
                                 <th style="min-width: 10rem" scope="col">Nombre</th>
                                 <th style="min-width: 10rem" scope="col">Nota</th>
-                                <th style="min-width: 10rem" scope="col">% Obtenido</th>
-                                <th style="min-width: 10rem" scope="col">Valor %</th>
                                 <th style="min-width: 10rem" scope="col">Fecha y Hora 1</th>
-                                <th style="min-width: 10rem" scope="col">Fecha y Hora 2</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
                                 <th style="min-width: 10rem" scope="col">Estado</th>
                             </tr>
@@ -38,25 +36,23 @@
                         <ng-template pTemplate="body" let-carrera>
                             <tr>
                                 <td>
-                                    <button pButton style="border-radius: 30px; background-color: green; color: white;"
-                                    title="Responder Evaluación" class="p-button-rounded p-button-text"
-                                    (click)="agregarPreguntas(carrera)">
-                                Responder Evaluación
-                            </button>
+                                    <!-- Desactivar el botón si el estado es "Culminado" -->
+                                    <button pButton 
+                                        [disabled]="carrera.estado_nombre === 'Culminado'"
+                                        style="border-radius: 30px; background-color: green; color: white;"
+                                        title="Responder Evaluación" class="p-button-rounded p-button-text"
+                                        (click)="agregarPreguntas(carrera)">
+                                        Responder Evaluación
+                                    </button>
                                 </td>
                                 <td>{{ carrera.nombre_del_grupo }}</td>
                                 <td>{{ carrera.nombre }}</td>
-                                 <td>{{ carrera.nota }}</td>
-                                <td>{{ carrera.porcentaje_obtenido }}%</td>
-                                <td>{{ carrera.porcentaje_evaluacion }}%</td>
+                                <td>{{ carrera.nota }}</td>
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
-                                <td>{{ carrera.fecha_hora_2 }}</td>
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>
                             </tr>
                         </ng-template>
-
-                  
 
                         <ng-template pTemplate="emptymessage">
                             <tr>

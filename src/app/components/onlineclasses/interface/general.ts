@@ -14,6 +14,7 @@ export class ApiResponse {
     public responseCode: string = '';
     public responseMessage: string = '';
     public response: any;
+    public  message?: string;
 }
 export class Base {
     public responseCode: number | null = null;

@@ -12,8 +12,7 @@ export class RegPreguntasDocenteComponent {
   estados =[
     { name: 'Pendiente' },
     { name: 'En Proceso' },
-    { name: 'Culminado' },
-    { name: 'Desaprobado' },
+    { name: 'Culminado' }
   ];
 
   opciones: any[] = [

@@ -39,6 +39,9 @@ import { EditorModule } from 'primeng/editor';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    DropdownModule,
+    CommonModule,
     AvanceCurricularRoutingModule,
     CalendarModule,
     TableModule,

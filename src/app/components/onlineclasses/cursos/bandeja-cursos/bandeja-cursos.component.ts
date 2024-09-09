@@ -74,7 +74,6 @@ export class BandejaCursosComponent {
   listarCursos() {
     this.cursosService.getCursosByAlumno(this.config.data.data.id).subscribe((response: any) => {
       this.carrerastecnicasList = response;
-      console.log( 'cursos', this.carrerastecnicasList);
       this.originalCarrerastecnicasList = [...response];
     });
   }

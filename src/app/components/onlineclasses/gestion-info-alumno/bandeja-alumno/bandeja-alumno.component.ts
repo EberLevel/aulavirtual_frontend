@@ -143,24 +143,33 @@ export class BandejaAlumnoComponent {
                     width: '60%',
                     styleClass: 'custom-dialog-header',
                 });
+    
+                // Cuando el modal de edición se cierra
                 this.ref.onClose.subscribe((data: any) => {
-                    console.log(data)
                     if (data) {
+                        // Si la edición fue exitosa, recargamos la lista de alumnos
                         if (data.register) {
-                          console.log('Organo-colegaido-sect');
-                            this.cargaInicial();
+                            this.cargaInicial(); // Recargar la lista de alumnos
                         }
                     }
-                    this.router.routeReuseStrategy.shouldReuseRoute = () =>
-                        false;
+    
+                    // Asegúrate de que la ruta se recargue completamente si es necesario
+                    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
                     this.router.onSameUrlNavigation = 'reload';
                 });
             },
             (error: any) => {
                 this.loading = false;
+                Swal.fire({
+                    title: '¡Error!',
+                    text: 'Error al cargar la información del alumno',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                });
             }
         );
     }
+    
     navigateToNuevo() {
         this.ref = this.dialogService.open(RegAlumnoComponent, {
             width: '60%',

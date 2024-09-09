@@ -60,6 +60,9 @@ export class RegAlumnoComponent {
     };
     translateService: any;
     loading: boolean = false;
+    estados: any[] = [];
+    estado: any = {};
+
     domain_id: number = 1;
     constructor(
         private router: Router,
@@ -81,6 +84,7 @@ export class RegAlumnoComponent {
             tipoDocumento: ['', Validators.required],
             numeroDocumento: ['', Validators.required],
             nombres: ['', Validators.required],
+            estadoId: ['', Validators.required],
             apellidos: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             contraseña: ['', Validators.required],
@@ -104,7 +108,7 @@ export class RegAlumnoComponent {
 
     ngOnInit() {
         this.domain_id = this.helpersService.getDominioId();
-
+        this.listarEstados();
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
             { name: 'PASAPORTE', value: 2, code: 'RM' },
@@ -143,13 +147,34 @@ export class RegAlumnoComponent {
         this.getCiclosDropdown();
         this.getPromocionesDropdown();
     }
+    
+    estadosList: { name: string, value: number }[] = [];
+
+    listarEstados(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.parametroService.getEstadoDeCurso().subscribe(
+                (response: any) => {
+                    console.log("Lista de listarEstados", response);
+                    // Mapear los datos obtenidos para que el dropdown los entienda
+                    this.estadosList = response.map((estado: any) => {
+                        return {
+                            name: estado.nombre,  
+                            value: estado.id      
+                        };
+                    });
+                    resolve();
+                },
+                (error: any) => reject(error)
+            );
+        });
+    }
+    
+
     getPromocionesDropdown() {
         this.promocionService
             .getPromocionesByDomainId(this.domain_id)
             .subscribe(
                 (response) => {
-                    console.log('Promociones API Response:', response);
-                    // Ahora accede a response.data para mapear las promociones
                     this.promocionesList = response.data.map(
                         (promocion: any) => {
                             return {
@@ -190,7 +215,6 @@ export class RegAlumnoComponent {
     getCarrerasDropdown() {
         this.commonService.getCarrerasDropdown(this.domain_id).subscribe(
             (response) => {
-                console.log('Carreras', response);
                 this.carrerasList = response.map((carrera: any) => {
                     return {
                         name: carrera.nombres,
@@ -206,14 +230,12 @@ export class RegAlumnoComponent {
     getCiclosDropdown() {
         this.commonService.getCiclosDropdown(this.domain_id).subscribe(
             (response) => {
-                console.log('ciclos', response);
                 this.ciclosList = response.map((ciclo: any) => {
                     return {
                         name: ciclo.nombre,
                         value: ciclo.id,
                     };
                 });
-                console.log('Ciclos', response);
             },
             (error) => {
                 console.error('Error obteniendo ciclos', error);
@@ -251,6 +273,7 @@ export class RegAlumnoComponent {
                 email: this.alumnoForm.get('email')?.value,
                 nroCelular: this.alumnoForm.get('nroCelular')?.value,
                 carreraId: this.alumnoForm.get('carreraId')?.value,
+                estadoId: this.alumnoForm.get('estadoId')?.value,  
                 cicloId: this.alumnoForm.get('cicloId')?.value,
                 contraseña: this.alumnoForm.get('contraseña')?.value,
                 direccion: this.alumnoForm.get('direccion')?.value,
@@ -307,6 +330,7 @@ export class RegAlumnoComponent {
                 apellidos: string;
                 nroCelular: string;
                 carreraId: number;
+                estadoId: number;
                 contraseña: string;
                 cicloId: number;
                 promocion_id: number;
@@ -324,6 +348,7 @@ export class RegAlumnoComponent {
                 apellidos: this.alumnoForm.get('apellidos')?.value,
                 nroCelular: this.alumnoForm.get('nroCelular')?.value,
                 carreraId: this.alumnoForm.get('carreraId')?.value,
+                estadoId: this.alumnoForm.get('estadoId')?.value,  
                 cicloId: this.alumnoForm.get('cicloId')?.value,
                 promocion_id: this.alumnoForm.get('promocionId')?.value,
                 contraseña: this.alumnoForm.get('contraseña')?.value,
@@ -338,7 +363,6 @@ export class RegAlumnoComponent {
                 domain_id: this.domain_id,
             };
             console.log('Datos enviados:', alumnoData);
-            // Variables para saber cuándo ambas imágenes estén listas (si es que existen)
             let fotoPerfilLista = false;
             let fotoCarnetLista = false;
 
@@ -432,7 +456,6 @@ export class RegAlumnoComponent {
         if (fecha instanceof Date) {
             fechaString = fecha.toISOString().split('T')[0];
         }
-        console.log('Fecha', fechaString);
 
         this.alumnoForm.patchValue({
             fechaNacimiento: fecha,

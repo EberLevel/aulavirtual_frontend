@@ -24,19 +24,13 @@
                         <ng-template pTemplate="header">
                             <tr>
                                 <th style="min-width: 10rem" scope="col">Valor de la pregunta</th>
-                                <th style="min-width: 10rem" scope="col">Puntos de la pregunta</th>
-                                <th style="min-width: 10rem" scope="col">Porcentaje de la pregunta</th>
                                 <th style="min-width: 10rem" scope="col">Responder Pregunta</th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-pregunta>
                             <tr>
-
- 
                                 <td>{{ pregunta.valor_pregunta }}</td>
-                                <td>{{ pregunta.puntos }}</td>
-                                <td>{{ pregunta.porcentaje }}%</td>
                                 <td>
                                     <button pButton label="Responder" class="p-button-rounded p-button-info"
                                         (click)="responderPregunta(pregunta)">

@@ -23,4 +23,13 @@ export class CursoService {
     getCursosPorAlumno(alumnoId: number): Observable<any> {
       return this.http.get(`${this.baseUrl}cursos-alumno/${alumnoId}`);
     }
+
+    getCursosPorDomain(domainId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}cursos/domain/${domainId}`, this.httpOptions);
+    }
+
+    // Método para actualizar el estado del curso
+    updateCursoEstado(estadoData: { cursoId: number; estadoId: number; alumnoId: number }): Observable<any> {
+        return this.http.put<any>(`${this.baseUrl}curso/estado`, estadoData);
+    }      
 }

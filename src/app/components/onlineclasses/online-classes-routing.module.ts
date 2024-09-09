@@ -106,7 +106,7 @@ const routes: Routes = [];
             },
             {
                 path: 'estado-cursos',
-                data: { breadcrumb: 'Estado de Cursos' },
+                data: { breadcrumb: 'Plan de Estudio' },
                 loadChildren: () =>
                     import(
                         '../onlineclasses/instituciones/estado-cursos/estado-cursos.module'
