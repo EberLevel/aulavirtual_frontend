@@ -47,11 +47,18 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
   }
 
   listarGrupoEvaluaciones() {
-    this.grupoEvaluacionesService.getListadoDeEvaluacionesPorGrupo({id:this.grupoEvaluaciones.id}).subscribe((response: any) => {
-      this.grupoEvaluacionesList = response;
-      this.originalgrupoEvaluacionesList = [...response];
-    });
+    this.grupoEvaluacionesService.getListadoDeEvaluacionesPorGrupo({ id: this.grupoEvaluaciones.id }).subscribe(
+      (response: any) => {
+        console.log('Datos de evaluaciones recibidos:', response);
+        this.grupoEvaluacionesList = response;
+        this.originalgrupoEvaluacionesList = [...response];
+      },
+      (error: any) => {
+        console.error('Error al listar evaluaciones:', error);
+      }
+    );
   }
+  
 
   calcularTotales() {
     let totalPromedio = 0;
@@ -76,17 +83,6 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
         this.listarGrupoEvaluaciones();  
     });
 }
-  // navigateToDetalle(data: any) {
-  //   this.ref = this.dialogService.open(VerListadoDeEvaluacionesPorGrupoComponent, {
-  //     width: '80%',
-  //     styleClass: 'custom-dialog-header',
-  //     data: { acciones: 'ver', idCurso: this.grupoEvaluaciones.id ,data: data }
-  //   });
-
-  //   this.ref.onClose.subscribe((data: any) => {
-  //     this.listarGrupoEvaluaciones();
-  //   });
-  // }
 
   navigateToEdit(evaluacion: any) {
     if (!evaluacion || !evaluacion.id) {
@@ -180,7 +176,8 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
       data: { acciones: 'add', grupoEvaluacionesId: this.grupoEvaluaciones.id ,data: evaluaciones } 
      });
   
-    this.ref.onClose.subscribe((data: any) => {
+     this.ref.onClose.subscribe((data: any) => {
+      console.log('Modal cerrado, recargando la lista de evaluaciones...');
       this.listarGrupoEvaluaciones();
     });
   }

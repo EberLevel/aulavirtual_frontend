@@ -33,8 +33,7 @@ export class RegEvaluacionDocenteComponent {
     estados = [
         { name: 'Pendiente', value: 1 },   
         { name: 'En Proceso', value: 2 }, 
-        { name: 'Culminado', value: 3 },   
-        { name: 'Desaprobado', value: 4 } 
+        { name: 'Culminado', value: 3 }
     ];
 
     constructor(

@@ -39,7 +39,6 @@ export class AppMenuComponent implements OnInit {
 
     ngOnInit() {
         const isUserLogged = this.helpersService.checkIsUserLogged();
-        console.log('isUserLogged', isUserLogged);
         if (!isUserLogged) {
             this.router.navigate(['/auth/login']);
             return;

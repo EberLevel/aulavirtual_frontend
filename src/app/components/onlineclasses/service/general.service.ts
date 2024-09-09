@@ -73,6 +73,7 @@ export class GeneralService {
                 })
             );
     }
+    
 
     editarCarreraTecnica(parametro: any): Observable<ApiResponse> {
         return this.http
@@ -1916,28 +1917,31 @@ export class GeneralService {
 
     guardarPreguntaAlumno(parametro: any): Observable<ApiResponse> {
         return this.http
-            .post<ApiResponse>(`${this.baseUrl}alumno-preguntas/`, parametro, {
-                observe: 'response',
+          .post<ApiResponse>(`${this.baseUrl}alumno-preguntas/`, parametro, {
+            observe: 'response',
+          })
+          .pipe(
+            tap((response: HttpResponse<ApiResponse>) => {
+              console.log('HTTP Status Code:', response.status);
+            }),
+            map((response: HttpResponse<ApiResponse>) => {
+              console.log('Response body:', response.body);
+      
+              // Si la respuesta tiene un status 200 o 201, la tratamos como éxito.
+              if ((response.status === 201 || response.status === 200) && response.body) {
+                return response.body;
+              } else {
+                // Lanzar un error solo si el status no es exitoso.
+                throw new Error('Respuesta no válida o falta información del servidor.');
+              }
+            }),
+            catchError((error) => {
+              console.error('Error en la solicitud:', error);
+              return throwError(() => new Error('Error en la solicitud al servidor'));
             })
-            .pipe(
-                tap((response: HttpResponse<ApiResponse>) => {
-                    // console.log('HTTP Status Code:', response.status);
-                }),
-                map((response: HttpResponse<ApiResponse>) => {
-                    // console.log('Response body:', response.body);
-                    if (response.status === 201 && response.body) {
-                        return response.body;
-                    } else {
-                        throw new Error(
-                            response.body
-                                ? response.body.responseMessage
-                                : 'Unknown error'
-                        );
-                    }
-                })
-            );
-    }
-
+          );
+      }
+         
     getListadoDeEvaluacionesPorCurso(parametro: any): Observable<ApiResponse> {
         return this.http
             .get<ApiResponse>(
@@ -1962,7 +1966,9 @@ export class GeneralService {
                 })
             );
     }
-
+    getSumaCalificaciones(alumnoId: number, evaluacionId: number) {
+        return this.http.get(`${this.baseUrl}suma-calificaciones?alumno_id=${alumnoId}&evaluacion_id=${evaluacionId}`);
+      }
     getListadoDePreguntasPorCorregir(parametro: any): Observable<ApiResponse> {
         return this.http
             .get<ApiResponse>(

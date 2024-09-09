@@ -1,6 +1,6 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl">Listado de evaluaciones por grupooooooooooooo</span>
+        <span class="text-primary font-semibold text-xl">Listado de evaluaciones por grupo</span>
     </ng-template>
     <ng-template pTemplate="content">
         <div class="row mb-4">
@@ -27,15 +27,11 @@
 
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="min-width: 10rem" scope="col">Acciones</th>
+                                <th style="min-width: 5rem" scope="col">Acciones</th>
                                 <th style="min-width: 10rem" scope="col">ID</th>
-                                <th style="min-width: 10rem" scope="col">Nombre del grupo</th>
+                                <th style="min-width: 10rem" scope="col">Nombre del gruposssssssssss</th>
                                 <th style="min-width: 10rem" scope="col">Preguntas</th>
-                                <th style="min-width: 10rem" scope="col">Nota</th>
-                                <th style="min-width: 10rem" scope="col">% Obtenido</th>
-                                <th style="min-width: 10rem" scope="col">Valor %</th>
                                 <th style="min-width: 10rem" scope="col">Fecha y Hora 1</th>
-                                <th style="min-width: 10rem" scope="col">Fecha y Hora 2</th>
                                 <th style="min-width: 10rem" scope="col">Tipo de Evaluación</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
                                 <th style="min-width: 10rem" scope="col">Estado</th>
@@ -68,11 +64,7 @@
                                         (click)="agregarPreguntas(carrera)">
                                     </button>
                                 </td>
-                                <td>{{ carrera.nota }}</td>
-                                <td>{{ carrera.porcentaje_obtenido }}%</td>
-                                <td>{{ carrera.porcentaje_evaluacion }}%</td>
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
-                                <td>{{ carrera.fecha_hora_2 }}</td>
                                 <td>{{ carrera.tipo_evaluacion_nombre }}</td>
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>

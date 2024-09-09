@@ -61,7 +61,10 @@ export class EditAlumnoComponent {
     translateService: any;
     loading: boolean = false;
     domain_id: number = 1;
-
+    estadoAlumnoOptions: { label: string, value: string }[] = [
+        { label: 'EN PROCESO', value: 'EN PROCESO' },
+        { label: 'RETIRADO', value: 'RETIRADO' }
+    ];
     constructor(
         private router: Router,
         private ref: DynamicDialogRef,
@@ -82,6 +85,8 @@ export class EditAlumnoComponent {
             tipoDocumento: ['', Validators.required],
             numeroDocumento: ['', Validators.required],
             nombres: ['', Validators.required],
+            promocionId: ['', Validators.required],
+            estadoId: ['', Validators.required],
             apellidos: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             nroCelular: [
@@ -92,14 +97,16 @@ export class EditAlumnoComponent {
             cicloId: ['', Validators.required],
             direccion: [''],
             fechaNacimiento: [this.fechanacimiento, Validators.required],
-            promocionId: ['', Validators.required],
             fotoPerfil: [null as string | null],
             fotoCarnet: [null as string | null],
+            estadoAlumno: ['', Validators.required],
+            contraseña: ['', Validators.required]
         });
         this.domain_id = this.helpersService.getDominioId();
     }
 
     ngOnInit() {
+        this.listarEstados();
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
             { name: 'PASAPORTE', value: 2, code: 'RM' },
@@ -124,12 +131,14 @@ export class EditAlumnoComponent {
                     nroCelular: this.alumno.celular,
                     carreraId: this.alumno.carrera_id,
                     cicloId: this.alumno.ciclo_id,
+                    estadoId: this.alumno.estado_id,
                     contraseña: this.alumno.contraseña,
                     promocionId: this.alumno.promocion_id,
                     direccion: this.alumno.direccion,
                     fechaNacimiento: new Date(this.alumno.fecha_nacimiento),
                     fotoPerfil: this.alumno.foto_perfil,
                     fotoCarnet: this.alumno.foto_carnet,
+                    estadoAlumno: this.alumno.estadoAlumno || 'EN PROCESO'
                 });
             }
         }
@@ -137,6 +146,27 @@ export class EditAlumnoComponent {
         this.getCarrerasDropdown();
         this.getCiclosDropdown();
         this.getPromocionesDropdown();
+    }
+
+    estadosList: { name: string, value: number }[] = [];
+
+    listarEstados(): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.parametroService.getEstadoDeCurso().subscribe(
+                (response: any) => {
+                    console.log("Lista de listarEstados", response);
+                    // Mapear los datos obtenidos para que el dropdown los entienda
+                    this.estadosList = response.map((estado: any) => {
+                        return {
+                            name: estado.nombre,  
+                            value: estado.id      
+                        };
+                    });
+                    resolve();
+                },
+                (error: any) => reject(error)
+            );
+        });
     }
 
     getCarrerasDropdown() {
@@ -191,13 +221,15 @@ export class EditAlumnoComponent {
                 nroCelular: this.alumnoForm.get('nroCelular')?.value,
                 carreraId: this.alumnoForm.get('carreraId')?.value,
                 cicloId: this.alumnoForm.get('cicloId')?.value,
+                estadoId: this.alumnoForm.get('estadoId')?.value,
                 direccion: this.alumnoForm.get('direccion')?.value,
                 fechaNacimiento: this.alumnoForm.get('fechaNacimiento')?.value.toISOString().split('T')[0],
-                promocionId: this.alumnoForm.get('promocionId')?.value,
+                promocion_id: this.alumnoForm.get('promocionId')?.value,
                 domain_id: this.domain_id,
                 fotoPerfil: this.alumnoForm.get('fotoPerfil')?.value,
                 fotoCarnet: this.alumnoForm.get('fotoCarnet')?.value,
                 contraseña: this.alumnoForm.get('contraseña')?.value,
+                estadoAlumno: this.alumnoForm.get('estadoAlumno')?.value
             };
     
             console.log('Datos enviados como JSON:', alumnoData);
