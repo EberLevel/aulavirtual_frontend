@@ -2120,4 +2120,52 @@ export class GeneralService {
                 })
             );
     }
+
+    getProyectos() {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    getTareas(proyecto_id: string) {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyecto_id}/tareas`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
 }
