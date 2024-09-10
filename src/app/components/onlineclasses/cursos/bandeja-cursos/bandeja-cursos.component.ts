@@ -13,6 +13,7 @@ import { MarcarAsistenciaCursoComponent } from '../../carreras-tecnicas/dialog/m
 import { VerGrupoEvaluacionesComponent } from '../../carreras-tecnicas/dialog/ver-curso-de-carrera/opciones/ver-g-ev/ver-g-ev.component';
 import { CrearForoCursoComponent } from '../../carreras-tecnicas/dialog/crear-foro-curso/crear-foro-curso.component';
 import { VerEvaluacionesComponent } from './ver-evaluaciones/ver-evaluaciones.component';
+import { CursoAlumnoService } from '../../service/curso-alumno.service';
 @Component({
   selector: 'app-bandeja-cursos',
   templateUrl: './bandeja-cursos.component.html',
@@ -39,6 +40,7 @@ export class BandejaCursosComponent {
   constructor(
     private dialogService: DialogService,
     private cursosService: GeneralService,
+    private cursoAlumnoService: CursoAlumnoService,
     private router: Router
   ) { }
 
@@ -63,7 +65,7 @@ export class BandejaCursosComponent {
         data: {
             data: {
                 id: alumnoId,
-                total_creditos: 30 // Replace with actual total credits
+                total_creditos: 30
             }
         }
     };
@@ -72,7 +74,7 @@ export class BandejaCursosComponent {
 }
 
   listarCursos() {
-    this.cursosService.getCursosByAlumno(this.config.data.data.id).subscribe((response: any) => {
+    this.cursoAlumnoService.getCursosByAlumno(this.config.data.data.id).subscribe((response: any) => {
       this.carrerastecnicasList = response;
       this.originalCarrerastecnicasList = [...response];
     });

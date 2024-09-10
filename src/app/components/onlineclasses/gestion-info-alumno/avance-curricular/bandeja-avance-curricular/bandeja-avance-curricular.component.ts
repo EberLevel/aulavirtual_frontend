@@ -18,9 +18,6 @@ export class BandejaAvanceCurricularComponent implements OnInit {
     estadoOptions: SelectItem[] = [
         { label: 'Pendiente', value: 1 },
         { label: 'En Proceso', value: 2 },
-        { label: 'Finalizado', value: 3 },
-        { label: 'Observado', value: 4 },
-        { label: 'Desaprobado', value: 5 },
     ];
 
     @ViewChild('filter') filter!: ElementRef;
@@ -53,7 +50,15 @@ export class BandejaAvanceCurricularComponent implements OnInit {
         this.loading = true;
         this.cursoService.getCursosPorAlumno(alumnoId).subscribe(
             (data: any) => {
-                this.cursosList = data;
+                // Aquí asigna el estado_id de la respuesta al estado que manejará el dropdown
+                console.log('Datos recibidos:', data);
+                
+                this.cursosList = data.map((curso: any) => {
+                    return {
+                        ...curso,
+                        estado: this.estadoOptions.find(option => option.value === curso.estado_id)  // Encuentra el estado correcto
+                    };
+                });
                 this.loading = false;
             },
             (error: any) => {
@@ -62,14 +67,14 @@ export class BandejaAvanceCurricularComponent implements OnInit {
             }
         );
     }
+    
     onEstadoChange(event: any, curso: any): void {
-      const estadoId = event.value; // Obtiene el valor seleccionado del dropdown
+      const estadoId = event.value;
   
-      // Crea un objeto con el ID del curso, el nuevo estado y el ID del alumno
       const estadoData = {
           cursoId: curso.id,
           estadoId: estadoId.value,
-          alumnoId: this.alumnoId // Asegúrate de que `alumnoId` está disponible en el componente
+          alumnoId: this.alumnoId 
       };
       console.log("estadoData" , estadoData)
   
