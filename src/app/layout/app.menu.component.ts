@@ -23,6 +23,7 @@ export class AppMenuComponent implements OnInit {
     model5: any[] = [];
     model6: any[] = [];
     model7: any[] = [];
+    model8: any[] = [];
     menuOpciones: any[] = [];
     authUser: any;
     elementosOcultos: any[] = [];
@@ -715,6 +716,24 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Incidencias',
                                 icon: 'pi pi-fw pi-building',
+                            },
+                        ],
+                    },
+                ],
+            },
+        ];
+
+        this.model8 = [
+            {
+                items: [
+                    {
+                        label: 'PROYECTOS',
+                        icon: 'pi pi-play',
+                        items: [
+                            {
+                                label: 'Proyectos',
+                                icon: 'pi pi-fw pi-building',
+                                routerLink: ['/pl-virtual/proyectos'],
                             },
                         ],
                     },
