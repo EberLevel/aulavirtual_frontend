@@ -13,7 +13,6 @@ export class RegEvaluacionDocenteComponent {
     // Variables del formulario
     nombre!: string;
     tipoEvaluacion!: string;
-    porcentajeEvaluacion!: number;
     estado!: string;
     observaciones!: string;
     grupoDeEvaluacionesId!: number;
@@ -76,7 +75,6 @@ export class RegEvaluacionDocenteComponent {
                 const evaluacion = response;
                 this.nombre = evaluacion.nombre;
                 this.tipoEvaluacion = evaluacion.tipo_evaluacion_id;
-                this.porcentajeEvaluacion = evaluacion.porcentaje_evaluacion;
                 this.estado = evaluacion.estado_id;
                 this.observaciones = evaluacion.observaciones;
                 this.fechaRegistro = new Date(evaluacion.fecha_y_hora_programo);
@@ -109,7 +107,6 @@ export class RegEvaluacionDocenteComponent {
         const nuevaEvaluacion = {
             nombre: this.nombre,
             tipo_evaluacion_id: Number(this.tipoEvaluacion),
-            porcentaje_evaluacion: Number(this.porcentajeEvaluacion),
             fecha_y_hora_programo: fechaHoraProgramada,  // Aquí se asigna la fecha con la hora
             observaciones: this.observaciones || null,
             estado_id: Number(this.estado),
@@ -171,7 +168,6 @@ export class RegEvaluacionDocenteComponent {
         const evaluacionActualizada = {
             nombre: this.nombre,
             tipo_evaluacion_id: Number(this.tipoEvaluacion),
-            porcentaje_evaluacion: Number(this.porcentajeEvaluacion),
             fecha_y_hora_programo: fechaHoraProgramada,
             observaciones: this.observaciones || null,
             estado_id: Number(this.estado),

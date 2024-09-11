@@ -31,6 +31,7 @@
                                 <th style="min-width: 10rem" scope="col">ID</th>
                                 <th style="min-width: 10rem" scope="col">Nombre del gruposssssssssss</th>
                                 <th style="min-width: 10rem" scope="col">Preguntas</th>
+                                <th style="min-width: 10rem" scope="col">Promedio de notas</th>
                                 <th style="min-width: 10rem" scope="col">Fecha y Hora 1</th>
                                 <th style="min-width: 10rem" scope="col">Tipo de Evaluación</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
@@ -41,10 +42,6 @@
                         <ng-template pTemplate="body" let-carrera>
                             <tr>
                                 <td>
-                                    <!-- <button pButton icon="pi pi-eye" style="width: 70px; border-radius: 30px;"
-                                        title="Ver" class="p-button-rounded p-button-text p-button-success"
-                                        (click)="navigateToDetalle(carrera)">
-                                    </button> -->
                                     <button pButton icon="pi pi-pencil" 
                                     style="width: 70px; border-radius: 30px;"
                                     title="Editar" 
@@ -64,6 +61,7 @@
                                         (click)="agregarPreguntas(carrera)">
                                     </button>
                                 </td>
+                                <td>{{ carrera.porcentaje_evaluacion }}</td>
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
                                 <td>{{ carrera.tipo_evaluacion_nombre }}</td>
                                 <td>{{ carrera.observaciones }}</td>

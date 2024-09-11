@@ -6,11 +6,23 @@
     <ng-template pTemplate="content">
         <form [formGroup]="parametroForm" (ngSubmit)="guardarParametro()">
             <div class="row">
-                <div class="grid p-fluid ">                
+                <div class="grid p-fluid">                
                     <div class="field col-12 md:col-6">
                         <span class="p-float-label">
                             <input type="text" pInputText formControlName="codigo">
                             <label class="required">Código</label>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown 
+                                [options]="estadosList" 
+                                formControlName="plan_de_estudios_id" 
+                                optionLabel="name" 
+                                optionValue="value" 
+                                placeholder="Selecciona un Plan de Estudio">
+                            </p-dropdown>
+                            <label class="required">Plan de Estudio</label>
                         </span>
                     </div>
                     <div class="field col-12 md:col-6">

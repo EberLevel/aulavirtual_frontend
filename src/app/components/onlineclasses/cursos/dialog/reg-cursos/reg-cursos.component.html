@@ -107,11 +107,36 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <span class="p-float-label">
-                        <p-dropdown inputId="dropdownEstado" [options]="estados" optionLabel="nombre" [(ngModel)]="estado"
-                        optionValue="id" [disabled]="acciones === 'ver'"></p-dropdown>
-                        <label for="dropdownEstado">Plan de Estudios</label>
-                        <small style="color: brown;">Campo obligatorio * </small>
+                        <p-dropdown inputId="dropdownEstado" 
+                        [options]="estados" 
+                        optionLabel="nombre" 
+                        [(ngModel)]="estado"
+                        optionValue="id" 
+                        [disabled]="acciones === 'ver'"
+                        (onChange)="onPlanDeEstudioChange($event)">
+                        </p-dropdown>
+                    <label for="dropdownEstado">Plan de Estudios</label>
+                    <small style="color: brown;">Campo obligatorio *</small>
+                    
                     </span>
+                </div>
+            </div>
+            <div class="row" *ngIf="acciones === 'duplicar'">
+                <div class="grid p-fluid ">
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown inputId="dropdownCarreraId" 
+                                [options]="carrerasList" 
+                                optionLabel="name" 
+                                [(ngModel)]="carreraSeleccionada" 
+                                optionValue="value"
+                            >
+                            </p-dropdown>
+                            <label for="dropdownCarreraId">Carrera Profesional</label>
+                            <small style="color: brown;">Campo obligatorio *</small>
+                        </span>
+                    </div>
+                    
                 </div>
             </div>
         </div>

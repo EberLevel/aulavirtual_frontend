@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GeneralService } from '../../../service/general.service';
 import { Parametro } from '../../../interface/general';
@@ -12,14 +12,11 @@ import { HelpersService } from 'src/app/helpers.service';
   templateUrl: './reg-carrerastecnicas.component.html',
   styleUrls: ['./reg-carrerastecnicas.component.scss']
 })
-export class RegCarrerastecnicasComponent {
+export class RegCarrerastecnicasComponent implements OnInit {
 
   loading: boolean = false;
-  parametroDatos: Parametro = new Parametro();
-  parametro: Parametro = new Parametro();
-  mostrarCursos = false;
   parametroForm: FormGroup;
-  
+  estadosList: any[] = [];  // Para los planes de estudio
 
   constructor(
     private fb: FormBuilder,
@@ -34,8 +31,31 @@ export class RegCarrerastecnicasComponent {
       codigo: ['', Validators.required],
       nombres: ['', Validators.required],
       domain_id: [this.helpersService.getDominioId()],
+      plan_de_estudios_id: ['', Validators.required]  // Agregamos el campo del Plan de Estudio
     });
+  }
 
+  ngOnInit() {
+    this.listarPlanEstudio();  // Cargar los planes de estudio cuando el componente se inicializa
+  }
+
+  listarPlanEstudio(): Promise<void> {
+    return new Promise((resolve, reject) => {
+        this.parametroService.getEstadoDeCurso().subscribe(
+            (response: any) => {
+                console.log('Lista de Planes de Estudio:', response);
+                // Mapear los datos obtenidos para que el dropdown los entienda
+                this.estadosList = response.map((estado: any) => {
+                    return {
+                        name: estado.nombre,  // Nombre que se mostrará en el dropdown
+                        value: estado.id      // Valor que se enviará al backend
+                    };
+                });
+                resolve();
+            },
+            (error: any) => reject(error)
+        );
+    });
   }
 
   guardarParametro() {
@@ -54,7 +74,7 @@ export class RegCarrerastecnicasComponent {
           });
         },
         (error: any) => {
-          console.error('Error al guardar el parametro', error);
+          console.error('Error al guardar el parámetro', error);
           // Aquí puedes manejar el error, como mostrar un mensaje de error
         }
       );

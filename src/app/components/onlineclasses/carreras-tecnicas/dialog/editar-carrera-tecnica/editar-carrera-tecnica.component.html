@@ -6,7 +6,7 @@
     <ng-template pTemplate="content">
         <form [formGroup]="parametroForm" (ngSubmit)="editarParametro()">
             <div class="row">
-                <div class="grid p-fluid ">                
+                <div class="grid p-fluid">                
                     <div class="field col-12 md:col-6">
                         <span class="p-float-label">
                             <input type="text" pInputText formControlName="codigo">
@@ -17,6 +17,18 @@
                         <span class="p-float-label">
                             <input type="text" pInputText formControlName="nombres">
                             <label class="required">Nombre de Carrera</label>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown 
+                                [options]="estadosList" 
+                                formControlName="plan_de_estudios_id" 
+                                optionLabel="name" 
+                                optionValue="value" 
+                                placeholder="Selecciona un Plan de Estudios">
+                            </p-dropdown>
+                            <label class="required">Plan de Estudios</label>
                         </span>
                     </div>
                 </div>
@@ -31,4 +43,4 @@
             </div>
         </form>
     </ng-template>
-</p-panel>
+</p-panel> 

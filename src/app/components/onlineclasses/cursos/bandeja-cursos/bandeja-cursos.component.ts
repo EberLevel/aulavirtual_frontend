@@ -14,6 +14,7 @@ import { VerGrupoEvaluacionesComponent } from '../../carreras-tecnicas/dialog/ve
 import { CrearForoCursoComponent } from '../../carreras-tecnicas/dialog/crear-foro-curso/crear-foro-curso.component';
 import { VerEvaluacionesComponent } from './ver-evaluaciones/ver-evaluaciones.component';
 import { CursoAlumnoService } from '../../service/curso-alumno.service';
+import { HelpersService } from 'src/app/helpers.service';
 @Component({
   selector: 'app-bandeja-cursos',
   templateUrl: './bandeja-cursos.component.html',
@@ -36,15 +37,20 @@ export class BandejaCursosComponent {
 
   // Define the config property
   config: any;
+  rolId: any;
 
   constructor(
     private dialogService: DialogService,
     private cursosService: GeneralService,
+    private helpersService: HelpersService,
     private cursoAlumnoService: CursoAlumnoService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.rolId = this.helpersService.getRolId();
+    console.log("ROL ID" , this.rolId)
+    
     // Obtener el objeto 'user' del localStorage
     const user = localStorage.getItem('user');
 

@@ -108,7 +108,17 @@ export class RegAlumnoComponent {
 
     ngOnInit() {
         this.domain_id = this.helpersService.getDominioId();
-        this.listarEstados();
+        this.listarPlanEstudio();
+
+        // Detectar cuando se selecciona un plan de estudios
+        this.alumnoForm
+            .get('estadoId')
+            ?.valueChanges.subscribe((selectedEstadoId) => {
+                if (selectedEstadoId) {
+                    this.getCarrerasDropdown(selectedEstadoId); // Pasar el ID del plan de estudios para filtrar las carreras
+                }
+            });
+
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
             { name: 'PASAPORTE', value: 2, code: 'RM' },
@@ -143,23 +153,22 @@ export class RegAlumnoComponent {
                 });
             }
         }
-        this.getCarrerasDropdown();
         this.getCiclosDropdown();
         this.getPromocionesDropdown();
     }
-    
-    estadosList: { name: string, value: number }[] = [];
 
-    listarEstados(): Promise<void> {
+    estadosList: { name: string; value: number }[] = [];
+
+    listarPlanEstudio(): Promise<void> {
         return new Promise((resolve, reject) => {
             this.parametroService.getEstadoDeCurso().subscribe(
                 (response: any) => {
-                    console.log("Lista de listarEstados", response);
+                    console.log('Lista de listarPlanEstudio', response);
                     // Mapear los datos obtenidos para que el dropdown los entienda
                     this.estadosList = response.map((estado: any) => {
                         return {
-                            name: estado.nombre,  
-                            value: estado.id      
+                            name: estado.nombre,
+                            value: estado.id,
                         };
                     });
                     resolve();
@@ -168,7 +177,22 @@ export class RegAlumnoComponent {
             );
         });
     }
-    
+    getCarrerasDropdown(planDeEstudioId: number) {
+        // Llamar a la API para obtener las carreras filtradas por el Plan de Estudio seleccionado
+        this.commonService.getCarrerasDropdownByPlanDeEstudio(planDeEstudioId).subscribe(
+            (response) => {
+                this.carrerasList = response.map((carrera: any) => {
+                    return {
+                        name: carrera.nombres,
+                        value: carrera.id,
+                    };
+                });
+            },
+            (error) => {
+                console.error('Error obteniendo carreras', error);
+            }
+        );
+    }
 
     getPromocionesDropdown() {
         this.promocionService
@@ -189,7 +213,6 @@ export class RegAlumnoComponent {
                 }
             );
     }
-
     getAge(dateString: string) {
         const today = new Date();
         const birthDate = new Date(dateString);
@@ -211,21 +234,6 @@ export class RegAlumnoComponent {
         this.alumnoForm.patchValue({
             fotoPerfil: file,
         });
-    }
-    getCarrerasDropdown() {
-        this.commonService.getCarrerasDropdown(this.domain_id).subscribe(
-            (response) => {
-                this.carrerasList = response.map((carrera: any) => {
-                    return {
-                        name: carrera.nombres,
-                        value: carrera.id,
-                    };
-                });
-            },
-            (error) => {
-                console.error('Error obteniendo carreras', error);
-            }
-        );
     }
     getCiclosDropdown() {
         this.commonService.getCiclosDropdown(this.domain_id).subscribe(
@@ -252,7 +260,6 @@ export class RegAlumnoComponent {
             console.error('TranslateService is not initialized.');
         }
     }
-
     onUpload(event: any) {
         this.messageService.add({
             severity: 'info',
@@ -260,7 +267,6 @@ export class RegAlumnoComponent {
             detail: 'Archivo cargado correctamente',
         });
     }
-
     actualizarAlumno() {
         if (this.alumnoForm.valid) {
             // Crear un objeto JSON normal en lugar de FormData
@@ -273,7 +279,7 @@ export class RegAlumnoComponent {
                 email: this.alumnoForm.get('email')?.value,
                 nroCelular: this.alumnoForm.get('nroCelular')?.value,
                 carreraId: this.alumnoForm.get('carreraId')?.value,
-                estadoId: this.alumnoForm.get('estadoId')?.value,  
+                estadoId: this.alumnoForm.get('estadoId')?.value,
                 cicloId: this.alumnoForm.get('cicloId')?.value,
                 contraseña: this.alumnoForm.get('contraseña')?.value,
                 direccion: this.alumnoForm.get('direccion')?.value,
@@ -319,7 +325,6 @@ export class RegAlumnoComponent {
         } else {
         }
     }
-
     saveAlumno() {
         if (this.alumnoForm.valid) {
             const alumnoData: {
@@ -348,7 +353,7 @@ export class RegAlumnoComponent {
                 apellidos: this.alumnoForm.get('apellidos')?.value,
                 nroCelular: this.alumnoForm.get('nroCelular')?.value,
                 carreraId: this.alumnoForm.get('carreraId')?.value,
-                estadoId: this.alumnoForm.get('estadoId')?.value,  
+                estadoId: this.alumnoForm.get('estadoId')?.value,
                 cicloId: this.alumnoForm.get('cicloId')?.value,
                 promocion_id: this.alumnoForm.get('promocionId')?.value,
                 contraseña: this.alumnoForm.get('contraseña')?.value,
@@ -410,7 +415,6 @@ export class RegAlumnoComponent {
             });
         }
     }
-
     convertImageToBase64(
         file: File,
         callback: (base64Image: string) => void
@@ -424,7 +428,6 @@ export class RegAlumnoComponent {
             console.error('Error al convertir imagen a base64:', error);
         };
     }
-
     registrarAlumno(alumnoData: any) {
         this.loading = true;
         this.spinner.show();
@@ -448,7 +451,6 @@ export class RegAlumnoComponent {
             }
         );
     }
-
     capturarFecha(event: any) {
         console.log('Fecha', event);
         let fecha: Date = new Date(event);
