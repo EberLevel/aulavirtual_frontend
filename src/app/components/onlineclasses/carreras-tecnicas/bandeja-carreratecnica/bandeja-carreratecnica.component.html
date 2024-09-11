@@ -9,6 +9,8 @@
                     <p-table #dt1 [value]="carrerastecnicasList" [rows]="10" [loading]="loading"
                         [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
                         responsiveLayout="scroll" class="custom-search-input">
+                        
+                        <!-- Filtros y botones -->
                         <ng-template pTemplate="caption">
                             <div class="flex justify-content-between flex-wrap">
                                 <div class="flex-grow-1 mb-2 mr-2">
@@ -23,45 +25,29 @@
                             </div>
                         </ng-template>
 
+                        <!-- Encabezado de la tabla -->
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="min-width: 10rem" scope="col">
-                                    <div class="flex justify-content-between align-items-center">
-                                        Código
-                                    </div>
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    <div class="flex justify-content-between align-items-center">
-                                        Nombre de Carrera técnica
-                                    </div>
-                                </th>
-                
-                                <th style="min-width: 10rem" scope="col">
-                                    <div >
-                                        Configuraciones
-                                    </div>
-                                </th>
+                                <th style="min-width: 10rem" scope="col">Código</th>
+                                <th style="min-width: 10rem" scope="col">Nombre de Carrera Técnica</th>
+                                <th style="min-width: 10rem" scope="col">Plan de Estudios</th> <!-- Nueva columna -->
+                                <th style="min-width: 10rem" scope="col">Configuraciones</th>
                             </tr>
                         </ng-template>
 
+                        <!-- Cuerpo de la tabla -->
                         <ng-template pTemplate="body" let-carrera>
                             <tr>
                                 <td>{{ carrera.codigo }}</td>
                                 <td>{{ carrera.nombres }}</td>
-                                <td >
-                                    <button pButton icon="pi pi-briefcase" title="Agregar Curso" class="p-button-rounded p-button-text p-button-success" style="width: 70px; border-radius: 30px;" (click)="navigateTocurso(carrera)">
-                                    </button>
-                                    <button pButton icon="pi pi-eye" style="width: 70px; border-radius: 30px;" title="Detalle" class="p-button-rounded p-button-text p-button-success" (click)="navigateToDetalle(carrera)">
-                                    </button>
-                                    <button pButton icon="pi pi-pencil" style="width: 70px; border-radius: 30px;" title="Editar" class="p-button-rounded p-button-text p-button-warning" (click)="navigateToEdit(carrera)">
-                                    </button>
-                                    <button pButton icon="pi pi-trash" style="width: 70px; border-radius: 30px;" title="Eliminar" class="p-button-rounded p-button-text p-button-danger" (click)="navigateToDelete(carrera.id)">
-                                    </button>
-                                 
+                                <td>{{ carrera.plan_de_estudios_nombre }}</td> <!-- Mostrar el nombre del plan de estudios -->
+                                <td>
+                                    <button pButton icon="pi pi-briefcase" title="Agregar Curso" class="p-button-rounded p-button-text p-button-success" style="width: 70px; border-radius: 30px;" (click)="navigateTocurso(carrera)"></button>
+                                    <button pButton icon="pi pi-pencil" style="width: 70px; border-radius: 30px;" title="Editar" class="p-button-rounded p-button-text p-button-warning" (click)="navigateToEdit(carrera)"></button>
+                                    <button pButton icon="pi pi-trash" style="width: 70px; border-radius: 30px;" title="Eliminar" class="p-button-rounded p-button-text p-button-danger" (click)="navigateToDelete(carrera.id)"></button>
                                 </td>
                             </tr>
                         </ng-template>
-                        
 
                         <ng-template pTemplate="emptymessage">
                             <tr>

@@ -25,6 +25,10 @@ export class CommonService{
     getCarrerasDropdown(domain_id:number):Observable<any>{
         return this.http.get(`${this.baseUrl}carreras-dropdown/${domain_id}`);
     }
+    getCarrerasDropdownByPlanDeEstudio(planDeEstudioId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}carreras-dropdown/${planDeEstudioId}`);
+    }
+    
     getCiclosDropdown(domain_id:number):Observable<any>{
         return this.http.get(`${this.baseUrl}ciclos-dropdown/${domain_id}`);
     }
