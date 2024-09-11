@@ -1,6 +1,6 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl">Bandeja de Alumno</span>
+        <span class="text-primary font-semibold text-xl">Vista de Alumnos en Administrador</span>
     </ng-template>
     <ng-template pTemplate="content">
         <div class="row mb-4">
@@ -24,62 +24,49 @@
                                 </div>
                             </div>
                         </ng-template>
-
+                        
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="min-width: 10rem" scope="col">
-                                    <div class="flex justify-content-between align-items-center">
-                                        Nombres de Alumno
-                                    </div>
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    <div class="flex justify-content-between align-items-center">
-                                        Institución
-                                    </div>
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    <div class="flex justify-content-between align-items-center">
-                                        Carrera Técnica
-                                    </div>
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    <div class="flex justify-content-between align-items-center">
-                                        Siglo
-                                    </div>
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    <div class="flex justify-content-between align-items-center">
-                                        Acciones
-                                    </div>
-                                </th>
+                                <th style="min-width: 10rem" scope="col">Código</th>
+                                <th style="min-width: 10rem" scope="col">Nombre y Apellidos</th>
+                                <th style="min-width: 10rem" scope="col">Estado</th>
+                                <th style="min-width: 10rem" scope="col">Ciclo</th>
+                                <th style="min-width: 10rem" scope="col">Carrera Técnica</th>
+                                <th style="min-width: 10rem" scope="col">Promoción</th>
+                                <th style="min-width: 10rem" scope="col">Plan de Estudios</th>
+                                <th style="min-width: 10rem" scope="col">Celular</th>
+                                <th style="min-width: 10rem" scope="col">Acciones</th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-miembro>
                             <tr>
-                                <td>{{miembro.nombres}} {{miembro.apellidos}}</td>
-                                <td>{{miembro.institucion}}</td>
-                                <td>{{miembro.carrera_nombre}}</td>
-                                <td>{{miembro.ciclo_nombre}}</td>
+                                <td>{{ miembro.codigo }}</td>
+                                <td>{{ miembro.nombres }} {{ miembro.apellidos }}</td>
+                                <td>{{ miembro.estadoAlumno }}</td>
+                                <td>{{ miembro.ciclo_nombre }}</td>
+                                <td>{{ miembro.carrera_nombre }}</td>
+                                <td>{{ miembro.promocion_nombre }}</td>
+                                <td>{{ miembro.estado_nombre }}</td>
+                                <td>{{ miembro.celular }}</td>
                                 <td>
                                     <div class="flex justify-content-between align-items-center">
                                         <button pButton icon="pi pi-pencil" class="p-button-info p-button-sm" (click)="navigateToEditar(miembro)"></button>
                                         <button *ngIf="!esAlumno" pButton icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="eliminarAlumno(miembro)"></button>
                                     </div>
                                 </td>
-                                
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td colspan="8">No se encontraron registros</td>
+                                <td colspan="9">No se encontraron registros</td>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="loadingbody">
                             <tr>
-                                <td colspan="8">Cargando registros. Por favor espere.</td>
+                                <td colspan="9">Cargando registros. Por favor espere.</td>
                             </tr>
                         </ng-template>
                     </p-table>
@@ -88,4 +75,3 @@
         </div>
     </ng-template>
 </p-panel>
-

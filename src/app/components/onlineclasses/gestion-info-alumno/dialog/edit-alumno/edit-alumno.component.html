@@ -249,7 +249,11 @@
                                 placeholder="Selecciona una carrera"
                             ></p-dropdown>
                             <label for="carreraId">Carrera Profesional</label>
+                            <small style="color: brown;" *ngIf="alumnoForm.get('carreraId')?.invalid && alumnoForm.get('carreraId')?.touched">
+                                Debes seleccionar una carrera
+                            </small>
                         </span>
+                        
                     </div>
                     <div class="field md:col-6">
                         <span class="p-float-label">
@@ -383,6 +387,7 @@
                     id="btnActualizar"
                     class="p-button-info mr-2"
                     (click)="actualizarAlumno()"
+                    [disabled]="alumnoForm.invalid || !alumnoForm.get('carreraId')?.value"
                     type="button"
                 ></button>
                 <button
