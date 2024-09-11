@@ -32,51 +32,52 @@ export class BandejaAlumnoComponent {
 
     ngOnInit() {
         this.domain_id = this.helpersService.getDominioId();
-    
+
         // Obtener el ID del alumno dinámicamente al iniciar
         const alumnoId = this.helpersService.getAlumnoId();
-        
+
         if (alumnoId) {
             const alumno = {
                 domain_id: this.domain_id,
                 id: alumnoId,
             };
-                this.navigateToEditar(alumno);
+            this.navigateToEditar(alumno);
         }
-        this.esAlumno = this.helpersService.getRolId() === 12; 
-            this.cargaInicial();
+        this.esAlumno = this.helpersService.getRolId() === 12;
+        this.cargaInicial();
     }
-    
 
     cargaInicial(): void {
         const esAlumno = this.helpersService.getRolId() === 12; // Rol 12 como alumno
-    
+
         this.loading = true;
-        
+
         if (esAlumno) {
             // Si es Alumno, cargar solo los datos de su perfil
             const alumnoId = this.helpersService.getAlumnoId(); // Obtén el ID del alumno logueado
             if (alumnoId) {
-                this.alumnoService.getLoggedAlumno(alumnoId, this.domain_id).subscribe(
-                    (data: any) => {
-                        // Cargar solo la información de este alumno
-                        this.instituciones = [data]; // Poner la data del alumno en un array
-                        this.loading = false;
-                    },
-                    (error: any) => {
-                        this.loading = false;
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'Error al cargar los datos del alumno',
-                            icon: 'error'
-                        });
-                    }
-                );
+                this.alumnoService
+                    .getLoggedAlumno(alumnoId, this.domain_id)
+                    .subscribe(
+                        (data: any) => {
+                            console.log('Data del alumno:', data);
+                            this.instituciones = [data]; // Poner la data del alumno en un array
+                            this.loading = false;
+                        },
+                        (error: any) => {
+                            this.loading = false;
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Error al cargar los datos del alumno',
+                                icon: 'error',
+                            });
+                        }
+                    );
             }
         } else {
-            // Si no es Alumno, cargar todos los alumnos (esto aplica a los administradores o usuarios con permisos especiales)
             this.alumnoService.getAlumnos(this.domain_id).subscribe(
                 (data: any) => {
+                    console.log('Data de los alumno:', data);
                     this.instituciones = data;
                     this.loading = false;
                 },
@@ -97,36 +98,51 @@ export class BandejaAlumnoComponent {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí',
             cancelButtonText: 'No',
-            
         }).then((result) => {
             if (result.isConfirmed) {
-              const data = {
-                domain_id: alumno.domain_id ?? 1,
-                id: alumno.id,
-            };
-            this.alumnoService.deleteAlumno(data).subscribe((data: any) => {
-                //show swall success
-                Swal.fire({
-                    title: '¡Éxito!',
-                    text: 'eliminado correctamente',
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar',
-                }).then(
-                    () => {
-                        this.cargaInicial();
-                    },
-                    (error: any) => {
-                        this.loading = false;
-                        Swal.fire({
-                            title: '¡Error!',
-                            text: 'Error al eliminar',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar',
-                        });
-                    }
-                );
-            });
+                const data = {
+                    domain_id: alumno.domain_id ?? 1,
+                    id: alumno.id,
+                };
+                this.alumnoService.deleteAlumno(data).subscribe((data: any) => {
+                    //show swall success
+                    Swal.fire({
+                        title: '¡Éxito!',
+                        text: 'eliminado correctamente',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                    }).then(
+                        () => {
+                            this.cargaInicial();
+                        },
+                        (error: any) => {
+                            this.loading = false;
+                            Swal.fire({
+                                title: '¡Error!',
+                                text: 'Error al eliminar',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar',
+                            });
+                        }
+                    );
+                });
             }
+        });
+    }
+    navigateToNuevo() {
+        this.ref = this.dialogService.open(RegAlumnoComponent, {
+            width: '60%',
+            styleClass: 'custom-dialog-header',
+        });
+
+        this.ref.onClose.subscribe((data: any) => {
+            if (data) {
+                if (data.register) {
+                    this.cargaInicial();
+                }
+            }
+            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+            this.router.onSameUrlNavigation = 'reload';
         });
     }
     navigateToEditar(alumno: any) {
@@ -143,7 +159,7 @@ export class BandejaAlumnoComponent {
                     width: '60%',
                     styleClass: 'custom-dialog-header',
                 });
-    
+
                 // Cuando el modal de edición se cierra
                 this.ref.onClose.subscribe((data: any) => {
                     if (data) {
@@ -152,40 +168,17 @@ export class BandejaAlumnoComponent {
                             this.cargaInicial(); // Recargar la lista de alumnos
                         }
                     }
-    
+
                     // Asegúrate de que la ruta se recargue completamente si es necesario
-                    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+                    this.router.routeReuseStrategy.shouldReuseRoute = () =>
+                        false;
                     this.router.onSameUrlNavigation = 'reload';
-                });
-            },
-            (error: any) => {
-                this.loading = false;
-                Swal.fire({
-                    title: '¡Error!',
-                    text: 'Error al cargar la información del alumno',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar',
                 });
             }
         );
     }
-    
-    navigateToNuevo() {
-        this.ref = this.dialogService.open(RegAlumnoComponent, {
-            width: '60%',
-            styleClass: 'custom-dialog-header',
-        });
 
-        this.ref.onClose.subscribe((data: any) => {
-          if (data) {
-            if (data.register) {
-                this.cargaInicial();
-            }
-        }
-            this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-            this.router.onSameUrlNavigation = 'reload';
-        });
-    }
+
 
     onGlobalFilter(table: Table, event: Event) {
         if (table) {

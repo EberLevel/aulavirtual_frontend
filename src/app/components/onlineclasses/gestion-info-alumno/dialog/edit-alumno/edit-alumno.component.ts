@@ -108,7 +108,16 @@ export class EditAlumnoComponent {
     }
 
     ngOnInit() {
-        this.listarEstados();
+        this.listarPlanEstudio();
+
+        this.alumnoForm
+        .get('estadoId')
+        ?.valueChanges.subscribe((selectedEstadoId) => {
+            if (selectedEstadoId) {
+                this.getCarrerasDropdown(selectedEstadoId); // Pasar el ID del plan de estudios para filtrar las carreras
+            }
+        });
+
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
             { name: 'PASAPORTE', value: 2, code: 'RM' },
@@ -144,15 +153,13 @@ export class EditAlumnoComponent {
                 });
             }
         }
-
-        this.getCarrerasDropdown();
         this.getCiclosDropdown();
         this.getPromocionesDropdown();
     }
 
     estadosList: { name: string, value: number }[] = [];
 
-    listarEstados(): Promise<void> {
+    listarPlanEstudio(): Promise<void> {
         return new Promise((resolve, reject) => {
             this.parametroService.getEstadoDeCurso().subscribe(
                 (response: any) => {
@@ -169,14 +176,20 @@ export class EditAlumnoComponent {
         });
     }
 
-    getCarrerasDropdown() {
-        this.commonService.getCarrerasDropdown(this.domain_id).subscribe(
+    getCarrerasDropdown(planDeEstudioId: number) {
+        // Llamar a la API para obtener las carreras filtradas por el Plan de Estudio seleccionado
+        this.commonService.getCarrerasDropdownByPlanDeEstudio(planDeEstudioId).subscribe(
             (response) => {
                 this.carrerasList = response.map((carrera: any) => {
-                    return { name: carrera.nombres, value: carrera.id };
+                    return {
+                        name: carrera.nombres,
+                        value: carrera.id,
+                    };
                 });
             },
-            (error) => console.error('Error obteniendo carreras', error)
+            (error) => {
+                console.error('Error obteniendo carreras', error);
+            }
         );
     }
 
