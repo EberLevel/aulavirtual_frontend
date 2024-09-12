@@ -78,7 +78,11 @@ export class VerCursoDeCarreraComponent {
     }
 
     navigateAddCurso() {
-        console.log("first")
+    // Mostrar el contenido completo de this.config.data.data antes de enviar
+    console.log("Datos que se enviarán navigateAddCurso : ", this.config.data.data);
+
+    console.log("ID navigateAddCurso: ", this.config.data.data.id);
+    console.log("Total Créditos navigateAddCurso: ", this.config.data.data.total_creditos);
         console.log(this.config.data.data.id,)
         this.ref = this.dialogService.open(RegCursosComponent, {
             width: '60%',
@@ -162,30 +166,28 @@ export class VerCursoDeCarreraComponent {
             didOpen: () => {
                 const container = document.querySelector('.swal2-container');
                 if (container) {
-                    container.setAttribute(
-                        'style',
-                        'z-index: 2147483647 !important'
-                    );
+                    container.setAttribute('style', 'z-index: 2147483647 !important');
                 }
             },
         }).then((result) => {
             if (result.isConfirmed) {
+                // Ejecuta la eliminación en el servicio
                 this.cursosService.eliminarCurso(id).subscribe(
                     (response) => {
+                        // Muestra el mensaje de éxito
                         Swal.fire({
                             title: 'Eliminado',
                             text: 'La carrera técnica ha sido eliminada.',
                             icon: 'success',
                             showClass: {
                                 popup: `
-                  background-color: #78CBF2;
-                  color: white;
-                  z-index: 10000!important;
-                `,
+                                    background-color: #78CBF2;
+                                    color: white;
+                                    z-index: 10000!important;
+                                `,
                             },
                             didOpen: () => {
-                                const container =
-                                    document.querySelector('.swal2-container');
+                                const container = document.querySelector('.swal2-container');
                                 if (container) {
                                     container.setAttribute(
                                         'style',
@@ -193,10 +195,13 @@ export class VerCursoDeCarreraComponent {
                                     );
                                 }
                             },
+                        }).then(() => {
+                            // Recarga la lista de cursos después de eliminar
+                            this.listarCursos();
                         });
-                        // Aquí puedes actualizar la vista, por ejemplo, recargar la lista de carreras técnicas
                     },
                     (error) => {
+                        // Muestra el mensaje de error si la eliminación falla
                         Swal.fire(
                             'Error',
                             'Hubo un problema al eliminar la carrera técnica.',
@@ -204,10 +209,10 @@ export class VerCursoDeCarreraComponent {
                         );
                     }
                 );
-                this.listarCursos(); // Recargar los datos de la tabla
             }
         });
     }
+    
 
     onGlobalFilter(event: Event) {
         const filterValue = (

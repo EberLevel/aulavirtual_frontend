@@ -56,7 +56,7 @@ export class BandejaCarreratecnicaComponent {
 
     this.ref = this.dialogService.open(RegCarrerastecnicasComponent, {
       width: '60%',
-      height: '60%',
+      height: '75%',
       styleClass: 'custom-dialog-header'
     });
 

@@ -49,29 +49,21 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     ) {}
 
     ngOnInit(): void {
-        this.id = this.config.data.id; //ID docente
-        console.log('firstaaaaaaaaa');
-        console.log(this.config.data);
-        this.idCurso = this.config.data.data.id; //ID Curso
-        console.log('carrera_id:', this.config.data.data.carrera_id);
+        if (this.config.data.acciones !== 'add') {
+            this.idCurso = this.config.data.data.id; // ID Curso
+        }
+
         this.cantidadTotalCreditos = this.config.data.total_creditos;
         this.acciones = this.config.data.acciones;
         this.domain_id = this.helperService.getDominioId();
-
-        Promise.all([
-            this.obtenerDatosCurso(this.idCurso),
-            this.listarModulosFormativos(),
-            this.listarAreasFormacion(),
-            this.listarCiclos(),
-            this.listarEstados(),
-            this.listarDocentes(this.domain_id),
-        ]).then(() => {
-            if (
-                this.config.data.acciones === 'editar' ||
-                this.config.data.acciones === 'ver' ||
-                this.config.data.acciones === 'duplicar'
-            ) {
-                console.log(this.config.data.data);
+        this.carrera_id = this.curso.carrera_id;
+        // Carga de datos basada en la acción
+        if (
+            this.acciones === 'editar' ||
+            this.acciones === 'ver' ||
+            this.acciones === 'duplicar'
+        ) {
+            this.obtenerDatosCurso(this.idCurso).then(() => {
                 this.codigo = this.curso.codigo;
                 this.nombreCurso = this.curso.nombre;
                 this.ciclo = this.curso.ciclo_id;
@@ -82,21 +74,48 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                 this.cantidadHoras = this.curso.cantidad_de_horas;
                 this.syllabus = this.curso.syllabus;
                 this.carrera_id = this.curso.carrera_id;
+                //console.log("carrera_id" ,this.carrera_id)
                 this.tema = this.curso.tema;
                 this.asignacionDocentes = this.curso.docente_id;
                 this.estado = this.curso.estado_id;
 
                 if (this.acciones === 'duplicar') {
-                    this.getCarrerasDropdown(this.estado); // Llamar a la función para obtener las carreras cuando se selecciona el plan de estudio
+                    this.getCarrerasDropdown(this.estado);
                 }
-            }
+            });
+        } else {
+            // En el modo de agregar, inicializa las variables necesarias sin necesidad de cargar un curso existente
+            this.codigo = '';
+            this.nombreCurso = '';
+            this.ciclo = {};
+            this.areaFormacion = {};
+            this.moduloFormativo = {};
+            this.cantidadCreditos = 0;
+            this.porcentajeCreditos = 0;
+            this.cantidadHoras = 0;
+            this.syllabus = '';
+            this.tema = '';
+            this.asignacionDocentes = {};
+            this.carrera_id = null;
+            this.estado = null;
+        }
+
+        // Cargar listas independientes de la acción
+        Promise.all([
+            this.listarModulosFormativos(),
+            this.listarAreasFormacion(),
+            this.listarCiclos(),
+            this.listarEstados(),
+            this.listarDocentes(this.domain_id),
+        ]).then(() => {
+            //console.log('Datos cargados para el formulario de curso.');
         });
     }
 
     ngAfterViewInit(): void {}
 
     GuardarCurso(): void {
-        console.log(this.asignacionDocentes);
+        //console.log(this.asignacionDocentes);
         const curso = {
             codigo: this.codigo,
             nombreCurso: this.nombreCurso,
@@ -109,10 +128,11 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             syllabus: this.syllabus,
             tema: this.tema,
             asignacionDocentesId: this.asignacionDocentes,
-            carreraId: this.carrera_id,
+            carreraId: this.config.data.id,
             estadoId: this.estado,
             domain_id: this.domain_id,
         };
+        console.log("curso",curso)
 
         if (curso) {
             this.parametroService.guardarCurso(curso).subscribe(
@@ -126,11 +146,11 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                     }).then(() => {});
                 },
                 (error: any) => {
-                    console.error('Error al guardar el parametro', error);
+                    //console.error('Error al guardar el parametro', error);
                 }
             );
         } else {
-            console.error('Formulario inválido');
+            //console.error('Formulario inválido');
         }
     }
 
@@ -148,26 +168,26 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                     });
                 },
                 (error) => {
-                    console.error('Error obteniendo carreras', error);
+                    //console.error('Error obteniendo carreras', error);
                 }
             );
     }
 
     onPlanDeEstudioChange(event: any) {
-      const planDeEstudioId = event.value;
-  
-      // Limpia la carrera seleccionada si cambias el plan de estudios
-      this.carreraSeleccionada = null;
-      this.carrerasList = []; // Limpia las carreras actuales antes de cargar las nuevas
-  
-      // Llama al método para obtener las carreras basadas en el nuevo plan de estudios
-      if (planDeEstudioId) {
-          this.getCarrerasDropdown(planDeEstudioId);
-      }
-  }
+        const planDeEstudioId = event.value;
+
+        // Limpia la carrera seleccionada si cambias el plan de estudios
+        this.carreraSeleccionada = null;
+        this.carrerasList = []; // Limpia las carreras actuales antes de cargar las nuevas
+
+        // Llama al método para obtener las carreras basadas en el nuevo plan de estudios
+        if (planDeEstudioId) {
+            this.getCarrerasDropdown(planDeEstudioId);
+        }
+    }
 
     GuardarCursoDuplicado(): void {
-      console.log('Carrera seleccionada antes de guardar:', this.carreraSeleccionada); 
+        //console.log('Carrera seleccionada antes de guardar:', this.carreraSeleccionada);
 
         const cursoDuplicado = {
             id: undefined,
@@ -187,7 +207,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             domain_id: this.domain_id,
         };
 
-        console.log('Datos del curso duplicado a guardar:', cursoDuplicado);
+        //console.log('Datos del curso duplicado a guardar:', cursoDuplicado);
 
         if (cursoDuplicado) {
             this.parametroService.guardarCurso(cursoDuplicado).subscribe(
@@ -201,11 +221,11 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                     }).then(() => {});
                 },
                 (error: any) => {
-                    console.error('Error al guardar el curso duplicado', error);
+                    //console.error('Error al guardar el curso duplicado', error);
                 }
             );
         } else {
-            console.error('Formulario inválido');
+            //console.error('Formulario inválido');
         }
     }
 
@@ -228,7 +248,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             domain_id: this.domain_id,
         };
 
-        console.log('Curso a guardar', curso);
+        //console.log('Curso a guardar', curso);
 
         if (curso) {
             this.parametroService.actualizarCurso(curso).subscribe(
@@ -242,11 +262,11 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                     }).then(() => {});
                 },
                 (error: any) => {
-                    console.error('Error al guardar el parametro', error);
+                    //console.error('Error al guardar el parametro', error);
                 }
             );
         } else {
-            console.error('Formulario inválido');
+            //console.error('Formulario inválido');
         }
     }
 
@@ -257,23 +277,20 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
         ) {
             this.porcentajeCreditos = 100;
         } else {
-            console.log('Cantidad de créditos ha cambiado:', newValue);
-            console.log(
-                'Cantidad total de créditos:',
-                this.cantidadTotalCreditos
-            );
+            //console.log('Cantidad de créditos ha cambiado:', newValue);
+            //console.log(                'Cantidad total de créditos:'                this.cantidadTotalCreditos            );
             const resultado = (newValue / this.cantidadTotalCreditos) * 100;
             this.porcentajeCreditos = resultado;
-            console.log('Resultado del cálculo:', resultado);
+            //console.log('Resultado del cálculo:', resultado);
         }
     }
 
     obtenerDatosCurso(id: number): Promise<void> {
-        console.log('Id curso:', id);
+        //console.log('Id curso:', id);
         return new Promise((resolve, reject) => {
             this.parametroService.getCursoById(id).subscribe(
                 (response: any) => {
-                    console.log('Datos Curso', response.Datos);
+                    //console.log('Datos Curso', response.Datos);
                     this.curso = response.Datos;
                     //this.modulosFormativos = response;
                     resolve();
@@ -323,7 +340,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
         return new Promise((resolve, reject) => {
             this.parametroService.getEstadoDeCurso().subscribe(
                 (response: any) => {
-                    console.log('Lista de listarEstados', response);
+                    //console.log('Lista de listarEstados', response);
                     this.estados = response;
                     resolve();
                 },
@@ -353,6 +370,6 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     }
 
     syllabusChange(event: any): void {
-        console.log(event);
+        //console.log(event);
     }
 }
