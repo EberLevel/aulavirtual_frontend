@@ -32,10 +32,10 @@
                                 <th style="min-width: 10rem" scope="col">Nombre del grupos</th>
                                 <th style="min-width: 10rem" scope="col">Preguntas</th>
                                 <th style="min-width: 10rem" scope="col">Promedio de notas</th>
-                                <th style="min-width: 10rem" scope="col">Fecha y Hora 1</th>
                                 <th style="min-width: 10rem" scope="col">Tipo de Evaluación</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
                                 <th style="min-width: 10rem" scope="col">Estado</th>
+                                <th style="min-width: 10rem" scope="col">Modalidad</th>
                             </tr>
                         </ng-template>
 
@@ -63,9 +63,9 @@
                                 </td>
                                 <td>{{ carrera.porcentaje_evaluacion }}</td>
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
-                                <td>{{ carrera.tipo_evaluacion_nombre }}</td>
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>
+                                <td>{{ getModalidad(carrera.modalidad) }}</td> 
                             </tr>
                         </ng-template>
 

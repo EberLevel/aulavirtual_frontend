@@ -55,12 +55,12 @@
 
         <div class="row mb-4">
             <div class="grid p-fluid">
-                <div class="field md:col-6">
+                <!-- <div class="field md:col-6">
                     <span class="p-float-label">
                         <p-dropdown inputId="dropdownAula" [options]="tipEvaluacion"  [(ngModel)]="tipoEvaluacion" optionLabel="name" optionValue="value"></p-dropdown>
                         <label for="dropdownAula">Tipo de Evaluación</label>
                     </span>
-                </div>
+                </div> -->
                 <div class="field md:col-6">
                     <span class="p-float-label">
                         <p-dropdown inputId="dropdownEstado" [options]="estados"  [(ngModel)]="estado" optionLabel="name" optionValue="value"></p-dropdown>
@@ -69,7 +69,17 @@
                 </div>
             </div>
         </div>
-
+        <div class="row mb-4">
+            <div class="grid p-fluid">
+                <div class="field md:col-6">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="dropdownModalidad" [options]="tipModalidad" [(ngModel)]="modalidad" optionLabel="name" optionValue="value"></p-dropdown>
+                        <label for="dropdownModalidad">Modalidad</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
         <div class="row">
             <div class="flex justify-content-end flex-column sm:flex-row">
                 <div class="flex flex-wrap gap-2">

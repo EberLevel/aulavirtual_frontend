@@ -8,6 +8,7 @@ import { RegCursosComponent } from '../../../../../cursos/dialog/reg-cursos/reg-
 import Swal from 'sweetalert2';
 import { VerListadoDePreguntasComponent } from '../ver-listado-de-preguntas/ver-listado-de-preguntas.component';
 import { RegEvaluacionDocenteComponent } from '../../../../../docentes/evaluaciones-docente-menu/dialog/reg-evaluacion-docente/reg-evaluacion-docente.component';
+import { ListadoEvaluacionPresencialComponent } from '../listado-evaluacion-presencial/listado-evaluacion-presencial.component';
 
 @Component({
   selector: 'app-ver-lis-eval-grupo',
@@ -59,7 +60,9 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     );
   }
   
-
+  getModalidad(modalidad: number): string {
+    return modalidad === 0 ? 'Presencial' : 'Remoto';
+}
   calcularTotales() {
     let totalPromedio = 0;
     let totalPorcentaje = 0;
@@ -170,17 +173,25 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
   }
 
   agregarPreguntas(evaluaciones: any) {
-    this.ref = this.dialogService.open(VerListadoDePreguntasComponent, {
-      width: '60%',
-      styleClass: 'custom-dialog-header',
-      data: { acciones: 'add', grupoEvaluacionesId: this.grupoEvaluaciones.id ,data: evaluaciones } 
-     });
-  
-     this.ref.onClose.subscribe((data: any) => {
-      console.log('Modal cerrado, recargando la lista de evaluaciones...');
-      this.listarGrupoEvaluaciones();
+    if (evaluaciones.modalidad === 0) { // Si la modalidad es Presencial
+        this.ref = this.dialogService.open(ListadoEvaluacionPresencialComponent, {  // Abre otro componente
+            width: '60%',
+            styleClass: 'custom-dialog-header',
+            data: { acciones: 'add', grupoEvaluacionesId: this.grupoEvaluaciones.id, data: evaluaciones, evaluacionId: evaluaciones.id } 
+        });
+    } else { // Si la modalidad no es Presencial
+        this.ref = this.dialogService.open(VerListadoDePreguntasComponent, {  
+            width: '60%',
+            styleClass: 'custom-dialog-header',
+            data: { acciones: 'add', grupoEvaluacionesId: this.grupoEvaluaciones.id, data: evaluaciones } 
+        });
+    }
+    
+    this.ref.onClose.subscribe((data: any) => {
+        console.log('Modal cerrado, recargando la lista de evaluaciones...');
+        this.listarGrupoEvaluaciones();
     });
-  }
+}
 
   
 }
