@@ -26,10 +26,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TareasRoutingModule } from './tareas-routing.module';
 import { TareasComponent } from './tareas.component';
+import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.component';
 
 @NgModule({
   declarations: [
-    TareasComponent
+    TareasComponent,
+    RegistrarTareaComponent
   ],
   imports: [
     CommonModule,

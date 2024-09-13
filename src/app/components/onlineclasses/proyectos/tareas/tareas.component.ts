@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { catchError, of, switchMap } from 'rxjs';
 import { GeneralService } from '../../service/general.service';
+import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.component';
 
 @Component({
   selector: 'app-tareas',
@@ -38,40 +39,39 @@ export class TareasComponent {
 
   navigateToNuevo(id: number) {
     if (id > 0) {
-      this.proyectosService.getOfertaLaboral(id).subscribe((response: any) => {
+      this.proyectosService.getTarea(Number(this.proyectoId), id).subscribe((response: any) => {
         this.tarea = response.data;
-        // this.ref = this.dialogService.open(RegistraOfertaLaboralComponent, {
-        //   width: '60%',
-        //   styleClass: 'custom-dialog-header',
-        //   data: this.ofertaLaboral
-        // });
-        // this.ref.onClose.subscribe((dataFromDialog) => {
-        //   this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        //   this.router.onSameUrlNavigation = 'reload';
-        // });
-        console.log(this.tarea)
+        this.ref = this.dialogService.open(RegistrarTareaComponent, {
+          width: '60%',
+          styleClass: 'custom-dialog-header',
+          data: { tarea: this.tarea, proyectoId: this.proyectoId }
+        });
+        this.ref.onClose.subscribe((dataFromDialog) => {
+          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+          this.router.onSameUrlNavigation = 'reload';
+        });
       });
     } else {
-      // this.ref = this.dialogService.open(RegistraOfertaLaboralComponent, {
-      //   width: '60%',
-      //   styleClass: 'custom-dialog-header',
-      //   data: this.ofertaLaboral
-      // });
+      this.ref = this.dialogService.open(RegistrarTareaComponent, {
+        width: '60%',
+        styleClass: 'custom-dialog-header',
+        data: { tarea: this.tarea, proyectoId: this.proyectoId}
+      });
 
-      // this.ref.onClose.subscribe((dataFromDialog) => {
-      //   this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-      //   this.router.onSameUrlNavigation = 'reload';
-      // })
+      this.ref.onClose.subscribe((dataFromDialog) => {
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+      })
     }
   }
 
   verTareas(id: number) { }
 
   eliminar(id: number) {
-    this.proyectosService.eliminarOfertaLaboral(id).pipe(
+    this.proyectosService.eliminarTarea(Number(this.proyectoId), id).pipe(
       switchMap(() => {
         console.log('Oferta laboral eliminada');
-        return this.proyectosService.getOfertasLaborales();
+        return this.proyectosService.getTareas(this.proyectoId!);
       }),
       catchError((error) => {
         console.error('Error eliminando oferta laboral:', error);

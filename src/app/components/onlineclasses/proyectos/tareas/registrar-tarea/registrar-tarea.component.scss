@@ -1,0 +1,46 @@
+.image-uploader {
+  display: flex;
+  flex-direction: column;
+}
+
+.previews {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.preview {
+  position: relative;
+}
+
+.preview img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 2px 5px;
+  font-size: 12px;
+}
+
+.remove-btn:hover {
+  background-color: rgba(255, 0, 0, 0.9);
+}
+
+
+.img-selector {
+ max-width: 200px;
+ justify-content: center;
+}
