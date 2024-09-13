@@ -26,10 +26,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ProyectosComponent } from './proyectos.component';
 import { ProyectosRoutingModule } from './proyectos-routing.module';
+import { RegistraProyectoComponent } from './registrar-proyecto/registrar-proyecto.component';
 
 @NgModule({
   declarations: [
-    ProyectosComponent
+    ProyectosComponent,
+    RegistraProyectoComponent
   ],
   imports: [
     CommonModule,

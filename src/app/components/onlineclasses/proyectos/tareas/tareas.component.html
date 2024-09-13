@@ -28,8 +28,10 @@
                 <th style="min-width: 10rem">Acciones</th>
                 <th style="min-width: 10rem">ID</th>
                 <th style="min-width: 10rem">Nombre Principal</th>
+                <th style="min-width: 10rem">Grupo</th>
+                <th style="min-width: 10rem">Responsable</th>
+                <th style="min-width: 10rem">Prioridad</th>
                 <th style="min-width: 10rem">Estado</th>
-                <th style="min-width: 10rem">Tareas</th>
               </tr>
             </ng-template>
 
@@ -49,16 +51,10 @@
                 </td>
                 <td>{{ proyecto.id }}</td>
                 <td>{{ proyecto.nombre }}</td>
+                <td>{{ proyecto.grupo }}</td>
+                <td>{{ proyecto.responsable }}</td>
+                <td>{{ proyecto.prioridad }}</td>
                 <td><a href="">{{ proyecto.estado }}</a></td>
-                <td>
-                  <button [routerLink]="[proyecto.id + '/tareas']" style="width: fit-content" pButton
-                      class="p-button-rounded p-button-text custom-edit-button" title="Ver Tareas">
-                      <i class="pi pi-eye" aria-hidden="true" [style]="{
-                              color: 'var(--primary-color)',
-                              'font-size': '1.5rem'
-                          }"></i>
-                  </button> 
-                </td>
               </tr>
             </ng-template>
           </p-table>
