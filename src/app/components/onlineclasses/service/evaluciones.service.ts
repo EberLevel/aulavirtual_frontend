@@ -20,16 +20,16 @@ export class EvaluacionesService {
     crearEvaluacion(evaluacion: any): Observable<any> {
         return this.http.post(`${this.baseUrl}evaluaciones`, evaluacion);
     }
-
+    // Actualizar evaluación
+    actualizarEvaluacion(id: number, evaluacion: any): Observable<any> {
+        return this.http.put(`${this.baseUrl}evaluacion/${id}`, evaluacion);
+    }
     // Obtener evaluaciones por grupo
     obtenerEvaluacionesPorGrupo(id: number): Observable<any> {
         return this.http.get(`${this.baseUrl}/${id}`);
     }
 
-    // Actualizar evaluación
-    actualizarEvaluacion(id: number, evaluacion: any): Observable<any> {
-        return this.http.put(`${this.baseUrl}evaluacion/${id}`, evaluacion);
-    }
+
 
     // Eliminar evaluación
     eliminarEvaluacion(id: number): Observable<any> {

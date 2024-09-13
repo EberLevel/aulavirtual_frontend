@@ -19,7 +19,7 @@ export class RegEvaluacionDocenteComponent {
     fechaRegistro!: Date | null;
     horaprogramada!: Date | null;  // Aseguramos que esta es del tipo Date
     acciones!: string;  // Aquí almacenamos la acción ('registrar' o 'actualizar')
-
+    modalidad: any;
     loading: boolean = false;
 
     // Datos de los dropdowns
@@ -33,6 +33,10 @@ export class RegEvaluacionDocenteComponent {
         { name: 'Pendiente', value: 1 },   
         { name: 'En Proceso', value: 2 }, 
         { name: 'Culminado', value: 3 }
+    ];
+    tipModalidad = [
+        { name: 'Presencial', value: 0 },       
+        { name: 'Remoto', value: 1 }
     ];
 
     constructor(
@@ -79,6 +83,7 @@ export class RegEvaluacionDocenteComponent {
                 this.observaciones = evaluacion.observaciones;
                 this.fechaRegistro = new Date(evaluacion.fecha_y_hora_programo);
                 this.grupoDeEvaluacionesId = evaluacion.grupo_de_evaluaciones_id;
+                this.modalidad = evaluacion.modalidad; 
 
                 // Extraer y establecer la hora como Date en horaprogramada
                 const fechaCompleta = new Date(evaluacion.fecha_y_hora_programo);
@@ -110,6 +115,7 @@ export class RegEvaluacionDocenteComponent {
             fecha_y_hora_programo: fechaHoraProgramada,  // Aquí se asigna la fecha con la hora
             observaciones: this.observaciones || null,
             estado_id: Number(this.estado),
+            modalidad: this.modalidad, 
             domain_id: 2,
             grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null
         };
@@ -170,6 +176,7 @@ export class RegEvaluacionDocenteComponent {
             tipo_evaluacion_id: Number(this.tipoEvaluacion),
             fecha_y_hora_programo: fechaHoraProgramada,
             observaciones: this.observaciones || null,
+            modalidad: this.modalidad, 
             estado_id: Number(this.estado),
             domain_id: 2,
             grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null
