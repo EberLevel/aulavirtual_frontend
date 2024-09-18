@@ -1,0 +1,14 @@
+@import url('https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lightgallery.css');
+@import url('https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css');
+
+.image-uploader lightgallery {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.image-uploader lightgallery a {
+  height: 200px;
+  display: inline-flex;
+  border: solid 1px #d2d2d2;
+}

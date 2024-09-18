@@ -1,0 +1,26 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl"
+            >Imagenes</span
+        >
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row">
+            <div class="grid p-fluid">                
+                <div class="md:col-12">
+                    <div class="image-uploader">
+                        <lightgallery [settings]="settings" [onBeforeSlide]="onBeforeSlide">
+                            <a 
+                                class="gallery-item"
+                                *ngFor="let image of previewImages"
+                                [attr.href]="image"
+                            >
+                                <img class="img-responsive" [src]="image" />
+                            </a>
+                        </lightgallery>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

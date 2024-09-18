@@ -30,7 +30,8 @@
                 <th style="min-width: 10rem">Descripción</th>
                 <th style="min-width: 10rem">Grupo</th>
                 <th style="min-width: 10rem">Responsable</th>
-                <th style="min-width: 10rem">Prioridad</th>                
+                <th style="min-width: 10rem">Prioridad</th>
+                <th style="min-width: 10rem">IM</th>
                 <th style="min-width: 10rem">Estado</th>                
               </tr>
             </ng-template>
@@ -53,7 +54,8 @@
                 <td [innerHTML]="proyecto.descripcion"></td>
                 <td>{{ proyecto.grupo }}</td>
                 <td>{{ proyecto.responsable }}</td>
-                <td>{{ proyecto.prioridad }}</td>                
+                <td>{{ proyecto.prioridad }}</td>
+                <td><button pButton class="p-button p-button-sm mr-2" (click)="navigateToGaleria(proyecto.id)">IM</button></td>                
                 <td><a href="">{{ proyecto.estado }}</a></td>
               </tr>
             </ng-template>

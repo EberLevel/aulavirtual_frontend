@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 import { GeneralService } from '../../../service/general.service';
 import { catchError, of, tap } from 'rxjs';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import lgZoom from 'lightgallery/plugins/zoom';
+import { BeforeSlideDetail } from 'lightgallery/lg-events';
 
 @Component({
   selector: 'app-registrar-tarea',
@@ -28,6 +30,16 @@ export class RegistrarTareaComponent {
   base64Files: string[] = [];
   public Editor = ClassicEditor as any;
   @ViewChild('ckeditor', { static: false }) ckeditor!: ElementRef;
+
+  settings = {
+    counter: false,
+    plugins: [lgZoom]
+  };
+
+  onBeforeSlide = (detail: BeforeSlideDetail): void => {
+    const { index, prevIndex } = detail;
+    console.log(index, prevIndex);
+  };
 
   constructor(
     private router: Router,
@@ -58,6 +70,7 @@ export class RegistrarTareaComponent {
       this.prioridad = '';
       this.descripcion = ''
       this.proyectoId = this.config.data.proyectoId;
+      this.base64Files = [];
     }
 
   }
@@ -153,6 +166,6 @@ export class RegistrarTareaComponent {
 
   closeModal() {
     this.ref.close({ register: false });
-  }
+  }  
 }
 
