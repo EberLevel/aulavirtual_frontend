@@ -27,11 +27,14 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TareasRoutingModule } from './tareas-routing.module';
 import { TareasComponent } from './tareas.component';
 import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.component';
+import { LightgalleryModule } from 'lightgallery/angular';
+import { GaleriaComponent } from './galeria/galeria.component';
 
 @NgModule({
   declarations: [
     TareasComponent,
-    RegistrarTareaComponent
+    RegistrarTareaComponent,
+    GaleriaComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +68,8 @@ import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.compo
     InputTextModule,
     MultiSelectModule,
     TareasRoutingModule,
-    CKEditorModule
+    CKEditorModule,
+    LightgalleryModule
   ]
 })
 export class TareasModule { }

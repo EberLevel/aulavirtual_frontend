@@ -4,6 +4,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { catchError, of, switchMap } from 'rxjs';
 import { GeneralService } from '../../service/general.service';
 import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.component';
+import { GaleriaComponent } from './galeria/galeria.component';
 
 @Component({
   selector: 'app-tareas',
@@ -63,6 +64,21 @@ export class TareasComponent {
         this.router.onSameUrlNavigation = 'reload';
       })
     }
+  }
+
+  navigateToGaleria(id: number) {
+    this.proyectosService.getTarea(Number(this.proyectoId), id).subscribe((response: any) => {
+      this.tarea = response.data;
+      this.ref = this.dialogService.open(GaleriaComponent, {
+        width: '60%',
+        styleClass: 'custom-dialog-header',
+        data: { tarea: this.tarea, proyectoId: this.proyectoId }
+      });
+      this.ref.onClose.subscribe((dataFromDialog) => {
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+        this.router.onSameUrlNavigation = 'reload';
+      });
+    });
   }
 
   verTareas(id: number) { }
