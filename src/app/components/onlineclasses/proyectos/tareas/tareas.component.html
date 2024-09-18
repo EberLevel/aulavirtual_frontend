@@ -27,11 +27,11 @@
               <tr>
                 <th style="min-width: 10rem">Acciones</th>
                 <th style="min-width: 10rem">ID</th>
-                <th style="min-width: 10rem">Nombre Principal</th>
+                <th style="min-width: 10rem">Descripción</th>
                 <th style="min-width: 10rem">Grupo</th>
                 <th style="min-width: 10rem">Responsable</th>
-                <th style="min-width: 10rem">Prioridad</th>
-                <th style="min-width: 10rem">Estado</th>
+                <th style="min-width: 10rem">Prioridad</th>                
+                <th style="min-width: 10rem">Estado</th>                
               </tr>
             </ng-template>
 
@@ -50,10 +50,10 @@
                     </button>                    
                 </td>
                 <td>{{ proyecto.id }}</td>
-                <td>{{ proyecto.nombre }}</td>
+                <td [innerHTML]="proyecto.descripcion"></td>
                 <td>{{ proyecto.grupo }}</td>
                 <td>{{ proyecto.responsable }}</td>
-                <td>{{ proyecto.prioridad }}</td>
+                <td>{{ proyecto.prioridad }}</td>                
                 <td><a href="">{{ proyecto.estado }}</a></td>
               </tr>
             </ng-template>
