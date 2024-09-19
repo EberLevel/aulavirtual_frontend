@@ -17,9 +17,9 @@ export class RegistraEmpresaComponent {
   id: number = 0;
   name: string = '';
   domain: string = '';
-  database: string = '';
-  status: string = '';
-  rol_id: number= 0;
+  database: string = 'BD';
+  status: string = '1';
+  rol_id: number= 8;
   domain_id: number= 0;
 
   constructor(
@@ -56,7 +56,7 @@ export class RegistraEmpresaComponent {
       rol_id: this.rol_id,
       domain_id: this.domain_id
     }
-
+    console.log("empresa" , empresa)
     if (this.id > 0) {
       this.empresaService.actualizarEmpresa(empresa,this.id).subscribe(
         (response: any) => {
