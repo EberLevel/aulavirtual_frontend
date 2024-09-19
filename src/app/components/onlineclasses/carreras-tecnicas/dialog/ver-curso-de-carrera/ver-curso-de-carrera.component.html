@@ -1,7 +1,7 @@
 <p-panel>
     <ng-template pTemplate="header">
         <span class="text-primary font-semibold text-xl"
-            >Bandeja de Cursos</span
+            >Bandeja de Unidad Didactica</span
         >
     </ng-template>
     <ng-template pTemplate="content">
@@ -28,7 +28,7 @@
                                             type="text"
                                             #filter
                                             (input)="onGlobalFilter($event)"
-                                            placeholder="Buscar cursos"
+                                            placeholder="Buscar Unidad Didactica"
                                             class="w-full"
                                         />
                                     </span>
@@ -78,21 +78,6 @@
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Docente
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Foto
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Estado (m16)
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Modalidad (m18)
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    F. inicio
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    F. término
                                 </th>
                             </tr>
                         </ng-template>
@@ -215,17 +200,6 @@
                                 <td>{{ carrera.area_de_formacion_nombre }}</td>
                                 <td>{{ carrera.modulo_formativo_nombre }}</td>
                                 <td>{{ carrera.docente_nombre }}</td>
-                                <td>
-                                    <img
-                                        [src]="carrera.foto"
-                                        alt="Foto"
-                                        width="50"
-                                    />
-                                </td>
-                                <td>{{ carrera.estado_m16 }}</td>
-                                <td>{{ carrera.modalidad_m18 }}</td>
-                                <td>{{ carrera.fecha_inicio }}</td>
-                                <td>{{ carrera.fecha_termino }}</td>
                             </tr>
                         </ng-template>
 

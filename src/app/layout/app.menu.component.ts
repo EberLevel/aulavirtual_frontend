@@ -464,14 +464,14 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-wrench',
                                 items: [
                                     {
-                                        label: 'Áreas de Formación',
+                                        label: 'Módulo',
                                         icon: 'pi pi-briefcase',
                                         routerLink: [
                                             '/pl-virtual/area-formacion',
                                         ],
                                     },
                                     {
-                                        label: 'Modulos Formativos',
+                                        label: 'Competencia',
                                         icon: 'pi pi-credit-card',
                                         routerLink: [
                                             '/pl-virtual/modulos-formativos',

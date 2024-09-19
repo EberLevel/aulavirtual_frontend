@@ -241,14 +241,14 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             cantidadHoras: this.cantidadHoras,
             syllabus: this.syllabus,
             tema: this.tema,
-            asignacionDocentesId: this.asignacionDocentes?.code,
+            asignacionDocentesId: this.asignacionDocentes ? this.asignacionDocentes.value : null,
             carreraId: this.carrera_id,
             estadoId: this.estado,
             cursoId: this.config.data.data.id,
             domain_id: this.domain_id,
         };
-
-        //console.log('Curso a guardar', curso);
+        //LISTO
+        console.log('Curso a actualizar', curso);
 
         if (curso) {
             this.parametroService.actualizarCurso(curso).subscribe(
@@ -262,11 +262,11 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                     }).then(() => {});
                 },
                 (error: any) => {
-                    //console.error('Error al guardar el parametro', error);
+                    console.error('Error al guardar el parametro', error);
                 }
             );
         } else {
-            //console.error('Formulario inválido');
+            console.error('Formulario inválido');
         }
     }
 
@@ -348,6 +348,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             );
         });
     }
+    
     listarDocentes(domain_id: any): Promise<void> {
         return new Promise((resolve, reject) => {
             this.commonService.getDocentesDropdown(this.domain_id).subscribe(
