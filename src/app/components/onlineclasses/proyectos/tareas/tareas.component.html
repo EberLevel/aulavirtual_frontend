@@ -28,11 +28,11 @@
                 <th style="min-width: 10rem">Acciones</th>
                 <th style="min-width: 3rem">ID</th>
                 <th style="min-width: 10rem">Descripción</th>
-                <th style="min-width: 5rem">Grupo</th>
-                <th style="min-width: 10rem">Responsable</th>
                 <th style="min-width: 3rem">OP</th>
                 <th style="min-width: 3rem">IM</th>
-                <th style="min-width: 5rem">Estado</th>                
+                <th style="min-width: 5rem">Estado</th>
+                <th style="min-width: 5rem">Grupo</th>
+                <th style="min-width: 10rem">Responsable</th>                
               </tr>
             </ng-template>
 
@@ -52,11 +52,11 @@
                 </td>
                 <td>{{ proyecto.id }}</td>
                 <td [innerHTML]="proyecto.descripcion"></td>
+                <td>{{ proyecto.prioridad }}</td>
+                <td><button pButton class="p-button p-button-sm mr-2" (click)="navigateToGaleria(proyecto.id)">IM</button></td>
+                <td><a href="">{{ proyecto.estado }}</a></td>
                 <td>{{ proyecto.grupo }}</td>
                 <td>{{ proyecto.responsable }}</td>
-                <td>{{ proyecto.prioridad }}</td>
-                <td><button pButton class="p-button p-button-sm mr-2" (click)="navigateToGaleria(proyecto.id)">IM</button></td>                
-                <td><a href="">{{ proyecto.estado }}</a></td>
               </tr>
             </ng-template>
           </p-table>
