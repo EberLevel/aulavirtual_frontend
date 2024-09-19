@@ -14,7 +14,7 @@ import { GaleriaComponent } from './galeria/galeria.component';
 export class TareasComponent {
   ref: DynamicDialogRef | undefined;
   tareas: any[] = [];
-  tarea: any = {};
+  tarea: any;
   proyectoId: string | null = null;
 
   constructor(
@@ -53,6 +53,7 @@ export class TareasComponent {
         });
       });
     } else {
+      this.tarea = undefined;
       this.ref = this.dialogService.open(RegistrarTareaComponent, {
         width: '60%',
         styleClass: 'custom-dialog-header',
