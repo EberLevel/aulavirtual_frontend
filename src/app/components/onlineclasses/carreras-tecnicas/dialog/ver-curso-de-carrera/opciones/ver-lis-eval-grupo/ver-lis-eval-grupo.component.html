@@ -17,7 +17,7 @@
                                             placeholder="Buscar por listado de evaluaciones por grupo" class="w-full" />
                                     </span>
                                 </div>
-                                <div class="mb-2">
+                                <div class="mb-2" *ngIf="helpersService.getRolId() !== 12">
                                     <button pButton label="Nuevo" icon="pi pi-user-plus" id="btnNuevo"
                                         class="p-button-primary mr-2" (click)="navigateAddCurso()"
                                         style="border-radius: 30px;"></button>
@@ -29,10 +29,10 @@
                             <tr>
                                 <th style="min-width: 5rem" scope="col">Acciones</th>
                                 <th style="min-width: 10rem" scope="col">ID</th>
-                                <th style="min-width: 10rem" scope="col">Nombre del grupos</th>
+                                <th style="min-width: 10rem" scope="col">Evaluaciones</th>
                                 <th style="min-width: 10rem" scope="col">Preguntas</th>
-                                <th style="min-width: 10rem" scope="col">Promedio de notas</th>
-                                <th style="min-width: 10rem" scope="col">Tipo de Evaluación</th>
+                                <!-- <th style="min-width: 10rem" scope="col">Promedio de notas</th> -->
+                                <th style="min-width: 10rem" scope="col">Fecha y Hora</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
                                 <th style="min-width: 10rem" scope="col">Estado</th>
                                 <th style="min-width: 10rem" scope="col">Modalidad</th>
@@ -61,7 +61,7 @@
                                         (click)="agregarPreguntas(carrera)">
                                     </button>
                                 </td>
-                                <td>{{ carrera.porcentaje_evaluacion }}</td>
+                                <!-- <td>{{ carrera.porcentaje_evaluacion }}</td> -->
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>
