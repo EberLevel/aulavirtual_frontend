@@ -29,7 +29,6 @@
                             <tr>
                                 <th style="min-width: 10rem" scope="col">Acciones</th>
                                 <th style="min-width: 10rem" scope="col">Nombre</th>
-                                <th style="min-width: 10rem" scope="col">Color</th>
                             </tr>
                         </ng-template>
 
@@ -51,10 +50,6 @@
                                 </td>
                                 <td>
                                     <span pTooltip="Nombre del área" tooltipPosition="top">{{ area.nombre }}</span>
-                                </td>
-                                <td>
-                                    <span [style.backgroundColor]="area.color" class="color-box"></span>
-                                    {{ area.color }}
                                 </td>
                             </tr>
                         </ng-template>
