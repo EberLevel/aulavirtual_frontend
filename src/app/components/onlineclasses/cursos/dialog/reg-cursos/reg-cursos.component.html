@@ -1,7 +1,7 @@
 <p-panel>
     <ng-template pTemplate="header">
         <span class="text-primary font-semibold text-xl">
-            <span *ngIf="acciones === 'add'">Registrar Cursos</span>
+            <span *ngIf="acciones === 'add'">Registro de Unidad Didáctica</span>
             <span *ngIf="acciones === 'ver'">Visualizar Unidad Didactica</span>
             <span *ngIf="acciones === 'editar'">Editar Unidad Didactica</span>
             <span *ngIf="acciones === 'duplicar'">Duplicar Unidad Didactica</span>
@@ -39,7 +39,7 @@
                     <span class="p-float-label">
                         <p-dropdown inputId="dropdownAreaFormacion" [options]="areasFormacion" optionLabel="nombre" [(ngModel)]="areaFormacion"
                         optionValue="id" [disabled]="acciones === 'ver'"></p-dropdown>
-                        <label for="dropdownAreaFormacion">Áreas de formación </label>
+                        <label for="dropdownAreaFormacion">Módulo </label>
                         <small style="color: brown;">Campo obligatorio * </small>
                     </span>
                 </div>

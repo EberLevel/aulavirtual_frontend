@@ -222,13 +222,6 @@ export class AppMenuComponent implements OnInit {
                                         ],
                                     },
                                     {
-                                        label: 'Avance Curricular',
-                                        icon: 'pi pi-sitemap',
-                                        routerLink: [
-                                            '/pl-virtual/avance-curricular',
-                                        ],
-                                    },
-                                    {
                                         label: 'Cursos',
                                         icon: 'pi pi-fw pi-calendar',
                                         routerLink: [
@@ -556,13 +549,13 @@ export class AppMenuComponent implements OnInit {
                                                   '/pl-virtual/documentos-alumnos',
                                               ],
                                           },
-                                          {
-                                              label: 'Avance Curricular',
-                                              icon: 'pi pi-sitemap',
-                                              routerLink: [
-                                                  '/pl-virtual/avance-curricular',
-                                              ],
-                                          },
+                                        //   {
+                                        //       label: 'Avance Curricular',
+                                        //       icon: 'pi pi-sitemap',
+                                        //       routerLink: [
+                                        //           '/pl-virtual/avance-curricular',
+                                        //       ],
+                                        //   },
                                           {
                                               label: 'Cursos',
                                               icon: 'pi pi-fw pi-calendar',
