@@ -2,3 +2,46 @@
   margin-right: auto!important;
   width: auto!important;
 }
+
+/* Archivo: styles.css o styles.scss */
+.estado-pendiente {
+  background-color: #c0c0c0; /* Gris */
+  padding: 3px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.estado-en-proceso {
+  background-color: #00bfff; /* Azul */
+  padding: 3px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.estado-observado {
+  background-color: #ffa500; /* Naranja */
+  padding: 3px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.estado-revision {
+  background-color: #ffff00; /* Amarillo */
+  padding: 3px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.estado-retrasado {
+  background-color: #ff0000; /* Rojo */
+  padding: 3px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.estado-aprobado {
+  background-color: #7cfc00; /* Verde */
+  padding: 3px;
+  border-radius: 5px;
+  color: #fff;
+}

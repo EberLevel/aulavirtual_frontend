@@ -54,7 +54,14 @@
                 <td [innerHTML]="proyecto.descripcion"></td>
                 <td>{{ proyecto.prioridad }}</td>
                 <td><button pButton class="p-button p-button-sm mr-2" (click)="navigateToGaleria(proyecto.id)">IM</button></td>
-                <td><a href="">{{ proyecto.estado }}</a></td>
+                <td><a href=""[ngClass]="{
+                  'estado-pendiente': proyecto.estado === 'PENDIENTE',
+                  'estado-en-proceso': proyecto.estado === 'EN PROCESO',
+                  'estado-observado': proyecto.estado === 'OBSERVADO',
+                  'estado-revision': proyecto.estado === 'REVISIÓN',
+                  'estado-retrasado': proyecto.estado === 'RETRASADO',
+                  'estado-aprobado': proyecto.estado === 'APROBADO'
+                }">{{ proyecto.estado }}</a></td>
                 <td>{{ proyecto.grupo }}</td>
                 <td>{{ proyecto.responsable }}</td>
               </tr>
