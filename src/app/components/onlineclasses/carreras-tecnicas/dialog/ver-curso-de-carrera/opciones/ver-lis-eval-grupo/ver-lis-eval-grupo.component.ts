@@ -77,6 +77,7 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     getModalidad(modalidad: number): string {
         return modalidad === 0 ? 'Presencial' : 'Remoto';
     }
+    
     calcularTotales() {
         let totalPromedio = 0;
         let totalPorcentaje = 0;
