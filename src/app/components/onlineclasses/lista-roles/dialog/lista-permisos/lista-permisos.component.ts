@@ -38,11 +38,12 @@ export class ListaPermisosComponent {
     permisos!: any[];
     permisosAgrupados: any[] = [];
     instituciones: any[] = [];
-    permisosSeleccionados: Set<number> = new Set();
+    permisosSeleccionados: Set<{ permiso_id: number; proyecto_id: number | null }> = new Set();
     selectedInstitucion: any;
     idRol!: number;
     estado!: boolean;
     domain_id: any;
+    proyectos: any[] = [];
 
     constructor(
         private router: Router,
@@ -73,11 +74,16 @@ export class ListaPermisosComponent {
                 .getRolPermisos(this.idRol, this.domain_id)
                 .subscribe((response: any[]) => {
                     this.permisosSeleccionados = new Set(
-                        response.map((permission) => permission.id)
+                        response.map((permission) => ({ permiso_id: permission.id, proyecto_id: permission.proyect_id ?? null }))
                     );
                     this.organizarPermisosPorGrupo();
                 });
         }
+        this.permisoService.getProyectos()
+            .subscribe((response: any) => {
+                this.proyectos = response.data;
+                this.organizarPermisosPorGrupo();
+            });
     }
 
     toggleGrupo(grupo: any) {
@@ -90,13 +96,13 @@ export class ListaPermisosComponent {
             .getRolPermisos(this.idRol, this.selectedInstitucion ?? 1)
             .subscribe((response: any[]) => {
                 this.permisosSeleccionados = new Set(
-                    response.map((permission) => permission.id)
+                    response.map((permission) => ({ permiso_id: permission.id, proyecto_id: permission.proyecto_id ?? null }))
                 );
                 this.organizarPermisosPorGrupo();
             });
     }
 
-    onCheckboxChange(permisoId: number | null, event: Event, grupo: any) {
+    onCheckboxChange(permisoId: number | null, event: Event, grupo: any, proyecto_id: any = null) {
         if (permisoId === null) {
             console.warn(
                 `Permiso con ID nulo detectado en el grupo ${grupo.nombre}`
@@ -111,26 +117,31 @@ export class ListaPermisosComponent {
         );
 
         if (permisoSeleccionado) {
-            this.togglePermisoSeleccion(permisoSeleccionado, isChecked);
+            this.togglePermisoSeleccion(permisoSeleccionado, isChecked, proyecto_id);
         }
 
         this.verificarSeleccionGrupo(grupo);
     }
 
-    togglePermisoSeleccion(permiso: Permiso, isChecked: boolean) {
+    togglePermisoSeleccion(permiso: Permiso, isChecked: boolean, proyecto_id: number | null = null) {
         permiso.seleccionado = isChecked;
 
         if (permiso.hijos && permiso.hijos.length > 0) {
             permiso.hijos.forEach((hijo: Permiso) => {
-                this.togglePermisoSeleccion(hijo, isChecked);
+                this.togglePermisoSeleccion(hijo, isChecked, proyecto_id ?? null);
             });
         }
 
         if (permiso.id !== null) {
             if (isChecked) {
-                this.permisosSeleccionados.add(permiso.id);
+                this.permisosSeleccionados.add({ permiso_id: permiso.id, proyecto_id: proyecto_id ?? null });
             } else {
-                this.permisosSeleccionados.delete(permiso.id);
+                const permisoEliminar = { permiso_id: permiso.id, proyecto_id: proyecto_id ?? null }
+                this.permisosSeleccionados.forEach(permiso => {
+                    if (permiso.permiso_id === permisoEliminar.permiso_id && permiso.proyecto_id === permisoEliminar.proyecto_id) {
+                        this.permisosSeleccionados.delete(permiso); // Eliminamos el objeto si coincide
+                    }
+                });
             }
         }
     }
@@ -183,6 +194,7 @@ export class ListaPermisosComponent {
             idPermisos: Array.from(this.permisosSeleccionados),
             domain_id: this.domain_id ?? this.selectedInstitucion,
         };
+        console.log(data);
         this.permisoService.guardarRolPermisos(data).subscribe(
             (response: any) => {
                 this.closeModal();
@@ -202,7 +214,6 @@ export class ListaPermisosComponent {
     seleccionarGrupo(grupo: any) {
         grupo.permisos.forEach((permiso: Permiso) => {
             this.togglePermisoSeleccion(permiso, grupo.seleccionado);
-
             if (permiso.hijos && permiso.hijos.length > 0) {
                 permiso.hijos.forEach((hijo: Permiso) => {
                     this.togglePermisoSeleccion(hijo, grupo.seleccionado);
@@ -782,6 +793,59 @@ export class ListaPermisosComponent {
                         seleccionado: false,
                         hijos: [],
                         isExpanded: false,
+                    },
+                    {
+                        id: null,
+                        nombre: 'LISTADO DE PROYECTOS',
+                        seleccionado: false,
+                        hijos: this.proyectos.map((proyecto) => ({
+                            id: proyecto.id,
+                            nombre: proyecto.nombre,
+                            seleccionado: false,
+                            hijos: [
+                                {
+                                    id: null,
+                                    nombre: 'TAREAS',
+                                    seleccionado: false,
+                                    hijos: [
+                                        {
+                                            id: 25,
+                                            nombre: 'NUEVO',
+                                            seleccionado: this.buscarPermiso(25, proyecto.id),
+                                            hijos: [],
+                                            isExpanded: false,
+                                            proyecto_id: proyecto.id
+                                        },
+                                        {
+                                            id: 26,
+                                            nombre: 'EDITAR',
+                                            seleccionado: this.buscarPermiso(26, proyecto.id),
+                                            hijos: [],
+                                            isExpanded: false,
+                                            proyecto_id: proyecto.id
+                                        },
+                                        {
+                                            id: 27,
+                                            nombre: 'VER',
+                                            seleccionado: this.buscarPermiso(27, proyecto.id),
+                                            hijos: [],
+                                            isExpanded: false,
+                                            proyecto_id: proyecto.id
+                                        },
+                                        {
+                                            id: 28,
+                                            nombre: 'ELIMINAR',
+                                            seleccionado: this.buscarPermiso(28, proyecto.id),
+                                            hijos: [],
+                                            isExpanded: false,
+                                            proyecto_id: proyecto.id
+                                        }
+                                    ]
+                                }
+                            ],
+                            isExpanded: false,
+                        })),
+                        isExpanded: false,
                     }
                 ],
                 isExpanded: false,
@@ -793,13 +857,13 @@ export class ListaPermisosComponent {
                 case 'ver_modulo_seguridad':
                     grupos['Seguridad'].id = permiso.id;
                     grupos['Seguridad'].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'ver_seguridad_configuracion':
                     grupos['Seguridad'].permisos[0].id = permiso.id;
                     grupos['Seguridad'].permisos[0].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'roles_crearRol':
@@ -808,7 +872,7 @@ export class ListaPermisosComponent {
                     grupos[
                         'Seguridad'
                     ].permisos[1].permisosInternos[0].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'roles_editarRol':
@@ -817,7 +881,7 @@ export class ListaPermisosComponent {
                     grupos[
                         'Seguridad'
                     ].permisos[1].permisosInternos[1].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'roles_eliminarRol':
@@ -826,7 +890,7 @@ export class ListaPermisosComponent {
                     grupos[
                         'Seguridad'
                     ].permisos[1].permisosInternos[2].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'roles_asignarPermiso':
@@ -835,7 +899,7 @@ export class ListaPermisosComponent {
                     grupos[
                         'Seguridad'
                     ].permisos[1].permisosInternos[3].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'ver_seguridad_roles':
@@ -844,81 +908,86 @@ export class ListaPermisosComponent {
                     grupos[
                         'Seguridad'
                     ].permisos[1].permisosInternos[4].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'aula_virtual_alumno':
                     grupos['AulaVirtual'].permisos[2].id = permiso.id;
                     grupos['AulaVirtual'].permisos[2].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'aula_virtual_mantenimientos':
                     grupos['AulaVirtual'].permisos[0].id = permiso.id;
                     grupos['AulaVirtual'].permisos[0].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'aula_virtual_capacitaciones':
                     grupos['AulaVirtual'].permisos[4].id = permiso.id;
                     grupos['AulaVirtual'].permisos[4].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'ver_modulo_estructura_organica':
                     grupos['EstructuraOrganica'].id = permiso.id;
                     grupos['EstructuraOrganica'].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'aula_virtual_docente_datos_personales':
                     grupos['AulaVirtual'].permisos[3].hijos[0].id = permiso.id;
                     grupos['AulaVirtual'].permisos[3].hijos[0].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'ver_modulo_aulaVirtual':
                     grupos['AulaVirtual'].id = permiso.id;
                     grupos['AulaVirtual'].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'aula_virtual_carreras':
                     grupos['AulaVirtual'].permisos[1].id = permiso.id;
                     grupos['AulaVirtual'].permisos[1].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'aula_virtual_alumno_datos_personales':
                     grupos['AulaVirtual'].permisos[2].hijos[0].id = permiso.id;
                     grupos['AulaVirtual'].permisos[2].hijos[0].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'aula_virtual_docente':
                     grupos['AulaVirtual'].permisos[3].id = permiso.id;
                     grupos['AulaVirtual'].permisos[3].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
 
                 case 'nuevo_modulo_proyecto':
                     grupos['Proyectos'].permisos[0].id = permiso.id;
                     grupos['Proyectos'].permisos[0].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'editar_modulo_proyecto':
                     grupos['Proyectos'].permisos[1].id = permiso.id;
                     grupos['Proyectos'].permisos[1].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'ver_modulo_proyecto':
                     grupos['Proyectos'].permisos[2].id = permiso.id;
                     grupos['Proyectos'].permisos[2].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
                 case 'eliminar_modulo_proyecto':
-                    console.log('pj2: ', grupos['Proyectos'])
                     grupos['Proyectos'].permisos[3].id = permiso.id;
                     grupos['Proyectos'].permisos[3].seleccionado =
-                        this.permisosSeleccionados.has(permiso.id);
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
             }
         });
+
+        grupos['Proyectos'].permisos[4].hijos.forEach((proyecto: any) => {
+            console.log('permisos', this.permisosSeleccionados);
+            console.log('tareas de proyectos', proyecto.hijos[0].hijos);
+        });
+        
 
         this.permisosAgrupados = Object.values(grupos);
 
@@ -926,6 +995,15 @@ export class ListaPermisosComponent {
         this.permisosAgrupados.forEach((grupo) => {
             this.verificarSeleccionGrupo(grupo);
         });
+    }
+
+    buscarPermiso(permiso_id: number, proyecto_id: number | null) {
+        for (const permiso of this.permisosSeleccionados) {
+            if (permiso.permiso_id === permiso_id && (permiso.proyecto_id ?? null) === proyecto_id) {
+                return true; // Si el permiso con ambos IDs existe
+            }
+        }
+        return false; // No se encontró el permiso
     }
 
     propagateSelection(permisos: Permiso[]) {

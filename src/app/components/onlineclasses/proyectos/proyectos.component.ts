@@ -21,6 +21,10 @@ export class ProyectosComponent {
     private dialogService: DialogService,
     private proyectosService: GeneralService
   ) {
+    this.getProyectos();
+  }
+
+  getProyectos() {
     this.proyectosService.getProyectos().subscribe((response: any) => {
       console.log('Lista de ofertas laborales: ', response);
       this.proyectos = response.data;
@@ -37,10 +41,8 @@ export class ProyectosComponent {
           data: this.proyecto
         });
         this.ref.onClose.subscribe((dataFromDialog) => {
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-          this.router.onSameUrlNavigation = 'reload';
+          this.getProyectos();
         });
-        console.log(this.proyecto)
       });
     } else {
       this.ref = this.dialogService.open(RegistraProyectoComponent, {
@@ -50,8 +52,7 @@ export class ProyectosComponent {
       });
 
       this.ref.onClose.subscribe((dataFromDialog) => {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.onSameUrlNavigation = 'reload';
+        this.getProyectos();
       })
     }
   }
