@@ -24,7 +24,8 @@
                             <tr>
                                 <th style="min-width: 10rem" scope="col">Evaluaciones</th>
                                 <th style="min-width: 10rem" scope="col">Nota</th>
-                                <!-- <th style="min-width: 10rem" scope="col">Porcentaje</th> -->
+                                <th style="min-width: 10rem" scope="col">Nota Porcentual</th>
+                                <th style="min-width: 10rem" scope="col">Porcentaje</th>
                                 <th style="min-width: 10rem" scope="col">Fecha y Hora</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
                                 <th style="min-width: 10rem" scope="col">Estado</th>
@@ -35,8 +36,9 @@
                         <ng-template pTemplate="body" let-carrera>
                             <tr>
                                 <td>{{ carrera.nombre }}</td>
-                                <td>{{ carrera.nota }}</td>
-                                <!-- <td>{{ carrera.porcentaje_asignado}}%</td> -->
+                                <td>{{ carrera.nota | number: '1.2-2' }}</td>
+                                <td>{{ (carrera.nota * carrera.porcentaje_asignado) / 100 | number: '1.2-2' }}</td>
+                                <td>{{ carrera.porcentaje_asignado}}%</td>
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>

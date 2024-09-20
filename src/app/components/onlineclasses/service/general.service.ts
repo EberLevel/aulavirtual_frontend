@@ -1067,6 +1067,10 @@ export class GeneralService {
       getPromedioPorAlumno(alumnoId: number, grupoId: number) {
         return this.http.get<any>(`${this.baseUrl}evaluacionesByAlumno/alumno/${alumnoId}/${grupoId}`);
     }
+
+    getEvaluacionesPorGrupo(grupoId: number, alumnoId: number): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}evaluacionesBygrupo/grupo/${grupoId}/${alumnoId}`);
+    }
     
     getListadoDeEvaluacionesPorGrupo(parametro: any): Observable<ApiResponse> {
         return this.http

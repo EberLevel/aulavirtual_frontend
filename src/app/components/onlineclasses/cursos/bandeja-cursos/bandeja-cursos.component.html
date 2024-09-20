@@ -68,12 +68,6 @@
                                 <th style="min-width: 10rem" scope="col">
                                     Docente
                                 </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Foto
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Estado (m16)
-                                </th>
                             </tr>
                         </ng-template>
 
@@ -181,17 +175,6 @@
                                 <td>{{ carrera.area_de_formacion_nombre }}</td>
                                 <td>{{ carrera.modulo_formativo_nombre }}</td>
                                 <td>{{ carrera.docente }}</td>
-                                <td>
-                                    <img
-                                        [src]="carrera.foto"
-                                        alt="Foto"
-                                        width="50"
-                                    />
-                                </td>
-                                <td>{{ carrera.estado_m16 }}</td>
-                                <td>{{ carrera.modalidad_m18 }}</td>
-                                <td>{{ carrera.fecha_inicio }}</td>
-                                <td>{{ carrera.fecha_termino }}</td>
                             </tr>
                         </ng-template>
 
