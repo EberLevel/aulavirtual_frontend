@@ -241,15 +241,15 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             cantidadHoras: this.cantidadHoras,
             syllabus: this.syllabus,
             tema: this.tema,
-            asignacionDocentesId: this.asignacionDocentes ? this.asignacionDocentes.value : null,
+            asignacionDocentesId: this.asignacionDocentes ? this.asignacionDocentes.value : null, // Verifica si asignacionDocentes tiene valor
             carreraId: this.carrera_id,
             estadoId: this.estado,
             cursoId: this.config.data.data.id,
             domain_id: this.domain_id,
         };
-        //LISTO
+    
         console.log('Curso a actualizar', curso);
-
+    
         if (curso) {
             this.parametroService.actualizarCurso(curso).subscribe(
                 (response: any) => {
@@ -262,13 +262,14 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                     }).then(() => {});
                 },
                 (error: any) => {
-                    console.error('Error al guardar el parametro', error);
+                    console.error('Error al actualizar el curso', error);
                 }
             );
         } else {
             console.error('Formulario inválido');
         }
     }
+    
 
     onCantidadCreditosChange(newValue: number) {
         if (

@@ -15,6 +15,8 @@ import { CrearForoCursoComponent } from '../../carreras-tecnicas/dialog/crear-fo
 import { VerEvaluacionesComponent } from './ver-evaluaciones/ver-evaluaciones.component';
 import { CursoAlumnoService } from '../../service/curso-alumno.service';
 import { HelpersService } from 'src/app/helpers.service';
+import { VerGrupoEvaluacionesAlumnoComponent } from './ver-grupo-evaluaciones-alumno/ver-grupo-evaluaciones-alumno.component';
+import { VerGEvAlumnoComponent } from '../../carreras-tecnicas/dialog/ver-curso-de-carrera/opciones/ver-g-ev-alumno/ver-g-ev-alumno.component';
 @Component({
   selector: 'app-bandeja-cursos',
   templateUrl: './bandeja-cursos.component.html',
@@ -206,7 +208,7 @@ export class BandejaCursosComponent {
   }
 
   verEvaluaciones(evaluaciones: any) {
-    this.ref = this.dialogService.open(VerEvaluacionesComponent, {
+    this.ref = this.dialogService.open(VerGrupoEvaluacionesAlumnoComponent, {
       width: '60%',
       styleClass: 'custom-dialog-header',
       data: { data: evaluaciones }

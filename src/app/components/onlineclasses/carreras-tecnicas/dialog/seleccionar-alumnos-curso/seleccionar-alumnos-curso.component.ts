@@ -8,6 +8,7 @@ import { GeneralService } from '../../../service/general.service';
 import { VerGrupoEvaluacionesComponent } from '../ver-curso-de-carrera/opciones/ver-g-ev/ver-g-ev.component';
 import { CursoService } from '../../../service/cursos.service';
 import { CrearForoCursoComponent } from '../crear-foro-curso/crear-foro-curso.component';
+import { VerGEvAlumnoComponent } from '../ver-curso-de-carrera/opciones/ver-g-ev-alumno/ver-g-ev-alumno.component';
 
 @Component({
     selector: 'app-seleccionar-alumnos-curso',
@@ -36,26 +37,23 @@ export class SeleccionarAlumnosCursoComponent {
         this.getAlumnosCurso(this.domainId ?? 1, this.curso);
     }
     getAlumnosCurso(domainId: any, cursoId: any) {
-      console.log('domainId', domainId);
-      this.loading = true;
-      this.alumnoService
-          .getAlumnosCurso(domainId, cursoId)
-          .subscribe(
-              (data: any[]) => {  // Asegúrate de recibir un array
-                  console.log('alumnos', data);
-                  this.cursoAlumnoList = data;  // Asigna el array recibido
-                  this.originalCursoAlumnoList = [...data];  // Crea una copia
-                  this.loading = false;
-              },
-              (error) => {
-                  console.error('Error al obtener los alumnos', error);
-                  this.loading = false;
-              }
-          );
-  }
-  
-  
-  
+        console.log('domainId', domainId);
+        this.loading = true;
+        this.alumnoService.getAlumnosCurso(domainId, cursoId).subscribe(
+            (data: any[]) => {
+                // Asegúrate de recibir un array
+                console.log('alumnos', data);
+                this.cursoAlumnoList = data; // Asigna el array recibido
+                this.originalCursoAlumnoList = [...data]; // Crea una copia
+                this.loading = false;
+            },
+            (error) => {
+                console.error('Error al obtener los alumnos', error);
+                this.loading = false;
+            }
+        );
+    }
+
     onSelectAlumno(alumno: any) {
         console.log('alumno cambio seleccionado');
         const data = {
@@ -111,27 +109,21 @@ export class SeleccionarAlumnosCursoComponent {
             });
     }
 
-    verEvaluaciones() {
+    verEvaluaciones(alumno: any) {
         this.alumnoService
             .getCursoById(this.curso) // Usa el `cursoId` para obtener los detalles
             .subscribe((response: any) => {
                 if (response.Exito) {
                     const curso = response.Datos; // Accede a los datos correctos
                     const id = curso.id; // Obtén el ID del curso
+                    const alumnoId = alumno.id;
 
-                    // Verifica qué datos le estás pasando antes de abrir el diálogo
-                    console.log('Datos que se pasan al diálogo:', { id: id });
+                    this.ref = this.dialogService.open(VerGEvAlumnoComponent, {
+                        width: '60%',
+                        styleClass: 'custom-dialog-header',
+                        data: { id: id , alumnoId: alumnoId }, // Pasa el ID del curso con la clave 'id'
+                    });
 
-                    this.ref = this.dialogService.open(
-                        VerGrupoEvaluacionesComponent,
-                        {
-                            width: '60%',
-                            styleClass: 'custom-dialog-header',
-                            data: { id: id }, // Pasa el ID del curso con la clave 'id'
-                        }
-                    );
-
-                    console.log('Evaluaciones para curso:', curso); // Para verificar los datos completos del curso
                     this.ref.onClose.subscribe(() => {
                         this.listarCursos();
                     });

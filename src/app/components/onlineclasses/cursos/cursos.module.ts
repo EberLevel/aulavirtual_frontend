@@ -37,10 +37,11 @@ import { VerPreguntasComponent } from './bandeja-cursos/ver-preguntas/ver-pregun
 import { ResponderPreguntaComponent } from './bandeja-cursos/responder-pregunta/responder-pregunta.component';
 import { ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule
 import {NgxSpinnerModule} from 'ngx-spinner';
+import { VerGrupoEvaluacionesAlumnoComponent } from './bandeja-cursos/ver-grupo-evaluaciones-alumno/ver-grupo-evaluaciones-alumno.component';
 
 
 @NgModule({
-  declarations: [ BandejaCursosComponent,RegCursosComponent, VerEvaluacionesComponent, VerPreguntasComponent, ResponderPreguntaComponent],
+  declarations: [ BandejaCursosComponent,RegCursosComponent, VerEvaluacionesComponent, VerPreguntasComponent, ResponderPreguntaComponent, VerGrupoEvaluacionesAlumnoComponent],
   imports: [
     CommonModule,
     CursosRoutingModule,

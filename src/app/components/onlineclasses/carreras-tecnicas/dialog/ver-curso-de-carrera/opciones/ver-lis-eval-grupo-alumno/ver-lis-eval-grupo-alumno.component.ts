@@ -6,28 +6,27 @@ import {
     Output,
     ViewChild,
 } from '@angular/core';
-import { Miembro } from '../../../../../interface/general';
-import { Table } from 'primeng/table';
+import { Router } from '@angular/router';
 import {
-    DialogService,
     DynamicDialogRef,
+    DialogService,
     DynamicDialogConfig,
 } from 'primeng/dynamicdialog';
-import { GeneralService } from '../../../../../service/general.service';
-import { Router } from '@angular/router';
-import { RegCursosComponent } from '../../../../../cursos/dialog/reg-cursos/reg-cursos.component';
-import Swal from 'sweetalert2';
-import { VerListadoDePreguntasComponent } from '../ver-listado-de-preguntas/ver-listado-de-preguntas.component';
-import { RegEvaluacionDocenteComponent } from '../../../../../docentes/evaluaciones-docente-menu/dialog/reg-evaluacion-docente/reg-evaluacion-docente.component';
-import { ListadoEvaluacionPresencialComponent } from '../listado-evaluacion-presencial/listado-evaluacion-presencial.component';
+import { Table } from 'primeng/table';
+import { RegEvaluacionDocenteComponent } from 'src/app/components/onlineclasses/docentes/evaluaciones-docente-menu/dialog/reg-evaluacion-docente/reg-evaluacion-docente.component';
+import { Miembro } from 'src/app/components/onlineclasses/interface/general';
+import { GeneralService } from 'src/app/components/onlineclasses/service/general.service';
 import { HelpersService } from 'src/app/helpers.service';
+import Swal from 'sweetalert2';
+import { ListadoEvaluacionPresencialComponent } from '../listado-evaluacion-presencial/listado-evaluacion-presencial.component';
+import { VerListadoDePreguntasComponent } from '../ver-listado-de-preguntas/ver-listado-de-preguntas.component';
 
 @Component({
-    selector: 'app-ver-lis-eval-grupo',
-    templateUrl: './ver-lis-eval-grupo.component.html',
-    styleUrls: ['./ver-lis-eval-grupo.component.scss'],
+    selector: 'app-ver-lis-eval-grupo-alumno',
+    templateUrl: './ver-lis-eval-grupo-alumno.component.html',
+    styleUrls: ['./ver-lis-eval-grupo-alumno.component.scss'],
 })
-export class VerListadoDeEvaluacionesPorGrupoComponent {
+export class VerLisEvalGrupoAlumnoComponent {
     loading: boolean = false;
 
     @ViewChild('filter') filter!: ElementRef;
@@ -46,7 +45,7 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     evaluacion: any;
 
     constructor(
-      public helpersService: HelpersService,
+        public helpersService: HelpersService,
         private dialogService: DialogService,
         private grupoEvaluacionesService: GeneralService,
         private router: Router,
@@ -54,30 +53,70 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     ) {}
 
     ngOnInit(): void {
-        this.grupoEvaluaciones = this.config.data.data;
-        console.log(this.grupoEvaluaciones, 'car');
-        this.listarGrupoEvaluaciones();
+        console.log("this.config.data",this.config.data)
+        const alumnoId = this.config.data.alumnoId;
+        const grupoId = this.config.data.data.id;
+        console.log('alumnoId , grupoId', alumnoId, grupoId);
+        this.grupoEvaluaciones = this.config.data.data || this.config.data;
+        this.getNotasPorAlumnoYGrupo(alumnoId, grupoId);
     }
 
     listarGrupoEvaluaciones() {
-        this.grupoEvaluacionesService
-            .getListadoDeEvaluacionesPorGrupo({ id: this.grupoEvaluaciones.id })
-            .subscribe(
-                (response: any) => {
-                    console.log('Datos de evaluaciones recibidos:', response);
+        if (this.grupoEvaluaciones && this.grupoEvaluaciones.id) {
+            this.grupoEvaluacionesService
+                .getGrupoEvaluaciones({ id: this.grupoEvaluaciones.id })
+                .subscribe((response: any) => {
+                    console.log('Datos de evaluaciones recibidos:', response); // Verificar los datos
                     this.grupoEvaluacionesList = response;
                     this.originalgrupoEvaluacionesList = [...response];
+                });
+            console.log('ID de grupo para obtener evaluaciones:', this.grupoEvaluaciones.id);
+        } else {
+            console.error('No se pudo listar las evaluaciones porque el ID de grupo es inválido o no está definido.');
+        }
+    }
+    
+    getPromedioPorAlumno(alumnoId: number, grupoId: number): void {
+        this.grupoEvaluacionesService.getPromedioPorAlumno(alumnoId, grupoId)
+            .subscribe(
+                (response: any) => {
+                    if (response.success) {
+                        this.grupoEvaluacionesList.forEach(grupo => {
+                            grupo.promedio_por_alumno = response.promedio;
+                        });
+                    } else {
+                        console.error('Error al obtener el promedio del alumno');
+                    }
                 },
-                (error: any) => {
-                    console.error('Error al listar evaluaciones:', error);
+                (error) => {
+                    console.error('Error en la solicitud del promedio:', error);
                 }
             );
     }
-
+    
+    getNotasPorAlumnoYGrupo(alumnoId: number, grupoId: number): void {
+        this.loading = true;
+        this.grupoEvaluacionesService
+            .getNotasPorAlumnoYGrupo(alumnoId, grupoId)
+            .subscribe(
+                (response: any) => {
+                    console.log('Datos recibidos de la API:', response);
+                    if (response.success) {
+                        this.grupoEvaluacionesList = response.notas;
+                    } else {
+                        console.error('Error al obtener las notas');
+                    }
+                    this.loading = false;
+                },
+                (error) => {
+                    console.error('Error en la solicitud', error);
+                    this.loading = false;
+                }
+            );
+    }
     getModalidad(modalidad: number): string {
         return modalidad === 0 ? 'Presencial' : 'Remoto';
     }
-    
     calcularTotales() {
         let totalPromedio = 0;
         let totalPorcentaje = 0;
@@ -159,10 +198,10 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
                                 icon: 'success',
                                 showClass: {
                                     popup: `
-                  background-color: #78CBF2;
-                  color: white;
-                  z-index: 10000!important;
-                `,
+                background-color: #78CBF2;
+                color: white;
+                z-index: 10000!important;
+              `,
                                 },
                                 didOpen: () => {
                                     const container =
@@ -211,43 +250,5 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
                 (carrera.cursos &&
                     carrera.cursos.toLowerCase().includes(filterValue))
         );
-    }
-
-    agregarPreguntas(evaluaciones: any) {
-        if (evaluaciones.modalidad === 0) {
-            // Si la modalidad es Presencial
-            this.ref = this.dialogService.open(
-                ListadoEvaluacionPresencialComponent,
-                {
-                    // Abre otro componente
-                    width: '60%',
-                    styleClass: 'custom-dialog-header',
-                    data: {
-                        acciones: 'add',
-                        grupoEvaluacionesId: this.grupoEvaluaciones.id,
-                        data: evaluaciones,
-                        evaluacionId: evaluaciones.id,
-                    },
-                }
-            );
-        } else {
-            // Si la modalidad no es Presencial
-            this.ref = this.dialogService.open(VerListadoDePreguntasComponent, {
-                width: '60%',
-                styleClass: 'custom-dialog-header',
-                data: {
-                    acciones: 'add',
-                    grupoEvaluacionesId: this.grupoEvaluaciones.id,
-                    data: evaluaciones,
-                },
-            });
-        }
-
-        this.ref.onClose.subscribe((data: any) => {
-            console.log(
-                'Modal cerrado, recargando la lista de evaluaciones...'
-            );
-            this.listarGrupoEvaluaciones();
-        });
     }
 }

@@ -1059,7 +1059,15 @@ export class GeneralService {
                 })
             );
     }
+    
+    getNotasPorAlumnoYGrupo(alumnoId: number, grupoId: number) {
+        return this.http.get(`${this.baseUrl}evaluaciones/alumno/${alumnoId}/${grupoId}`);
+      }
 
+      getPromedioPorAlumno(alumnoId: number, grupoId: number) {
+        return this.http.get<any>(`${this.baseUrl}evaluacionesByAlumno/alumno/${alumnoId}/${grupoId}`);
+    }
+    
     getListadoDeEvaluacionesPorGrupo(parametro: any): Observable<ApiResponse> {
         return this.http
             .get<ApiResponse>(`${this.baseUrl}evaluaciones/${parametro.id}`, {

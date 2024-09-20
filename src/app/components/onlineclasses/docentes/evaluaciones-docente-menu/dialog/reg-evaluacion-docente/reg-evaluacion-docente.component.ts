@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EvaluacionesService } from 'src/app/components/onlineclasses/service/evaluciones.service';
+import { HelpersService } from 'src/app/helpers.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,6 +19,7 @@ export class RegEvaluacionDocenteComponent {
     grupoDeEvaluacionesId!: number;
     fechaRegistro!: Date | null;
     horaprogramada!: Date | null;  // Aseguramos que esta es del tipo Date
+    porcentajeAsignado!: number;
     acciones!: string;  // Aquí almacenamos la acción ('registrar' o 'actualizar')
     modalidad: any;
     loading: boolean = false;
@@ -38,15 +40,19 @@ export class RegEvaluacionDocenteComponent {
         { name: 'Presencial', value: 0 },       
         { name: 'Remoto', value: 1 }
     ];
+    domain_id: any;
 
     constructor(
         public ref: DynamicDialogRef,
         private evaluacionesService: EvaluacionesService,
         private messageService: MessageService,
-        public config: DynamicDialogConfig 
+        public config: DynamicDialogConfig ,
+        private helpersService: HelpersService
     ) {}
 
     ngOnInit() {
+        this.domain_id = this.helpersService.getDominioId();
+        console.log(this.domain_id)
         if (this.config && this.config.data) {
             this.acciones = this.config.data.acciones;
     
@@ -84,6 +90,7 @@ export class RegEvaluacionDocenteComponent {
                 this.fechaRegistro = new Date(evaluacion.fecha_y_hora_programo);
                 this.grupoDeEvaluacionesId = evaluacion.grupo_de_evaluaciones_id;
                 this.modalidad = evaluacion.modalidad; 
+                this.porcentajeAsignado = evaluacion.porcentaje_asignado;
 
                 // Extraer y establecer la hora como Date en horaprogramada
                 const fechaCompleta = new Date(evaluacion.fecha_y_hora_programo);
@@ -116,8 +123,9 @@ export class RegEvaluacionDocenteComponent {
             observaciones: this.observaciones || null,
             estado_id: Number(this.estado),
             modalidad: this.modalidad, 
-            domain_id: 2,
-            grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null
+            domain_id: this.domain_id,
+            grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null,
+            porcentaje_asignado: this.porcentajeAsignado || 0
         };
 
         console.log('Datos enviados:', nuevaEvaluacion);
@@ -178,8 +186,9 @@ export class RegEvaluacionDocenteComponent {
             observaciones: this.observaciones || null,
             modalidad: this.modalidad, 
             estado_id: Number(this.estado),
-            domain_id: 2,
-            grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null
+            domain_id: this.domain_id,
+            grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null,
+            porcentaje_asignado: this.porcentajeAsignado || 0
         };
 
         console.log('Datos enviados para actualizar:', evaluacionActualizada);
