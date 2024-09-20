@@ -36,7 +36,7 @@ export class TareasComponent {
       if (this.proyectoId) {
         this.proyectosService.getTareas(this.proyectoId).subscribe((response: any) => {
           console.log('Lista de tareas: ', response);
-          this.tareas = response.data.data;
+          this.tareas = response.data;
         });
       }
     });
