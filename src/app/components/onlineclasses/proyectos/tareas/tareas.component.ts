@@ -26,6 +26,10 @@ export class TareasComponent {
 
   ngOnInit(): void {
     // Accede al `proyecto_id` desde los parámetros de la ruta
+    this.getTareas();
+  }
+
+  getTareas() {
     this.route.paramMap.subscribe(params => {
       this.proyectoId = params.get('proyecto_id');
       console.log('Proyecto ID:', this.proyectoId);
@@ -48,8 +52,7 @@ export class TareasComponent {
           data: { tarea: this.tarea, proyectoId: this.proyectoId }
         });
         this.ref.onClose.subscribe((dataFromDialog) => {
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-          this.router.onSameUrlNavigation = 'reload';
+          this.getTareas();
         });
       });
     } else {
@@ -61,8 +64,7 @@ export class TareasComponent {
       });
 
       this.ref.onClose.subscribe((dataFromDialog) => {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.onSameUrlNavigation = 'reload';
+        this.getTareas();
       })
     }
   }
