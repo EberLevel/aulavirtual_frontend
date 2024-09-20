@@ -750,6 +750,42 @@ export class ListaPermisosComponent {
                 ],
                 isExpanded: false,
             },
+            Proyectos: {
+                nombre: 'PROYECTOS',
+                id: null,
+                seleccionado: false,
+                permisos: [
+                    {
+                        id: 23,
+                        nombre: 'NUEVO',
+                        seleccionado: false,
+                        hijos: [],
+                        isExpanded: false,
+                    },
+                    {
+                        id: 22,
+                        nombre: 'EDITAR',
+                        seleccionado: false,
+                        hijos: [],
+                        isExpanded: false,
+                    },
+                    {
+                        id: 21,
+                        nombre: 'VER',
+                        seleccionado: false,
+                        hijos: [],
+                        isExpanded: false,
+                    },
+                    {
+                        id: 24,
+                        nombre: 'ELIMINAR',
+                        seleccionado: false,
+                        hijos: [],
+                        isExpanded: false,
+                    }
+                ],
+                isExpanded: false,
+            },
         };
 
         this.permisos.forEach((permiso) => {
@@ -857,6 +893,28 @@ export class ListaPermisosComponent {
                 case 'aula_virtual_docente':
                     grupos['AulaVirtual'].permisos[3].id = permiso.id;
                     grupos['AulaVirtual'].permisos[3].seleccionado =
+                        this.permisosSeleccionados.has(permiso.id);
+                    break;
+
+                case 'nuevo_modulo_proyecto':
+                    grupos['Proyectos'].permisos[0].id = permiso.id;
+                    grupos['Proyectos'].permisos[0].seleccionado =
+                        this.permisosSeleccionados.has(permiso.id);
+                    break;
+                case 'editar_modulo_proyecto':
+                    grupos['Proyectos'].permisos[1].id = permiso.id;
+                    grupos['Proyectos'].permisos[1].seleccionado =
+                        this.permisosSeleccionados.has(permiso.id);
+                    break;
+                case 'ver_modulo_proyecto':
+                    grupos['Proyectos'].permisos[2].id = permiso.id;
+                    grupos['Proyectos'].permisos[2].seleccionado =
+                        this.permisosSeleccionados.has(permiso.id);
+                    break;
+                case 'eliminar_modulo_proyecto':
+                    console.log('pj2: ', grupos['Proyectos'])
+                    grupos['Proyectos'].permisos[3].id = permiso.id;
+                    grupos['Proyectos'].permisos[3].seleccionado =
                         this.permisosSeleccionados.has(permiso.id);
                     break;
             }
