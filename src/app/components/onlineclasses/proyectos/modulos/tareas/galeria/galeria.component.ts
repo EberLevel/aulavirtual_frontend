@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
-import { GeneralService } from '../../../service/general.service';
+import { GeneralService } from '../../../../service/general.service';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BeforeSlideDetail } from 'lightgallery/lg-events';
 

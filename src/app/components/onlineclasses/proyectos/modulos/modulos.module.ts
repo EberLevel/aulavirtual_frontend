@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { RatingModule } from 'primeng/rating';
 import { ButtonModule } from 'primeng/button';
 import { SliderModule } from 'primeng/slider';
-import { Panel, PanelModule } from 'primeng/panel';
+import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToggleButtonModule } from 'primeng/togglebutton';
@@ -24,17 +24,17 @@ import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { TareasRoutingModule } from './tareas-routing.module';
-import { TareasComponent } from './tareas.component';
-import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.component';
+import { TareasRoutingModule } from './modulos-routing.module';
+import { ModulosComponent } from './modulos.component';
 import { LightgalleryModule } from 'lightgallery/angular';
-import { GaleriaComponent } from './galeria/galeria.component';
+import { RegistrarModuloComponent } from './registrar-modulo/registrar-modulo.component';
 
 @NgModule({
   declarations: [
-    TareasComponent,
-    RegistrarTareaComponent,
-    GaleriaComponent
+    ModulosComponent,
+    RegistrarModuloComponent
+    // RegistrarTareaComponent,
+    // GaleriaComponent
   ],
   imports: [
     CommonModule,
@@ -72,4 +72,4 @@ import { GaleriaComponent } from './galeria/galeria.component';
     LightgalleryModule
   ]
 })
-export class TareasModule { }
+export class ModulosModule { }

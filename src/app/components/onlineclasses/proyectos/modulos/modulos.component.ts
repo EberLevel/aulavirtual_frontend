@@ -3,15 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { catchError, of, switchMap } from 'rxjs';
 import { GeneralService } from '../../service/general.service';
-import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.component';
-import { GaleriaComponent } from './galeria/galeria.component';
+import { RegistrarModuloComponent } from './registrar-modulo/registrar-modulo.component';
 
 @Component({
-  selector: 'app-tareas',
-  templateUrl: './tareas.component.html',
-  styleUrls: ['./tareas.component.scss']
+  selector: 'app-modulos',
+  templateUrl: './modulos.component.html',
+  styleUrls: ['./modulos.component.scss']
 })
-export class TareasComponent {
+export class ModulosComponent {
   ref: DynamicDialogRef | undefined;
   tareas: any[] = [];
   tarea: any;
@@ -26,15 +25,14 @@ export class TareasComponent {
 
   ngOnInit(): void {
     // Accede al `proyecto_id` desde los parámetros de la ruta
-    this.getTareas();
+    this.getModulos();
   }
 
-  getTareas() {
+  getModulos() {
     this.route.paramMap.subscribe(params => {
       this.proyectoId = params.get('proyecto_id');
-      console.log('Proyecto ID:', this.proyectoId);
       if (this.proyectoId) {
-        this.proyectosService.getTareas(this.proyectoId).subscribe((response: any) => {
+        this.proyectosService.getModulos(this.proyectoId).subscribe((response: any) => {
           console.log('Lista de tareas: ', response);
           this.tareas = response.data;
         });
@@ -44,53 +42,38 @@ export class TareasComponent {
 
   navigateToNuevo(id: number) {
     if (id > 0) {
-      this.proyectosService.getTarea(Number(this.proyectoId), id).subscribe((response: any) => {
+      this.proyectosService.getModulo(Number(this.proyectoId), id).subscribe((response: any) => {
         this.tarea = response.data;
-        this.ref = this.dialogService.open(RegistrarTareaComponent, {
+        this.ref = this.dialogService.open(RegistrarModuloComponent, {
           width: '60%',
           styleClass: 'custom-dialog-header',
           data: { tarea: this.tarea, proyectoId: this.proyectoId }
         });
         this.ref.onClose.subscribe((dataFromDialog) => {
-          this.getTareas();
+          this.getModulos();
         });
       });
     } else {
       this.tarea = undefined;
-      this.ref = this.dialogService.open(RegistrarTareaComponent, {
+      this.ref = this.dialogService.open(RegistrarModuloComponent, {
         width: '60%',
         styleClass: 'custom-dialog-header',
         data: { tarea: this.tarea, proyectoId: this.proyectoId}
       });
 
       this.ref.onClose.subscribe((dataFromDialog) => {
-        this.getTareas();
+        this.getModulos();
       })
     }
-  }
-
-  navigateToGaleria(id: number) {
-    this.proyectosService.getTarea(Number(this.proyectoId), id).subscribe((response: any) => {
-      this.tarea = response.data;
-      this.ref = this.dialogService.open(GaleriaComponent, {
-        width: '60%',
-        styleClass: 'custom-dialog-header',
-        data: { tarea: this.tarea, proyectoId: this.proyectoId }
-      });
-      this.ref.onClose.subscribe((dataFromDialog) => {
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.onSameUrlNavigation = 'reload';
-      });
-    });
   }
 
   verTareas(id: number) { }
 
   eliminar(id: number) {
-    this.proyectosService.eliminarTarea(Number(this.proyectoId), id).pipe(
+    this.proyectosService.eliminarModulo(Number(this.proyectoId), id).pipe(
       switchMap(() => {
         console.log('Oferta laboral eliminada');
-        return this.proyectosService.getTareas(this.proyectoId!);
+        return this.proyectosService.getModulos(this.proyectoId!);
       }),
       catchError((error) => {
         console.error('Error eliminando oferta laboral:', error);
@@ -100,7 +83,7 @@ export class TareasComponent {
     ).subscribe(
       (response: any) => {
         console.log("Lista de ofertas laborales", response);
-        this.tareas = response.data;
+        this.getModulos();
       }
     );
   }
