@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
-import { GeneralService } from '../../../service/general.service';
+import { GeneralService } from '../../../../service/general.service';
 import { catchError, of, tap } from 'rxjs';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import lgZoom from 'lightgallery/plugins/zoom';
@@ -26,6 +26,7 @@ export class RegistrarTareaComponent {
   prioridad: string = '';
   descripcion: string = '';
   proyectoId: number = 0;
+  moduloId: number = 0;
   previewImages: string[] = [];
   base64Files: string[] = [];
   public Editor = ClassicEditor as any;
@@ -72,6 +73,7 @@ export class RegistrarTareaComponent {
       this.prioridad = '';
       this.descripcion = ''
       this.proyectoId = this.config.data.proyectoId;
+      this.moduloId = this.config.data.moduloId;
       this.base64Files = [];
       console.log('this.base64Files2', this.base64Files)
     }
@@ -116,7 +118,7 @@ export class RegistrarTareaComponent {
     }
 
     if (this.id > 0) {
-      this.empresaService.actualizarTarea(tarea, this.proyectoId, this.id).pipe(
+      this.empresaService.actualizarTarea(tarea, this.proyectoId, this.moduloId, this.id).pipe(
         tap((response: any) => {
           this.closeModal();
           Swal.fire({
@@ -135,7 +137,7 @@ export class RegistrarTareaComponent {
       ).subscribe();
 
     } else {
-      this.empresaService.guardarTarea(tarea, this.proyectoId).pipe(
+      this.empresaService.guardarTarea(tarea, this.proyectoId, this.moduloId).pipe(
         tap((response: any) => {
           this.closeModal();
           Swal.fire({

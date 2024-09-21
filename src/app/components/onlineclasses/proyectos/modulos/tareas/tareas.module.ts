@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { RatingModule } from 'primeng/rating';
 import { ButtonModule } from 'primeng/button';
 import { SliderModule } from 'primeng/slider';
-import { PanelModule } from 'primeng/panel';
+import { Panel, PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToggleButtonModule } from 'primeng/togglebutton';
@@ -24,14 +24,17 @@ import { DialogModule } from 'primeng/dialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { ProyectosComponent } from './proyectos.component';
-import { ProyectosRoutingModule } from './proyectos-routing.module';
-import { RegistraProyectoComponent } from './registrar-proyecto/registrar-proyecto.component';
+import { TareasRoutingModule } from './tareas-routing.module';
+import { TareasComponent } from './tareas.component';
+import { LightgalleryModule } from 'lightgallery/angular';
+import { RegistrarTareaComponent } from './registrar-tarea/registrar-tarea.component';
+import { GaleriaComponent } from './galeria/galeria.component';
 
 @NgModule({
   declarations: [
-    ProyectosComponent,
-    RegistraProyectoComponent
+    TareasComponent,
+    RegistrarTareaComponent,
+    GaleriaComponent
   ],
   imports: [
     CommonModule,
@@ -64,8 +67,9 @@ import { RegistraProyectoComponent } from './registrar-proyecto/registrar-proyec
     TranslateModule,
     InputTextModule,
     MultiSelectModule,
-    ProyectosRoutingModule,
-    CKEditorModule
+    TareasRoutingModule,
+    CKEditorModule,
+    LightgalleryModule
   ]
 })
-export class ProyectosModule { }
+export class TareasModule { }
