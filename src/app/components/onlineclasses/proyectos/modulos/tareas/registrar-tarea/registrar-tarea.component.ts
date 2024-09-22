@@ -61,6 +61,7 @@ export class RegistrarTareaComponent {
       this.descripcion = this.config.data.tarea.descripcion;
       this.proyectoId = this.config.data.proyectoId;
       this.base64Files = this.config.data.tarea.archivos?.map((elm: any) => elm.contenido);
+      this.moduloId = this.config.data.moduloId;
       console.log('this.base64Files1', this.config.data.tarea)
       this.previewImages = [...this.base64Files]
       console.log('this.base64Files1', this.base64Files)
