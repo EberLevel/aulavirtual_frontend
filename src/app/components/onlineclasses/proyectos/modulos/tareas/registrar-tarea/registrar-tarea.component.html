@@ -1,0 +1,102 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl"
+            >Registrar Tarea</span
+        >
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row">
+            <div class="grid p-fluid">
+                <div class="field md:col-6">
+                    <p-dropdown [options]="['PENDIENTE','EN PROCESO','OBSERVADO','REVISIÓN', 'RETRASADO', 'APROBADO']" [(ngModel)]="estado" placeholder="Seleccione un Estado"></p-dropdown>
+                    <!-- <span class="p-float-label p-input-icon-left">
+                        <i class="pi pi-user-edit"></i>
+                        <input type="text" id="estado" pInputText  [(ngModel)]="estado"/>
+                        <label for="estado">Estado</label>
+                    </span> -->
+                    <small style="color: brown">Campo obligatorio *</small>
+                </div>
+                <!-- <div class="field md:col-6">
+                    <span class="p-float-label p-input-icon-left">
+                        <i class="pi pi-user-edit"></i>
+                        <input type="text" id="nombre" pInputText  [(ngModel)]="nombre"/>
+                        <label for="nombre">Nombre</label>
+                    </span>
+                    <small style="color: brown">Campo obligatorio *</small>
+                </div> -->
+                <div class="field md:col-6">
+                    <span class="p-float-label p-input-icon-left">
+                        <i class="pi pi-user-edit"></i>
+                        <input type="text" id="grupo" pInputText  [(ngModel)]="grupo"/>
+                        <label for="grupo">Grupo</label>
+                    </span>
+                    <small style="color: brown">Campo obligatorio *</small>
+                </div>
+                <div class="field md:col-6">
+                    <span class="p-float-label p-input-icon-left">
+                        <i class="pi pi-user-edit"></i>
+                        <input type="text" id="responsable" pInputText  [(ngModel)]="responsable"/>
+                        <label for="responsable">Responsable</label>
+                    </span>
+                    <small style="color: brown">Campo obligatorio *</small>
+                </div>
+                <div class="field md:col-6">
+                    <span class="p-float-label p-input-icon-left">
+                        <i class="pi pi-user-edit"></i>
+                        <input type="text" id="prioridad" pInputText  [(ngModel)]="prioridad"/>
+                        <label for="prioridad">Prioridad</label>
+                    </span>
+                    <small style="color: brown">Campo obligatorio *</small>
+                </div>
+                <div class="md:col-12">
+                    <label for="">Descripción</label>
+                    <p-editor [style]="{ height: '90px' }" [(ngModel)]="descripcion"></p-editor>
+                    <!-- <p-editor  [(ngModel)]="requisitos" [style]="{ height: '90px' }"> -->
+                    <!-- </p-editor> -->
+                    <!-- <ckeditor #ckeditor [(ngModel)]="requisitos" [editor]="Editor"></ckeditor> -->
+                    <!--<ckeditor #ckeditor [(ngModel)]="parametroDatos.sylabus" [editor]="Editor" (focus)="resizeEditor()"></ckeditor>-->
+                </div>
+                <div class="md:col-12">
+                    <div class="image-uploader">
+                        <label for="img-selector" class="p-button-primary mr-2 p-button img-selector">Añadir Imagen</label>
+                        <input hidden id="img-selector" type="file" (change)="onFileSelected($event)" multiple accept="image/*">
+                        <div class="previews">
+                            <div *ngFor="let image of previewImages; let i = index" class="preview">
+                            <img [src]="image" alt="Preview {{i + 1}}">
+                            <button (click)="removeImage(i)" class="remove-btn">X</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="field md:col-6">
+                    <span class="p-float-label p-input-icon-left">
+                        <i class="pi pi-user-edit"></i>
+                        <input type="text" id="requisitos" pInputText  [(ngModel)]="requisitos"/>
+                        <label for="requisitos">Requisitos</label>
+                    </span>
+                    <small style="color: brown">Campo obligatorio *</small>
+                </div> -->
+            </div>
+        </div>
+
+        
+        <div class="row mb-5 text-right">
+            <button
+                pButton
+                label="Guardar"
+                icon="pi pi-plus"
+                (click)="Guardaruser()"
+                id="btnGuardar"
+                class="p-button-success mr-2"
+            ></button>
+            <button
+                pButton
+                label="Cerrar"
+                icon="pi pi-times"
+                iconPos="right"
+                class="p-button-close-clean"
+                (click)="closeModal()"
+            ></button>
+        </div>
+    </ng-template>
+</p-panel>

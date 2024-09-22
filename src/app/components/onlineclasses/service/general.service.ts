@@ -2132,4 +2132,394 @@ export class GeneralService {
                 })
             );
     }
+
+    getProyectos() {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    guardarProyecto(parametro: any): Observable<ApiResponse> {
+        return this.http
+            .post<ApiResponse>(
+                `${this.urlparametro}proyectos`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 201 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    actualizarProyecto(parametro: any, id: number): Observable<ApiResponse> {
+        return this.http
+            .put<ApiResponse>(
+                `${this.urlparametro}proyectos/${id}`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    getProyecto(id: number) {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    eliminarProyecto(id: number): Observable<ApiResponse> {
+        return this.http
+            .delete<ApiResponse>(`${this.urlparametro}proyectos/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 204) {
+                        return {} as ApiResponse;
+                    } else if (response.status === 204 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                }),
+                catchError((error) => {
+                    console.error('Error occurred:', error);
+                    return throwError(error);
+                })
+            );
+    }
+
+    getModulos(proyecto_id: string) {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyecto_id}/modulos`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    guardarModulo(parametro: any, proyectoId: any): Observable<ApiResponse> {
+        return this.http
+            .post<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 201 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    actualizarModulo(parametro: any, proyectoId: number, id: number): Observable<ApiResponse> {
+        return this.http
+            .put<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    getTarea(proyectoId: number, moduloId: number, id: number) {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    getModulo(proyectoId: number, id: number) {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    eliminarModulo(proyectoId: number, id: number): Observable<ApiResponse> {
+        return this.http
+            .delete<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 204) {
+                        return {} as ApiResponse;
+                    } else if (response.status === 204 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                }),
+                catchError((error) => {
+                    console.error('Error occurred:', error);
+                    return throwError(error);
+                })
+            );
+    }
+
+    eliminarTarea(proyectoId: number, moduloId: number, id: number): Observable<ApiResponse> {
+        return this.http
+            .delete<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 204) {
+                        return {} as ApiResponse;
+                    } else if (response.status === 204 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                }),
+                catchError((error) => {
+                    console.error('Error occurred:', error);
+                    return throwError(error);
+                })
+            );
+    }
+
+    getTareas(proyecto_id: string, modulo_id: string) {
+        return this.http
+            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyecto_id}/modulos/${modulo_id}/tareas`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    guardarTarea(parametro: any, proyectoId: any, moduloId: number): Observable<ApiResponse> {
+        return this.http
+            .post<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 201 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
+
+    actualizarTarea(parametro: any, proyectoId: number, moduloId: number, id: number): Observable<ApiResponse> {
+        return this.http
+            .put<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`,
+                parametro,
+                { observe: 'response' }
+            )
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
 }

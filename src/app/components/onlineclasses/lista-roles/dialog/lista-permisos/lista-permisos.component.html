@@ -75,12 +75,11 @@
                                             </g>
                                         </svg>
                                     </button>
-                        
                                     <input
                                         class="checkbox"
                                         type="checkbox"
                                         [(ngModel)]="permiso.seleccionado"
-                                        (change)="onCheckboxChange(permiso.id, $event, grupo)"
+                                        (change)="onCheckboxChange(permiso.id, $event, grupo, permiso.proyecto_id)"
                                     />
                                     <span class="ml-2">{{ permiso.nombre }}</span>
                                 </div>
