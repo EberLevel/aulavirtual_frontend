@@ -40,6 +40,7 @@ export class VerGrupoEvaluacionesAlumnoComponent {
 
     promedioTotal: number = 0;
     porcentajeTotal: number = 0;
+    totalNotaPorcentual: number = 0;
     grupoEvaluaciones: any;
     alumnoId: any;
 
@@ -76,27 +77,22 @@ export class VerGrupoEvaluacionesAlumnoComponent {
 
     listarGrupoEvaluaciones() {
         if (this.grupoEvaluaciones && this.grupoEvaluaciones.id) {
-            this.grupoEvaluacionesService
-                .getGrupoEvaluaciones({ id: this.grupoEvaluaciones.id })
-                .subscribe((response: any) => {
-                    this.grupoEvaluacionesList = response;
-                    this.originalgrupoEvaluacionesList = [...response];
-
-                    // Llamar a getPromedioPorAlumno para cada grupo de evaluaciones en la lista
-                    this.grupoEvaluacionesList.forEach((grupo) => {
-                        this.getPromedioPorAlumno(grupo.id);
-                    });
+            this.grupoEvaluacionesService.getGrupoEvaluaciones({ id: this.grupoEvaluaciones.id }).subscribe((response: any) => {
+                this.grupoEvaluacionesList = response;
+                this.originalgrupoEvaluacionesList = [...response];
+    
+                // Llamar a getPromedioPorAlumno para cada grupo de evaluaciones en la lista
+                this.grupoEvaluacionesList.forEach((grupo) => {
+                    this.getPromedioPorAlumno(grupo.id);
+                    this.obtenerEvaluacionesPorGrupo(grupo.id, this.alumnoId);
                 });
-            console.log(
-                'ID de grupo para obtener evaluaciones:',
-                this.grupoEvaluaciones.id
-            );
+            });
+            console.log('ID de grupo para obtener evaluaciones:', this.grupoEvaluaciones.id);
         } else {
-            console.error(
-                'No se pudo listar las evaluaciones porque el ID de grupo es inválido o no está definido.'
-            );
+            console.error('No se pudo listar las evaluaciones porque el ID de grupo es inválido o no está definido.');
         }
     }
+    
 
     // Función para obtener el promedio por alumno
     getPromedioPorAlumno(grupoId: number): void {
@@ -309,4 +305,57 @@ export class VerGrupoEvaluacionesAlumnoComponent {
             this.listarGrupoEvaluaciones();
         });
     }
+
+    obtenerEvaluacionesPorGrupo(grupoId: number, alumnoId: number): void {
+        this.grupoEvaluacionesService.getEvaluacionesPorGrupo(grupoId, alumnoId).subscribe(
+            (response: any) => {
+                console.log('Respuesta de la API:', response);
+                if (response.success) {
+                    this.calcularNotaPorcentualTotal(response.evaluaciones, grupoId);
+                    
+                    const notaTotal = this.calcularNotaTotal(response.evaluaciones);
+                    // Actualiza el grupo correspondiente con la nota total
+                    this.grupoEvaluacionesList.forEach(grupo => {
+                        if (grupo.id === grupoId) {
+                            grupo.nota_total = notaTotal; // Asigna la nota total al grupo
+                        }
+                    });
+                } else {
+                    console.error('Error al obtener las evaluaciones:', response.message);
+                }
+            },
+            (error) => {
+                console.error('Error en la solicitud de evaluaciones:', error);
+            }
+        );
+    }
+    
+    
+    
+    
+    // Método para sumar las notas porcentuales
+    calcularNotaPorcentualTotal(evaluaciones: any[], grupoId: number): void {
+        const totalNotaPorcentual = evaluaciones.reduce((total, evaluacion) => {
+            return total + parseFloat(evaluacion.nota_porcentual);
+        }, 0);
+    
+        // Actualiza solo el grupo correspondiente
+        this.grupoEvaluacionesList.forEach(grupo => {
+            if (grupo.id === grupoId) {
+                grupo.nota_porcentual_total = totalNotaPorcentual; // Asigna el total al grupo
+                console.log('Grupo actualizado:', grupo); // Verifica que el grupo tenga la propiedad
+            }
+        });
+    
+        console.log('Total Nota Porcentual para el grupo:', totalNotaPorcentual); // Verifica el total
+    }
+    calcularNotaTotal(evaluaciones: any[]): number {
+        return evaluaciones.reduce((total, evaluacion) => {
+            return total + parseFloat(evaluacion.nota);
+        }, 0);
+    }
+    
+    
+    
+    
 }
