@@ -25,7 +25,7 @@ import { TableModule } from "primeng/table";
 import { ToastModule } from "primeng/toast";
 import { ToggleButtonModule } from "primeng/togglebutton";
 import { TooltipModule } from "primeng/tooltip";
-import { TareasRoutingModule } from "./modulos-routing.module";
+import { ModulosRoutingModule } from "./modulos-routing.module";
 import { ModulosComponent } from "./modulos.component";
 import { RegistrarModuloComponent } from "./registrar-modulo/registrar-modulo.component";
 
@@ -67,7 +67,7 @@ import { RegistrarModuloComponent } from "./registrar-modulo/registrar-modulo.co
     TranslateModule,
     InputTextModule,
     MultiSelectModule,
-    TareasRoutingModule,
+    ModulosRoutingModule,
     CKEditorModule,
     LightgalleryModule
   ]
