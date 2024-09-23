@@ -41,7 +41,6 @@ export class SeleccionarAlumnosCursoComponent {
         this.loading = true;
         this.alumnoService.getAlumnosCurso(domainId, cursoId).subscribe(
             (data: any[]) => {
-                // Asegúrate de recibir un array
                 console.log('alumnos', data);
                 this.cursoAlumnoList = data; // Asigna el array recibido
                 this.originalCursoAlumnoList = [...data]; // Crea una copia
