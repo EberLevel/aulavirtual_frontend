@@ -24,6 +24,7 @@ import { VerGrupoEvaluacionesComponent } from './opciones/ver-g-ev/ver-g-ev.comp
 import { CrearForoCursoComponent } from '../crear-foro-curso/crear-foro-curso.component';
 import { VerSyllabusComponent } from './opciones/ver-syllabus/ver-syllabus.component';
 import { VerTemasComponent } from './opciones/ver-temas/ver-temas.component';
+import { HelpersService } from 'src/app/helpers.service';
 @Component({
     selector: 'app-ver-curso-de-carrera',
     templateUrl: './ver-curso-de-carrera.component.html',
@@ -41,27 +42,40 @@ export class VerCursoDeCarreraComponent {
     originalCarrerastecnicasList: any[] = []; // Add this line to store the original list
 
     ref: DynamicDialogRef | undefined;
+    rolId: any;
 
     constructor(
         private dialogService: DialogService,
         private cursosService: GeneralService,
         private router: Router,
-        public config: DynamicDialogConfig
+        public config: DynamicDialogConfig,
+        private helpersService: HelpersService,
     ) {}
 
     ngOnInit(): void {
         this.listarCursos();
+        this.rolId = this.helpersService.getRolId();
+        console.log("this.carrerastecnicasList",this.carrerastecnicasList)
     }
 
     listarCursos() {
         this.cursosService
             .getCursos(this.config.data.data.id)
             .subscribe((response: any) => {
-                this.carrerastecnicasList = response;
-                console.log('cursos', this.carrerastecnicasList);
-                this.originalCarrerastecnicasList = [...response];
+                // Agregar el cálculo de totalHoras para cada carrera
+                this.carrerastecnicasList = response.map((carrera: any) => {
+                    // Convertir ambos valores a números antes de sumarlos
+                    const horasTeoricas = parseFloat(carrera.cantidad_de_horas) || 0;
+                    const horasPracticas = parseFloat(carrera.horas_practicas) || 0;
+    
+                    carrera.totalHoras = horasTeoricas + horasPracticas;
+                    return carrera;
+                });
+                this.originalCarrerastecnicasList = [...this.carrerastecnicasList];
             });
     }
+    
+    
 
     navigateToNuevo() {
         console.log('nuevo');

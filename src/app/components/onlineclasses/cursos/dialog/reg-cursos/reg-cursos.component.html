@@ -74,7 +74,13 @@
                 <div class="field col-12 md:col-6">
                     <span class="p-float-label">
                         <input type="text" pInputText [(ngModel)]="cantidadHoras" [disabled]="acciones === 'ver'">
-                        <label class="required">Cantidad de horas</label>
+                        <label class="required">Horas Teóricas</label>
+                    </span>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                        <input type="text" pInputText [(ngModel)]="horasPracticas" [disabled]="acciones === 'ver'">
+                        <label class="required">Horas Practicas</label>
                     </span>
                 </div>
             </div>

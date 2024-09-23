@@ -25,6 +25,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     cantidadCreditos: number = 0;
     porcentajeCreditos: number = 0;
     cantidadHoras: number = 0;
+    horasPracticas: number = 0;
     syllabus: string | undefined = '';
     tema: string | undefined = '';
     asignacionDocentes: any = {};
@@ -72,6 +73,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                 this.cantidadCreditos = this.curso.cantidad_de_creditos;
                 this.porcentajeCreditos = this.curso.porcentaje_de_creditos;
                 this.cantidadHoras = this.curso.cantidad_de_horas;
+                this.horasPracticas = this.curso.horas_practicas;
                 this.syllabus = this.curso.syllabus;
                 this.carrera_id = this.curso.carrera_id;
                 //console.log("carrera_id" ,this.carrera_id)
@@ -93,6 +95,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             this.cantidadCreditos = 0;
             this.porcentajeCreditos = 0;
             this.cantidadHoras = 0;
+            this.horasPracticas = 0;
             this.syllabus = '';
             this.tema = '';
             this.asignacionDocentes = {};
@@ -125,6 +128,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             cantidadCreditos: this.cantidadCreditos,
             porcentajeCreditos: this.porcentajeCreditos,
             cantidadHoras: this.cantidadHoras,
+            horasPracticas: this.horasPracticas,
             syllabus: this.syllabus,
             tema: this.tema,
             asignacionDocentesId: this.asignacionDocentes,
@@ -199,6 +203,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             cantidadCreditos: this.cantidadCreditos,
             porcentajeCreditos: this.porcentajeCreditos,
             cantidadHoras: this.cantidadHoras,
+            horasPracticas: this.horasPracticas,
             syllabus: this.syllabus,
             tema: this.tema,
             asignacionDocentesId: this.asignacionDocentes,
@@ -239,6 +244,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             cantidadCreditos: this.cantidadCreditos,
             porcentajeCreditos: this.porcentajeCreditos,
             cantidadHoras: this.cantidadHoras,
+            horasPracticas: this.horasPracticas,
             syllabus: this.syllabus,
             tema: this.tema,
             asignacionDocentesId: this.asignacionDocentes ? this.asignacionDocentes.value : null, // Verifica si asignacionDocentes tiene valor

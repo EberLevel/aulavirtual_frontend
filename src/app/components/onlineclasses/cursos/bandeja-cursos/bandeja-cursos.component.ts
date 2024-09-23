@@ -81,12 +81,22 @@ export class BandejaCursosComponent {
     this.listarCursos();
 }
 
-  listarCursos() {
-    this.cursoAlumnoService.getCursosByAlumno(this.config.data.data.id).subscribe((response: any) => {
-      this.carrerastecnicasList = response;
-      this.originalCarrerastecnicasList = [...response];
-    });
-  }
+listarCursos() {
+  this.cursoAlumnoService.getCursosByAlumno(this.config.data.data.id).subscribe((response: any) => {
+      // Agrega el cálculo de totalHoras
+      this.carrerastecnicasList = response.map((curso: any) => {
+          const horasTeoricas = parseFloat(curso.cantidad_de_horas) || 0;
+          const horasPracticas = parseFloat(curso.horas_practicas) || 0;
+          curso.totalHoras = horasTeoricas + horasPracticas; // Suma de horas teóricas y prácticas
+          return curso;
+      });
+      this.originalCarrerastecnicasList = [...this.carrerastecnicasList];
+  },
+  (error) => {
+      console.error('Error al obtener cursos por alumno', error);
+  });
+}
+
 
   navigateToNuevo() {
     this.ref = this.dialogService.open(RegCarrerastecnicasComponent, {
