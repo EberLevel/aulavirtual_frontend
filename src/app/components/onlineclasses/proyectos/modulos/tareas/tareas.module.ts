@@ -25,10 +25,10 @@ import { TableModule } from "primeng/table";
 import { ToastModule } from "primeng/toast";
 import { ToggleButtonModule } from "primeng/togglebutton";
 import { TooltipModule } from "primeng/tooltip";
-import { TareasRoutingModule } from "../modulos-routing.module";
 import { GaleriaComponent } from "./galeria/galeria.component";
 import { RegistrarTareaComponent } from "./registrar-tarea/registrar-tarea.component";
 import { TareasComponent } from "./tareas.component";
+import { TareasRoutingModule } from './tareas-routing.module';
 
 @NgModule({
   declarations: [
