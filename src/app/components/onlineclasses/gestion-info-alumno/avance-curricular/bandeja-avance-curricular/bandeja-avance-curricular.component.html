@@ -50,6 +50,15 @@
                                     Créditos
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
+                                    Horas Teóricas
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Horas Practicas
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Total Horas
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
                                     Ciclo
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
@@ -69,6 +78,9 @@
                                 <td>{{ curso.codigo }}</td>
                                 <td>{{ curso.nombre }}</td>
                                 <td>{{ curso.cantidad_de_creditos }}</td>
+                                <td>{{ curso.cantidad_de_horas }}</td>
+                                <td>{{ curso.horas_practicas }}</td>
+                                <td>{{ (+curso.cantidad_de_horas) + (+curso.horas_practicas) }}</td>
                                 <td>{{ curso.ciclo_nombre  }}</td>
                                 <td>{{ curso.area_de_formacion_nombre }}</td>
                                 <td>{{ curso.modulo_formativo_nombre }}</td>
