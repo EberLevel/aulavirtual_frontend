@@ -36,15 +36,33 @@ export class SeleccionarAlumnosCursoComponent {
         this.cursoNombre = this.config.data.cursoNombre;
         this.getAlumnosCurso(this.domainId ?? 1, this.curso);
     }
+
     getAlumnosCurso(domainId: any, cursoId: any) {
         console.log('domainId', domainId);
         this.loading = true;
         this.alumnoService.getAlumnosCurso(domainId, cursoId).subscribe(
             (data: any[]) => {
-                // Asegúrate de recibir un array
                 console.log('alumnos', data);
                 this.cursoAlumnoList = data; // Asigna el array recibido
                 this.originalCursoAlumnoList = [...data]; // Crea una copia
+    
+                // Iteramos sobre la lista de alumnos para obtener el promedio
+                this.cursoAlumnoList.forEach((alumno) => {
+                    this.alumnoService.getPromedioEvaluaciones(cursoId, alumno.id).subscribe(
+                        (response: any) => {
+                            if (response.promedio_general) {
+                                alumno.promedio = parseFloat(response.promedio_general).toFixed(2);// Asignamos el promedio al alumno
+                            } else {
+                                alumno.promedio = 'Sin evaluaciones'; // Valor por defecto si no tiene evaluaciones
+                            }
+                        },
+                        (error) => {
+                            console.error('Error al obtener el promedio de evaluaciones', error);
+                            alumno.promedio = 'Error'; // Valor por defecto si hay un error
+                        }
+                    );
+                });
+    
                 this.loading = false;
             },
             (error) => {
@@ -53,6 +71,7 @@ export class SeleccionarAlumnosCursoComponent {
             }
         );
     }
+    
 
     onSelectAlumno(alumno: any) {
         console.log('alumno cambio seleccionado');

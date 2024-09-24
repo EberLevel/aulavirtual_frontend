@@ -48,9 +48,9 @@
                                 <th style="min-width: 10rem" scope="col">
                                     Promedio
                                 </th>
-                                <th style="min-width: 10rem" scope="col">
+                                <!-- <th style="min-width: 10rem" scope="col">
                                     % Promedio
-                                </th>
+                                </th> -->
                                 <th style="min-width: 10rem" scope="col">
                                     Estado
                                 </th>
@@ -59,9 +59,6 @@
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Correo
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Edad
                                 </th>
                             </tr>
                         </ng-template>
@@ -81,7 +78,7 @@
                                     >
                                         Ev
                                     </button>
-                                    <button
+                                    <!-- <button
                                         pButton
                                         class="p-button-rounded p-button-danger button-custom"
                                         style="background: rgb(15, 68, 110)"
@@ -90,15 +87,14 @@
                                         tooltipPosition="top"
                                     >
                                         Fo
-                                    </button>
+                                    </button> -->
                                     </div>
                                 </td>
                                 <td>{{ alumno.promedio }}</td>
-                                <td>{{ alumno.porcPromedio }}</td>
-                                <td>{{ alumno.Estado }}</td>
+                                <!-- <td>{{ alumno.porcPromedio }}</td> -->
+                                <td>{{ alumno.estadoAlumno }}</td>
                                 <td>{{ alumno.celular }}</td>
                                 <td>{{ alumno.email }}</td>
-                                <td>{{ alumno.Edad }}</td>
                             </tr>
                         </ng-template>
                     </p-table>
