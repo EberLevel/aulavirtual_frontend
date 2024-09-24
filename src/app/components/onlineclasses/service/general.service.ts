@@ -1165,6 +1165,9 @@ export class GeneralService {
                 })
             );
     }
+    getPromedioEvaluaciones(cursoId: number, alumnoId: number) {
+        return this.http.get<any>(`${this.baseUrl}evaluacionesByalumnos/promedio/${cursoId}/${alumnoId}`);
+    }
     
     updateAlumnoCurso(data: any): Observable<ApiResponse> {
         return this.http
