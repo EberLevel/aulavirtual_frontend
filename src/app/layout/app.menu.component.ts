@@ -232,14 +232,7 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Horarios',
                                         icon: 'pi pi-fw pi-calendar',
                                         routerLink: ['/apps/calendar'],
-                                    },
-                                    {
-                                        label: 'Plan de Estudio',
-                                        icon: 'pi pi-id-card',
-                                        routerLink: [
-                                            '/pl-virtual/estado-cursos',
-                                        ],
-                                    },
+                                    }
                                 ],
                             },
                         ],
