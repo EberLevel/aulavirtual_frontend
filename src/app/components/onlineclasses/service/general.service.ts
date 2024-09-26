@@ -49,7 +49,10 @@ export class GeneralService {
             })
         );
     }
-
+    getPromedioCurso(cursoId: number) {
+        return this.http.get<any>(`${this.baseUrl}cursos/promedio/${cursoId}`);
+    }
+    
     guardarCarreraTecnica(parametro: any): Observable<ApiResponse> {
         return this.http
             .post<ApiResponse>(`${this.baseUrl}carreras`, parametro, {

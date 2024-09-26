@@ -104,7 +104,7 @@ export class AppMenuComponent implements OnInit {
                                         ],
                                     },
                                     {
-                                        label: 'Cursos',
+                                        label: 'Unidad Didactica',
                                         icon: 'pi pi-share-alt',
                                         routerLink: [
                                             '/pl-virtual/cursos-docente',
@@ -222,7 +222,7 @@ export class AppMenuComponent implements OnInit {
                                         ],
                                     },
                                     {
-                                        label: 'Cursos',
+                                        label: 'Unidad Didactica',
                                         icon: 'pi pi-fw pi-calendar',
                                         routerLink: [
                                             '/pl-virtual/bandeja-curso',
@@ -550,7 +550,7 @@ export class AppMenuComponent implements OnInit {
                                         //       ],
                                         //   },
                                           {
-                                              label: 'Cursos',
+                                              label: 'Unidad Didactica',
                                               icon: 'pi pi-fw pi-calendar',
                                               routerLink: [
                                                   '/pl-virtual/bandeja-curso',
@@ -618,7 +618,7 @@ export class AppMenuComponent implements OnInit {
                                               ],
                                           },
                                           {
-                                              label: 'Cursos',
+                                              label: 'Unidad Didactica',
                                               icon: 'pi pi-share-alt',
                                               // routerLink: ['/pl-virtual/cursos-docente']
                                               routerLink: [
