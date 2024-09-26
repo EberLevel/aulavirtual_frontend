@@ -62,6 +62,8 @@ export class VerCursoDeCarreraComponent {
         this.cursosService
             .getCursos(this.config.data.data.id)
             .subscribe((response: any) => {
+                console.log('Cursos obtenidos del backend:', response); // Log para ver la respuesta de los cursos
+                
                 // Agregar el cálculo de totalHoras para cada carrera
                 this.carrerastecnicasList = response.map((carrera: any) => {
                     // Convertir ambos valores a números antes de sumarlos
@@ -69,11 +71,28 @@ export class VerCursoDeCarreraComponent {
                     const horasPracticas = parseFloat(carrera.horas_practicas) || 0;
     
                     carrera.totalHoras = horasTeoricas + horasPracticas;
+    
+                    // Obtener el promedio general para este curso
+                    this.cursosService.getPromedioCurso(carrera.id).subscribe(
+                        (promedioResponse: any) => {
+                            console.log(`Promedio obtenido para el curso ${carrera.id}:`, promedioResponse); // Log para ver el promedio obtenido
+                            carrera.promedio_general = promedioResponse.promedio_general;
+                        },
+                        (error) => {
+                            console.error(`Error al obtener el promedio para el curso ${carrera.id}:`, error);
+                            carrera.promedio_general = 'N/A'; // Indicar que hubo un error al obtener el promedio
+                        }
+                    );
+    
                     return carrera;
                 });
+    
                 this.originalCarrerastecnicasList = [...this.carrerastecnicasList];
+                console.log('Lista de cursos con promedios:', this.carrerastecnicasList); // Log para ver la lista final de cursos con los promedios
             });
     }
+    
+    
     
     
 
