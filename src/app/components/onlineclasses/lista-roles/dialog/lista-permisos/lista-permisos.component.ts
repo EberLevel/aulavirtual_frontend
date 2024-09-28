@@ -850,6 +850,38 @@ export class ListaPermisosComponent {
                 ],
                 isExpanded: false,
             },
+            AgendaVirtual: {
+                nombre: 'AGENDA VIRTUAL',
+                id: null,
+                seleccionado: false,
+                permisos: [
+                    {
+                        id: null,
+                        nombre: 'CANDIDATOS',
+                        seleccionado: false,
+                        hijos: [
+                            { id: 29, nombre: 'Nuevo', seleccionado: false },
+                            { id: 30, nombre: 'Ver', seleccionado: false },
+                            { id: 31, nombre: 'Editar', seleccionado: false },
+                            { id: 32, nombre: 'Eliminar', seleccionado: false }
+                        ],
+                        isExpanded: false,
+                    },
+                    {
+                        id: null,
+                        nombre: 'CIUDADES',
+                        seleccionado: false,
+                        hijos: [
+                            { id: 33, nombre: 'Nuevo', seleccionado: false },
+                            { id: 34, nombre: 'Ver', seleccionado: false },
+                            { id: 35, nombre: 'Editar', seleccionado: false },
+                            { id: 36, nombre: 'Eliminar', seleccionado: false }
+                        ],
+                        isExpanded: false,
+                    }
+                ],
+                isExpanded: false,
+            },
         };
 
         this.permisos.forEach((permiso) => {
@@ -978,6 +1010,46 @@ export class ListaPermisosComponent {
                 case 'eliminar_modulo_proyecto':
                     grupos['Proyectos'].permisos[3].id = permiso.id;
                     grupos['Proyectos'].permisos[3].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'nuevo_modulo_candidatos':
+                    grupos['AgendaVirtual'].permisos[0].hijos[0].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[0].hijos[0].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'ver_modulo_candidatos':
+                    grupos['AgendaVirtual'].permisos[0].hijos[1].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[0].hijos[1].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'editar_modulo_candidatos':
+                    grupos['AgendaVirtual'].permisos[0].hijos[2].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[0].hijos[2].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'eliminar_modulo_candidatos':
+                    grupos['AgendaVirtual'].permisos[0].hijos[3].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[0].hijos[3].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'nuevo_modulo_ciudades':
+                    grupos['AgendaVirtual'].permisos[1].hijos[0].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[1].hijos[0].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'ver_modulo_ciudades':
+                    grupos['AgendaVirtual'].permisos[1].hijos[1].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[1].hijos[1].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'editar_modulo_ciudades':
+                    grupos['AgendaVirtual'].permisos[1].hijos[2].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[1].hijos[2].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
+                case 'eliminar_modulo_ciudades':
+                    grupos['AgendaVirtual'].permisos[1].hijos[3].id = permiso.id;
+                    grupos['AgendaVirtual'].permisos[1].hijos[3].seleccionado =
                         this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
             }
