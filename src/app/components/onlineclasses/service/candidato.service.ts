@@ -22,7 +22,9 @@ export class CandidatoService {
   getCandidatosByCiudad(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}candidatos/ciudad/${id}`);
   }
-
+  getCiudadByCandidato(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}getCiudadByCandidato/${id}`);
+  }
   guardarCandidato(candidatoData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}candidatos`, candidatoData);
   }

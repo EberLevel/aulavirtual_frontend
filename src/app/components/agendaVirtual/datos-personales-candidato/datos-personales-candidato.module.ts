@@ -10,7 +10,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { DynamicDialogConfig, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EditorModule } from 'primeng/editor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
@@ -27,6 +27,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { InformacionAcademicaCandidatoModule } from '../informacion-academica-candidato/informacion-academica-candidato.module';
 import { DatosPersonalesCandidatoRoutingModule } from './datos-personales-candidato-routing.module';
+import { InformacionAcademicaModule } from "../../onlineclasses/informacion-academica/informacion-academica.module";
 
 
 
@@ -68,7 +69,9 @@ import { DatosPersonalesCandidatoRoutingModule } from './datos-personales-candid
     TranslateModule,
     InputTextModule,
     MultiSelectModule,
-    InformacionAcademicaCandidatoModule
-  ]
+    InformacionAcademicaCandidatoModule,
+    InformacionAcademicaModule
+],
+providers: [DynamicDialogConfig, DynamicDialogRef], 
 })
 export class DatosPersonalesCandidatoModule { }

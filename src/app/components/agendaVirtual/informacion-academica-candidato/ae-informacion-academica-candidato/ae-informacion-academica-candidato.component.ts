@@ -1,204 +1,132 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MessageService } from 'primeng/api';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { InformacionAcademicaCandidatoService } from 'src/app/components/onlineclasses/service/informacion-academica-candidato.service';
 import { InformacionAcademicaService } from 'src/app/components/onlineclasses/service/informacion-academica.service';
 import { HelpersService } from 'src/app/helpers.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-ae-informacion-academica-candidato',
-  templateUrl: './ae-informacion-academica-candidato.component.html',
-  styleUrls: ['./ae-informacion-academica-candidato.component.scss']
+    selector: 'app-ae-informacion-academica-candidato',
+    templateUrl: './ae-informacion-academica-candidato.component.html',
+    styleUrls: ['./ae-informacion-academica-candidato.component.scss'],
 })
 export class AeInformacionAcademicaCandidatoComponent {
-  loading: boolean = false;
     informacionAcademicaForm: FormGroup;
-    gradosInstruccion: any[] = [];
-    profesiones: any[] = [];
-    estadoAvances: any[] = [];
-    acciones: any;
-    domain_id!: number;
-    idPostulante!: number;  // Declaramos idPostulante
+    acciones: string;
+    estadoOptions: any[] = [
+        { label: 'Completado', value: 1 },
+        { label: 'En Proceso', value: 2 },
+        { label: 'Pendiente', value: 3 },
+    ];
+    domain_id: any;
+    candidato_id: any;
 
     constructor(
         private fb: FormBuilder,
         private ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        private informacionAcademicaService: InformacionAcademicaService,
-        private helpersService: HelpersService,
-        private messageService: MessageService,
-        private sanitizer: DomSanitizer
+        private informacionAcademicaService: InformacionAcademicaCandidatoService,
+        private helpersService: HelpersService
     ) {
         this.acciones = this.config.data.acciones;
-
         this.informacionAcademicaForm = this.fb.group({
-            grado_instruccion_id: ['', Validators.required],
-            profesion_id: ['', Validators.required],
-            estado_avance_id: ['', Validators.required],
-            institucion: ['', Validators.required],
-            fecha_inicio: ['', Validators.required],
-            fecha_termino: ['', Validators.required],
+            nombre: ['', Validators.required],
+            avance: ['', Validators.required],
+            estado_id: ['', Validators.required],
             observaciones: [''],
-            imagen_certificado: [''],
+            certificado: [''],
+            domain_id: [this.domain_id],
+            candidato_id: [this.candidato_id],
         });
     }
 
     ngOnInit(): void {
+        // Obtener los valores de dominio y candidato
         this.domain_id = this.helpersService.getDominioId();
+        this.candidato_id = this.helpersService.getCandidatoId();
+        console.log('Dominio ID:', this.domain_id); // Verificar si se obtiene correctamente
+        console.log('candidato_id ID:', this.candidato_id); // Verificar si se obtiene correctamente
 
-        // Verificamos si se pasa el idPostulante desde la configuración del modal
-        this.idPostulante = this.config.data.postulanteId 
-            ? this.config.data.postulanteId 
-            : this.helpersService.getPostulanteId();
+        // Actualizar el formulario con los valores obtenidos
+        this.informacionAcademicaForm.patchValue({
+            domain_id: this.domain_id,
+            candidato_id: this.candidato_id,
+        });
 
-        if (!this.idPostulante) {
-            console.error('No se encontró idPostulante');
-            return;
-        }
-
-        console.log('ID del postulante en AeInformacionAcademicaComponent:', this.idPostulante);
-
-        this.cargarDatos();
-
-        if (this.acciones === 'ver' || this.acciones === 'actualizar') {
-            const data = this.config.data.data;
-
-            // Convertir fechas a objetos Date
-            const fecha_inicio = new Date(data.fecha_inicio);
-            const fecha_termino = new Date(data.fecha_termino);
-
-            // Actualizar el formulario con los datos recibidos
-            this.informacionAcademicaForm.patchValue({
-                ...data,
-                fecha_inicio: fecha_inicio,
-                fecha_termino: fecha_termino,
-            });
+        if (this.acciones === 'actualizar' && this.config.data.data) {
+            this.informacionAcademicaForm.patchValue(this.config.data.data);
         }
     }
 
-    cargarDatos() {
-        this.informacionAcademicaService
-            .getDataCreate(this.domain_id)
-            .subscribe(
-                (data) => {
-                    setTimeout(() => {
-                        this.gradosInstruccion = data.gradosInstruccion;
-                        this.profesiones = data.profesiones;
-                        this.estadoAvances = data.estadoAvances;
-                    });
-                },
-                (error) => {
-                    console.error('Error al cargar los datos', error);
-                }
-            );
-    }
-
-    guardarInformacionAcademica() {
-        if (this.informacionAcademicaForm.valid) {
-            const domain_id = this.helpersService.getDominioId();
-            const idPostulante = this.config.data.postulanteId 
-                ? this.config.data.postulanteId 
-                : this.helpersService.getPostulanteId();
+    onFileChange(event: any) {
+        const file = event.files[0]; // Captura el archivo seleccionado
     
-            // Si la imagen está presente, asegurar que es una cadena base64
-            let imagenCertificado = this.informacionAcademicaForm.value.imagen_certificado;
-    
-            if (imagenCertificado && typeof imagenCertificado === 'object' && imagenCertificado.changingThisBreaksApplicationSecurity) {
-                imagenCertificado = imagenCertificado.changingThisBreaksApplicationSecurity;
-            }
-    
-            const informacionAcademica = {
-                ...this.informacionAcademicaForm.value,
-                fecha_inicio: this.formatDate(this.informacionAcademicaForm.value.fecha_inicio),
-                fecha_termino: this.formatDate(this.informacionAcademicaForm.value.fecha_termino),
-                domain_id: domain_id,
-                id_postulante: idPostulante,
-                imagen_certificado: imagenCertificado // Asignar la cadena base64 correctamente
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+                const base64String = e.target.result; // Mantén todo el resultado, incluyendo el prefijo
+                this.informacionAcademicaForm.patchValue({
+                    certificado: base64String, // Almacena la cadena base64 con el prefijo en el formulario
+                });
             };
+            reader.readAsDataURL(file); // Esto incluye el prefijo 'data:<type>;base64,'
+        }
+    }
     
-            console.log('Datos enviados al backend:', informacionAcademica);
-    
-            // Manejo de actualización
+    guardarInformacion() {
+        if (this.informacionAcademicaForm.valid) {
+            const data = this.informacionAcademicaForm.value;
+            console.log('Datos enviados al backend:', data); // Verifica los datos aquí
+
             if (this.acciones === 'actualizar') {
-                const params = {
-                    ...informacionAcademica,
-                    id: this.config.data.data.id,
-                };
-                console.log('Datos para actualización:', params);
-    
-                this.informacionAcademicaService.actualizarInformacionAcademica(params)
+                const id = this.config.data.data.id;
+                this.informacionAcademicaService
+                    .actualizarInformacionAcademica(id, data)
                     .subscribe(
                         () => {
-                            this.ref?.close();
-                            Swal.fire({
-                                title: '¡Éxito!',
-                                text: 'Los Datos se actualizaron correctamente',
-                                icon: 'success',
-                                confirmButtonText: 'Aceptar',
-                            });
+                            Swal.fire(
+                                '¡Éxito!',
+                                'La información ha sido actualizada correctamente.',
+                                'success'
+                            );
+                            this.ref.close();
                         },
-                        (error: any) => {
-                            console.error('Error al actualizar el registro', error);
+                        (error) => {
+                            Swal.fire(
+                                'Error',
+                                'Hubo un problema al actualizar la información.',
+                                'error'
+                            );
                         }
                     );
-            } 
-            else {
-                console.log('Datos para creación:', informacionAcademica);
-                this.informacionAcademicaService.guardarInformacionAcademica(informacionAcademica)
+            } else {
+                this.informacionAcademicaService
+                    .guardarInformacionAcademica(data)
                     .subscribe(
                         () => {
-                            this.ref?.close();
-                            Swal.fire({
-                                title: '¡Éxito!',
-                                text: 'Los Datos se registraron correctamente',
-                                icon: 'success',
-                                confirmButtonText: 'Aceptar',
-                            });
+                            Swal.fire(
+                                '¡Éxito!',
+                                'La información ha sido guardada correctamente.',
+                                'success'
+                            );
+                            this.ref.close();
                         },
-                        (error: any) => {
-                            console.error('Error al guardar el registro', error);
+                        (error) => {
+                            Swal.fire(
+                                'Error',
+                                'Hubo un problema al guardar la información.',
+                                'error'
+                            );
                         }
                     );
             }
         } else {
             console.error('Formulario inválido');
         }
-    }   
-
-    onFileChange(event: any) {
-        const file = event.files[0];
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-            this.informacionAcademicaForm.patchValue({
-                imagen_certificado:
-                    this.sanitizer.bypassSecurityTrustResourceUrl(
-                        e.target.result
-                    ),
-            });
-        };
-        reader.readAsDataURL(file);
     }
 
-    formatDate(date: Date): string {
-        const d = new Date(date);
-        let month = '' + (d.getMonth() + 1);
-        let day = '' + d.getDate();
-        const year = d.getFullYear();
-
-        if (month.length < 2) {
-            month = '0' + month;
-        }
-        if (day.length < 2) {
-            day = '0' + day;
-        }
-
-        return [year, month, day].join('-');
-    }
-
-    closeModal(event: Event) {
-        event.preventDefault();
-        this.ref?.close();
+    closeModal() {
+        this.ref.close();
     }
 }

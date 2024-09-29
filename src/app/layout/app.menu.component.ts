@@ -199,58 +199,30 @@ export class AppMenuComponent implements OnInit {
         ];
     }
     actualizarMenuCandidato() {
-        console.log('actualizarMenuPostulante llamado');
+        console.log('actualizarMenuCandidato llamado');
         this.model4 = [
             {
                 items: [
                     {
-                        label: 'ESTRUCTURA ORGANICA',
+                        label: 'AGENDA VIRTUAL',
                         icon: 'pi pi-play',
                         items: [
                             {
-                                label: 'Banco CV',
+                                label: 'Mantenimiento',
                                 icon: 'pi pi-play',
                                 items: [
                                     {
-                                        label: 'Datos personales',
+                                        label: 'Datos Personales del candidato',
                                         icon: 'pi pi-users',
                                         routerLink: [
-                                            '/pl-virtual/lista-postulantes',
+                                            '/pl-virtual/datos-personales-candidato',
                                         ],
                                     },
                                     {
                                         label: 'Informacion academica',
                                         icon: 'pi pi-users',
                                         routerLink: [
-                                            '/pl-virtual/informacion-academica',
-                                        ],
-                                    },
-                                    {
-                                        label: 'Experiencia Laboral',
-                                        icon: 'pi pi-users',
-                                        routerLink: [
-                                            '/pl-virtual/experiencia-laboral',
-                                        ],
-                                    },
-                                    {
-                                        label: 'Capacitaciones',
-                                        icon: 'pi pi-users',
-                                        routerLink: [
-                                            '/pl-virtual/capacitacion-postulante',
-                                        ],
-                                    },
-                                    {
-                                        label: 'Referencia familiares',
-                                        icon: 'pi pi-users',
-                                        routerLink: [
-                                            '/pl-virtual/referencias-familiares',
-                                        ],
-                                    },
-                                    {
-                                        label: 'Referencia laborales',
-                                        icon: 'pi pi-users',
-                                        routerLink: [
-                                            '/pl-virtual/referencias-laborales',
+                                            '/pl-virtual/informacion-academica-candidato',
                                         ],
                                     },
                                 ],
@@ -374,27 +346,7 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Candidatos',
                                 icon: 'pi pi-users',
                                 routerLink: ['/pl-virtual/lista-ciudades'],
-                            },
-                            {
-                                label: 'Mantenimiento',
-                                icon: 'pi pi-play',
-                                items: [
-                                    {
-                                        label: 'Datos Personales del candidato',
-                                        icon: 'pi pi-users',
-                                        routerLink: [
-                                            '/pl-virtual/datos-personales-candidato',
-                                        ],
-                                    },
-                                    {
-                                        label: 'Informacion academica',
-                                        icon: 'pi pi-users',
-                                        routerLink: [
-                                            '/pl-virtual/informacion-academica-candidato',
-                                        ],
-                                    },
-                                ],
-                            },
+                            }
                         ],
                     },
                 ],

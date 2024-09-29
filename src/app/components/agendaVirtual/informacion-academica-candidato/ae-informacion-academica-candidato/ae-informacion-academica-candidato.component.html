@@ -12,128 +12,40 @@
     </ng-template>
 
     <ng-template pTemplate="content">
-        <form
-            [formGroup]="informacionAcademicaForm"
-            (ngSubmit)="guardarInformacionAcademica()"
-        >
+        <form [formGroup]="informacionAcademicaForm" (ngSubmit)="guardarInformacion()">
             <div class="grid p-fluid">
                 <div class="field col-6">
-                    <label for="grado_instruccion_id">Grado de Estudios</label>
-                    <p-dropdown
-                        [options]="gradosInstruccion"
-                        optionLabel="nombre"
-                        optionValue="id"
-                        id="grado_instruccion_id"
-                        formControlName="grado_instruccion_id"
-                        [disabled]="acciones === 'ver'"
-                    >
-                    </p-dropdown>
+                    <label for="nombre">Nombre</label>
+                    <input pInputText formControlName="nombre" />
                 </div>
                 <div class="field col-6">
-                    <label for="profesion_id">Profesión</label>
-                    <p-dropdown
-                        [options]="profesiones"
-                        optionLabel="nombre"
-                        optionValue="id"
-                        id="profesion_id"
-                        formControlName="profesion_id"
-                        [disabled]="acciones === 'ver'"
-                    >
-                    </p-dropdown>
+                    <label for="avance">Porcentaje de Avance</label>
+                    <input type="number" pInputText formControlName="avance" />
                 </div>
                 <div class="field col-6">
-                    <label for="estado_avance_id">Avance de Estudios</label>
-                    <p-dropdown
-                        [options]="estadoAvances"
-                        optionLabel="nombre"
-                        optionValue="id"
-                        id="estado_avance_id"
-                        formControlName="estado_avance_id"
-                        [disabled]="acciones === 'ver'"
-                    >
-                    </p-dropdown>
+                    <label for="estado_id">Estado</label>
+                    <p-dropdown [options]="estadoOptions" formControlName="estado_id"></p-dropdown>
                 </div>
-                <div class="field col-6">
-                    <label for="institucion">Institución</label>
-                    <input
-                        pInputText
-                        id="institucion"
-                        formControlName="institucion"
-                        [disabled]="acciones === 'ver'"
-                    />
-                </div>
-                <div class="field col-6">
-                    <label for="fecha_inicio">Fecha de Inicio</label>
-                    <p-calendar
-                        id="fecha_inicio"
-                        formControlName="fecha_inicio"
-                        dateFormat="dd/mm/yy"
-                        [disabled]="acciones === 'ver'"
-                    ></p-calendar>
-                </div>
-                <div class="field col-6">
-                    <label for="fecha_termino">Fecha de Término</label>
-                    <p-calendar
-                        id="fecha_termino"
-                        formControlName="fecha_termino"
-                        dateFormat="dd/mm/yy"
-                        [disabled]="acciones === 'ver'"
-                    ></p-calendar>
-                </div>
-                <div class="field col-6">
+                <div class="field col-12">
                     <label for="observaciones">Observaciones</label>
-                    <textarea
-                        pInputTextarea
-                        id="observaciones"
-                        formControlName="observaciones"
-                        [disabled]="acciones === 'ver'"
-                    ></textarea>
+                    <textarea pInputTextarea formControlName="observaciones"></textarea>
                 </div>
-                <div
-                    class="field col-6"
-                    style="display: grid; align-items: center"
-                >
+                <div class="field col-6" style="display: grid; align-items: center">
                     <p-fileUpload
                         mode="basic"
-                        chooseLabel="Adjunte imagen de certificado"
+                        chooseLabel="Adjunte certificado"
                         chooseIcon="pi pi-upload"
-                        name="demo[]"
-                        url="https://www.primefaces.org/cdn/api/upload.php"
-                        accept="image/*"
+                        name="certificado"
                         (onSelect)="onFileChange($event)"
                     ></p-fileUpload>
                 </div>
+                
             </div>
-            <div class="row">
-                <div class="flex justify-content-end">
-                    <button
-                        *ngIf="acciones === 'add'"
-                        pButton
-                        icon="pi pi-plus"
-                        label="Guardar"
-                        iconPos="right"
-                        class="p-button-success p-button-sm"
-                        type="submit"
-                    ></button>
-                    <button
-                        *ngIf="acciones === 'actualizar'"
-                        pButton
-                        icon="pi pi-refresh"
-                        label="Actualizar"
-                        iconPos="right"
-                        class="p-button-warning p-button-sm"
-                        type="submit"
-                    ></button>
-                    <button
-                        pButton
-                        label="Cerrar"
-                        icon="pi pi-times"
-                        iconPos="right"
-                        class="p-button-close-clean"
-                        (click)="closeModal($event)"
-                    ></button>
-                </div>
+        
+            <div class="flex justify-content-end mt-4">
+                <button pButton label="Guardar" icon="pi pi-check" class="p-button-success" type="submit"></button>
+                <button pButton label="Cerrar" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
             </div>
-        </form>
+        </form>        
     </ng-template>
 </p-panel>

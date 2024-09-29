@@ -1,7 +1,7 @@
 <p-panel>
     <ng-template pTemplate="header">
         <span class="text-primary font-semibold text-xl"
-            >Listado de Postulantes</span
+            >Bandeja de Candidatos</span
         >
     </ng-template>
     <ng-template pTemplate="content">
@@ -10,7 +10,7 @@
                 <div class="field md:col-12">
                     <p-table
                         #dt1
-                        [value]="postulanteList"
+                        [value]="candidatoList"
                         [rows]="10"
                         [loading]="loading"
                         [rowHover]="true"
@@ -33,7 +33,7 @@
                                         />
                                     </span>
                                 </div>
-                                <div class="mb-2" *ngIf="helpersService.getRolId() !== 21">
+                                <div class="mb-2" *ngIf="helpersService.getRolId() !== 25">
                                     <button
                                       pButton
                                       label="Nuevo"
@@ -93,17 +93,12 @@
                                         "
                                     ></button>
                                 </td>
-                                <td>{{ postulante.code }}</td>
-                                <td>{{ postulante.position_code }}</td>
-                                <td>{{ postulante.names }}</td>
-                                <td>{{ postulante.phone }}</td>
-                                <td>{{ postulante.identification_number }}</td>
-                                <td>
-                                    {{
-                                        postulante.date_affiliation
-                                            | date : "dd/MM/yyyy"
-                                    }}
-                                </td>
+                                <td>{{ postulante.code || 'Sin código' }}</td>
+                                <td>{{ postulante.position_code || 'Sin puesto asignado' }}</td>
+                                <td>{{ postulante.nombre || 'Sin nombre' }}</td>
+                                <td>{{ postulante.phone || 'Sin teléfono' }}</td>
+                                <td>{{ postulante.identification_number || 'Sin documento' }}</td>
+                                <td>{{ postulante.date_affiliation ? (postulante.date_affiliation | date: 'dd/MM/yyyy') : 'Sin fecha de afiliación' }}</td>                                
                             </tr>
                         </ng-template>
 

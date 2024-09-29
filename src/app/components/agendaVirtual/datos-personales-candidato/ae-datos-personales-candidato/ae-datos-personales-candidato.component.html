@@ -3,10 +3,10 @@
         <span class="text-primary font-semibold text-xl">
             {{
                 acciones === "add"
-                    ? "Agregar Postulante"
+                    ? "Agregar Candidatossssss"
                     : acciones === "ver"
-                    ? "Ver Postulante"
-                    : "Editar Postulante"
+                    ? "Ver Candidatossssssssssssssssss"
+                    : "Editar Candidatossssssssss"
             }}
         </span>
     </ng-template>
@@ -22,7 +22,7 @@
                                 pInputText
                                 formControlName="code"
                             />
-                            <label>Código concursante</label>
+                            <label>Código de Candidato</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -30,7 +30,7 @@
                             <input
                                 type="text"
                                 pInputText
-                                formControlName="codigo_puesto_asignado"
+                                formControlName="position_code"
                             />
                             <label>Código de puesto asignado</label>
                         </span>
@@ -75,11 +75,11 @@
                     <div class="field col-6">
                         <span class="p-float-label">
                             <input
-                                type="number"
+                                type="text"
                                 pInputText
-                                formControlName="edad"
+                                formControlName="numero_documento"
                             />
-                            <label>Edad</label>
+                            <label>Número de documento</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -108,22 +108,21 @@
                             <p-dropdown
                                 [options]="identificationDocuments"
                                 formControlName="doc_identidad"
-                                optionLabel="nombre"
-                                optionValue="id"
+                                optionLabel="label"
+                                optionValue="value"
                                 placeholder="Seleccione un documento"
-                            >
-                            </p-dropdown>
+                            ></p-dropdown>
                             <label for="doc_identidad">Doc. Identidad</label>
                         </span>
                     </div>
                     <div class="field col-6">
                         <span class="p-float-label">
                             <input
-                                type="text"
+                                type="number"
                                 pInputText
-                                formControlName="numero_documento"
+                                formControlName="edad"
                             />
-                            <label>Número de documento</label>
+                            <label>Edad</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -131,11 +130,10 @@
                             <p-dropdown
                                 [options]="estadoCivilOptions"
                                 formControlName="estado_civil"
-                                optionLabel="nombre"
-                                optionValue="id"
+                                optionLabel="label"
+                                optionValue="value"
                                 placeholder="Seleccione estado civil"
-                            >
-                            </p-dropdown>
+                            ></p-dropdown>
                             <label>Estado Civil</label>
                         </span>
                     </div>
@@ -144,48 +142,41 @@
                             <input
                                 type="number"
                                 pInputText
-                                formControlName="numero_hijos"
+                                formControlName="number_children"
                             />
                             <label>Número de hijos</label>
                         </span>
                     </div>
                     <div class="field col-6">
                         <span class="p-float-label">
-                            <p-dropdown
-                                [options]="gradoInstruccionOptions"
+                            <input
+                                type="text"
+                                pInputText
                                 formControlName="grado_instruccion"
-                                optionLabel="nombre"
-                                optionValue="id"
-                                placeholder="Seleccione Grado de Instrucción"
-                            >
-                            </p-dropdown>
-                            <label>Grado de instrucción</label>
+                            />
+                            <label>% de Avance</label>
                         </span>
                     </div>
-                    <div class="field col-6 input">
+                    <div class="field col-6">
                         <span class="p-float-label">
-                            <p-dropdown
-                                [options]="profesionOptions"
+                            <input
+                                type="text"
+                                pInputText
                                 formControlName="profesion"
-                                optionLabel="nombre"
-                                optionValue="id"
-                                placeholder="Seleccione Profesión"
-                            >
-                            </p-dropdown>
-                            <label>Profesión</label>
+                            />
+                            <label>Profesión - Ocupación</label>
                         </span>
                     </div>
                     <div class="field col-6">
                         <span class="p-float-label">
                             <p-dropdown
-                                [options]="ocupacionOptions"
+                                [options]="afiliacionOptions"
                                 formControlName="ocupacion_actual"
-                                optionLabel="nombre"
-                                optionValue="id"
-                                placeholder="Seleccione Ocupación Actual"
+                                optionLabel="label"
+                                placeholder="Seleccione Afiliación"
                             >
                             </p-dropdown>
-                            <label>Ocupación actual</label>
+                            <label>Estado de Afiliación</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -206,14 +197,17 @@
                     <div class="field col-6">
                         <span class="p-float-label">
                             <p-dropdown
-                                [options]="estadoActualOptions"
+                                [options]="estadoOptions"
                                 formControlName="estado_actual"
-                                optionLabel="nombre"
-                                optionValue="id"
-                                placeholder="Seleccione Estado Actual"
+                                optionLabel="label"
+                                placeholder="Seleccione Estado"
+                                (onChange)="onEstadoChange($event)"
+                                [style]="{
+                                    'background-color': selectedEstadoColor
+                                }"
                             >
                             </p-dropdown>
-                            <label>Estado actual</label>
+                            <label>Estado</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -262,7 +256,8 @@
         </form>
         <app-informacion-academica-candidato
             *ngIf="acciones === 'actualizar' && rolId === 8"
-            [postulanteId]="postulanteId"
+            [candidatoId]="postulanteId"
+            [mostrarAcciones]="false"
         ></app-informacion-academica-candidato>
     </ng-template>
 </p-panel>

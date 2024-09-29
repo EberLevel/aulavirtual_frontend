@@ -5,190 +5,100 @@ import { HelpersService } from 'src/app/helpers.service';
 import Swal from 'sweetalert2';
 import { InformacionAcademicaService } from '../../onlineclasses/service/informacion-academica.service';
 import { AeInformacionAcademicaCandidatoComponent } from './ae-informacion-academica-candidato/ae-informacion-academica-candidato.component';
+import { InformacionAcademicaCandidatoService } from '../../onlineclasses/service/informacion-academica-candidato.service';
 
 @Component({
-  selector: 'app-informacion-academica-candidato',
-  templateUrl: './informacion-academica-candidato.component.html',
-  styleUrls: ['./informacion-academica-candidato.component.scss']
+    selector: 'app-informacion-academica-candidato',
+    templateUrl: './informacion-academica-candidato.component.html',
+    styleUrls: ['./informacion-academica-candidato.component.scss'],
 })
 export class InformacionAcademicaCandidatoComponent {
+    @Input() candidatoId!: number; // Agregar el decorador @Input para recibir candidatoId
+    @Input() mostrarAcciones: boolean = true; 
+    
     loading: boolean = false;
     informacionAcademicaList: any[] = [];
-    originalInformacionAcademicaList: any[] = [];
     ref: DynamicDialogRef | undefined;
-    domain_id: any;
-    @Input() postulanteId!: number;
+    domain_id!: number;
+
+    // Define estadoOptions en el componente padre
+    estadoOptions: any[] = [
+        { label: 'Completado', value: 1 },
+        { label: 'En Proceso', value: 2 },
+        { label: 'Pendiente', value: 3 },
+    ];
 
     constructor(
         private dialogService: DialogService,
-        private informacionAcademicaService: InformacionAcademicaService,
-        private helpersService: HelpersService,
-        private sanitizer: DomSanitizer
+        public helpersService: HelpersService,
+        private informacionAcademicaService: InformacionAcademicaCandidatoService
     ) {}
 
     ngOnInit(): void {
-        // Verifica si el postulanteId se ha pasado como Input, si no, lo obtiene desde HelpersService
-        if (!this.postulanteId) {
-            this.postulanteId = this.helpersService.getPostulanteId(); // Fallback en caso de que no se reciba como Input
-        }
-    
-    
         this.domain_id = this.helpersService.getDominioId();
-        this.informacionAcademicaService
-            .getDataCreate(this.domain_id)
-            .subscribe(() => {
-                this.listarInformacionAcademica();
-            });
+        this.listarInformacionAcademica();
     }
-    sanitizarImagen(imagenBase64: string) {
-        return this.sanitizer.bypassSecurityTrustUrl(imagenBase64);
-    }
-    // Usar en la lista de información académica
+
     listarInformacionAcademica() {
         this.loading = true;
-        if (this.postulanteId) {
-            this.loading = true;
-            this.informacionAcademicaService
-                .getInformacionAcademicaByPostulante(this.postulanteId)
-                .subscribe(
-                    (response: any) => {
-                        this.loading = true;
-                        this.informacionAcademicaList = response.data.map(
-                            (item: any) => {
-                                const grado = this.obtenerGradoInstruccion(
-                                    item.grado_instruccion_id
-                                );
-                                return {
-                                    ...item,
-                                    gradoEstudios: grado
-                                        ? grado.nombre
-                                        : 'Desconocido',
-                                    profesion: this.obtenerDescripcionProfesion(
-                                        item.profesion_id
-                                    ),
-                                    estadoEstudios:
-                                        this.obtenerDescripcionEstadoAvance(
-                                            item.estado_avance_id
-                                        ),
-                                    avance: grado
-                                        ? `${Math.round(grado.porcentaje)}%`
-                                        : 'N/A',
-                                    fechaInicio: new Date(item.fecha_inicio),
-                                    fechaTermino: new Date(item.fecha_termino),
-                                    imagen_certificado: this.sanitizarImagen(
-                                        item.imagen_certificado || ''
-                                    ),
-                                };
-                            }
-                        );
-                        this.originalInformacionAcademicaList = [
-                            ...this.informacionAcademicaList,
-                        ];
-                        this.loading = false;
-                    },
-                    (error) => {
-                        this.loading = false;
-                    }
-                );
-        } else {
-            Swal.fire(
-                'Error',
-                'No se pudo obtener el ID del postulante.',
-                'error'
+        this.informacionAcademicaService
+            .getInformacionAcademicaByDomainId(this.domain_id)
+            .subscribe(
+                (response: any) => {
+                    this.informacionAcademicaList = response.data.map(
+                        (item: any) => {
+                            // Mapea el estado al texto correspondiente
+                            item.estado = this.getEstadoLabel(item.estado_id);
+                            return item;
+                        }
+                    );
+                    this.loading = false;
+                },
+                (error) => {
+                    console.error(
+                        'Error al obtener la información académica:',
+                        error
+                    );
+                    this.loading = false;
+                }
             );
-            this.loading = false;
-        }
     }
 
-    convertImageToBase64(
-        url: string,
-        callback: (base64: string) => void
-    ): void {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            const reader = new FileReader();
-            reader.onloadend = function () {
-                callback(reader.result as string);
-            };
-            reader.readAsDataURL(xhr.response);
-        };
-        xhr.open('GET', url);
-        xhr.responseType = 'blob';
-        xhr.send();
-    }
-
-    obtenerGradoInstruccion(id: number): any {
-        return this.informacionAcademicaService.gradosInstruccion.find(
-            (g) => g.id === id
+    // Función para obtener la etiqueta del estado
+    getEstadoLabel(estadoId: number): string {
+        const estado = this.estadoOptions.find(
+            (option) => option.value === estadoId
         );
+        return estado ? estado.label : 'Sin estado';
     }
 
-    obtenerDescripcionGradoInstruccion(id: number): string {
-        const grado = this.informacionAcademicaService.gradosInstruccion.find(
-            (g) => g.id === id
+    navigateAddInformacion() {
+        this.ref = this.dialogService.open(
+            AeInformacionAcademicaCandidatoComponent,
+            {
+                width: '60%',
+                styleClass: 'custom-dialog-header',
+                data: { acciones: 'add', domain_id: this.domain_id },
+            }
         );
-        return grado ? grado.nombre : 'Desconocido';
-    }
-
-    obtenerDescripcionProfesion(id: number): string {
-        const profesion = this.informacionAcademicaService.profesiones.find(
-            (p) => p.id === id
-        );
-        return profesion ? profesion.nombre : 'Desconocido';
-    }
-
-    obtenerDescripcionEstadoAvance(id: number): string {
-        const estado = this.informacionAcademicaService.estadoAvances.find(
-            (e) => e.id === id
-        );
-        return estado ? estado.nombre : 'Desconocido';
-    }
-
-    navigateAdd() {
-        this.ref = this.dialogService.open(AeInformacionAcademicaCandidatoComponent, {
-            width: '60%',
-            styleClass: 'custom-dialog-header',
-            data: { acciones: 'add' , postulanteId: this.postulanteId},
-        });
         this.ref.onClose.subscribe(() => {
-            this.listarInformacionAcademica();  // Refrescar la lista
-        });
-    }
-
-    navigateToDetalle(data: any) {
-        this.ref = this.dialogService.open(AeInformacionAcademicaCandidatoComponent, {
-            width: '80%',
-            styleClass: 'custom-dialog-header',
-            data: { acciones: 'ver', data: data },
+            this.listarInformacionAcademica();
         });
     }
 
     navigateToEdit(data: any) {
-        console.log('Datos recibidos para edición:', data);
-    
-        // Cambiar de postulanteId a id_postulante, ya que el dato viene con ese nombre
-        const postulanteId = data.id_postulante ? data.id_postulante : null;
-    
-        if (postulanteId) {
-            this.ref = this.dialogService.open(AeInformacionAcademicaCandidatoComponent, {
+        this.ref = this.dialogService.open(
+            AeInformacionAcademicaCandidatoComponent,
+            {
                 width: '60%',
                 styleClass: 'custom-dialog-header',
-                data: { 
-                    acciones: 'actualizar', 
-                    data: data, 
-                    postulanteId: postulanteId  // Pasar correctamente el ID del postulante
-                },
-            });
-    
-            // Re-suscribir para actualizar los datos al cerrar el modal
-            this.ref.onClose.subscribe(() => {
-                this.listarInformacionAcademica();  // Refrescar la lista
-            });
-        } else {
-            console.error('No se encontró id_postulante en los datos proporcionados.');
-        }
+                data: { acciones: 'actualizar', data: data },
+            }
+        );
+        this.ref.onClose.subscribe(() => {
+            this.listarInformacionAcademica();
+        });
     }
-    
 
     navigateToDelete(id: number) {
         Swal.fire({
@@ -199,23 +109,20 @@ export class InformacionAcademicaCandidatoComponent {
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Sí, eliminarlo',
-            customClass: {
-                popup: 'custom-swal-popup',
-            },
         }).then((result) => {
             if (result.isConfirmed) {
                 this.informacionAcademicaService
                     .eliminarInformacionAcademica(id)
                     .subscribe(
                         () => {
-                            Swal.fire({
-                                title: 'Eliminado',
-                                text: 'El registro ha sido eliminado.',
-                                icon: 'success',
-                            });
+                            Swal.fire(
+                                'Eliminado',
+                                'El registro ha sido eliminado.',
+                                'success'
+                            );
                             this.listarInformacionAcademica();
                         },
-                        (error) => {
+                        (error: any) => {
                             Swal.fire(
                                 'Error',
                                 'Hubo un problema al eliminar el registro.',
@@ -231,18 +138,8 @@ export class InformacionAcademicaCandidatoComponent {
         const filterValue = (
             event.target as HTMLInputElement
         ).value.toLowerCase();
-        if (!filterValue) {
-            this.informacionAcademicaList = [
-                ...this.originalInformacionAcademicaList,
-            ];
-            return;
-        }
-
-        this.informacionAcademicaList =
-            this.originalInformacionAcademicaList.filter(
-                (info) =>
-                    info.gradoEstudios.toLowerCase().includes(filterValue) ||
-                    info.profesion.toLowerCase().includes(filterValue)
-            );
+        this.informacionAcademicaList = this.informacionAcademicaList.filter(
+            (info) => info.nombre.toLowerCase().includes(filterValue)
+        );
     }
 }

@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { AeCityFormComponent } from './ae-city-form/ae-city-form.component';
 import { HelpersService } from 'src/app/helpers.service';
 import { CiudadService } from '../service/ciudad.service';
-import { ListaEgresadosComponent } from '../lista-egresados/lista-egresados.component';
+import { DatosPersonalesCandidatoComponent } from '../../agendaVirtual/datos-personales-candidato/datos-personales-candidato.component';
 
 interface City {
     code: string;
@@ -91,7 +91,7 @@ export class CityListComponent {
     }
 
     navigateToOpenEgresados(ciudad: any) {
-        this.ref = this.dialogService.open(ListaEgresadosComponent, {
+        this.ref = this.dialogService.open(DatosPersonalesCandidatoComponent, {
             width: '80%',
             styleClass: 'custom-dialog-header',
             data: { acciones: 'abrir', ciudad: ciudad }, // Pasa la ciudad seleccionada
