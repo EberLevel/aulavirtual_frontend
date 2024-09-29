@@ -64,7 +64,6 @@ import { HttpClientModule } from '@angular/common/http';
     FileUploadModule,
     TooltipModule,
     ToastModule,
-    TableModule,
     ConfirmPopupModule,
     ConfirmDialogModule,
     FileUploadModule,
