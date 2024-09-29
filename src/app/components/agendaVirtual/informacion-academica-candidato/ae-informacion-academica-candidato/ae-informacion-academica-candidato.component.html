@@ -1,0 +1,51 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">
+            {{
+                acciones === "add"
+                    ? "Agregar Información Académica"
+                    : acciones === "ver"
+                    ? "Ver Información Académica"
+                    : "Editar Información Académica"
+            }}
+        </span>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <form [formGroup]="informacionAcademicaForm" (ngSubmit)="guardarInformacion()">
+            <div class="grid p-fluid">
+                <div class="field col-6">
+                    <label for="nombre">Nombre</label>
+                    <input pInputText formControlName="nombre" />
+                </div>
+                <div class="field col-6">
+                    <label for="avance">Porcentaje de Avance</label>
+                    <input type="number" pInputText formControlName="avance" />
+                </div>
+                <div class="field col-6">
+                    <label for="estado_id">Estado</label>
+                    <p-dropdown [options]="estadoOptions" formControlName="estado_id"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label for="observaciones">Observaciones</label>
+                    <textarea pInputTextarea formControlName="observaciones"></textarea>
+                </div>
+                <div class="field col-6" style="display: grid; align-items: center">
+                    <p-fileUpload
+                        mode="basic"
+                        chooseLabel="Adjunte certificado"
+                        chooseIcon="pi pi-upload"
+                        name="certificado"
+                        (onSelect)="onFileChange($event)"
+                    ></p-fileUpload>
+                </div>
+                
+            </div>
+        
+            <div class="flex justify-content-end mt-4">
+                <button pButton label="Guardar" icon="pi pi-check" class="p-button-success" type="submit"></button>
+                <button pButton label="Cerrar" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
+            </div>
+        </form>        
+    </ng-template>
+</p-panel>

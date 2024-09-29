@@ -1,0 +1,18 @@
+.selects_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.selects_content div{
+    display: flex;
+    flex-direction: column;
+}
+.selects_content div input[type="search"],
+.selects_content div select{
+    border: 1px solid rgb(136, 133, 133);
+    border-radius: 10px;
+    margin-top: .4rem;
+    width: 14.5rem;
+    padding: .8rem 1rem;
+    outline: none;
+}

@@ -3,15 +3,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { HelpersService } from 'src/app/helpers.service';
 import Swal from 'sweetalert2';
-import { EscalaService } from '../../service/escala.service';
-import { PostulanteService } from '../../service/postulante.service';
+import { CandidatoService } from '../../service/candidato.service';
 
 @Component({
-    selector: 'app-ae-lista-postulantes',
-    templateUrl: './ae-lista-postulantes.component.html',
-    styleUrls: ['./ae-lista-postulantes.component.scss'],
+    selector: 'app-ae-lista-egresados',
+    templateUrl: './ae-lista-egresados.component.html',
+    styleUrls: ['./ae-lista-egresados.component.scss'],
 })
-export class AeListaPostulantesComponent {
+export class AeListaEgresadosComponent {
     postulanteForm: FormGroup;
     rolId!: number;
     acciones: string;
@@ -29,27 +28,36 @@ export class AeListaPostulantesComponent {
         private fb: FormBuilder,
         private ref: DynamicDialogRef,
         public config: DynamicDialogConfig,
-        private postulanteService: PostulanteService,
+        private candidatoService: CandidatoService,
         private helpersService: HelpersService,
         private cd: ChangeDetectorRef
     ) {
         this.acciones = this.config.data.acciones;
         this.rolId = this.helpersService.getRolId(); // Obtén el rol desde el servicio
+
+        // Obtener el `ciudad_id` desde la configuración del componente
+        if (this.config.data.ciudad_id) {
+            console.log('Ciudad ID recibido:', this.config.data.ciudad_id);
+        } else {
+            console.log('No se recibió el Ciudad ID.');
+        }
+
         if (this.rolId === 8) {
             this.postulanteId = this.config.data.postulanteId; // Solo asigna el ID del postulante si el rolId es 8
         } else if (this.rolId !== 8) {
             this.rolId = 21; // Si el rol no es 8, lo asigna como 21
         }
+
         // Definir las validaciones del formulario
         this.postulanteForm = this.fb.group({
             code: [{ value: '', disabled: true }],
             codigo_puesto_asignado: [''],
-            nombre: ['', Validators.required],
+            nombre: [''],
             genero: [''],
             telefono: [''],
             fecha_nacimiento: [''],
             edad: [{ value: '', disabled: true }],
-            email: ['', [, Validators.email]],
+            email: ['', [Validators.email]],
             contrasena: ['', Validators.required],
             doc_identidad: [''],
             numero_documento: ['', Validators.required],
@@ -63,6 +71,7 @@ export class AeListaPostulantesComponent {
             fecha_afiliacion: [''],
         });
     }
+
     onFileChange(event: any) {
         const file = event.files[0]; // Captura el archivo seleccionado
 
@@ -101,7 +110,7 @@ export class AeListaPostulantesComponent {
     }
 
     loadDropdownOptions() {
-        this.postulanteService
+        this.candidatoService
             .getDataCreate(this.domain_id)
             .subscribe((data: any) => {
                 this.identificationDocuments =
@@ -151,8 +160,8 @@ export class AeListaPostulantesComponent {
         if (this.acciones === 'ver' || this.acciones === 'actualizar') {
             const postulanteId = this.config.data.data.id;
 
-            this.postulanteService
-                .getPostulanteById(postulanteId)
+            this.candidatoService
+                .getCandidatoById(postulanteId)
                 .subscribe((data: any) => {
                     console.log(data);
                     this.postulanteForm.patchValue({
@@ -209,11 +218,11 @@ export class AeListaPostulantesComponent {
 
             // Crea un objeto solo con los campos obligatorios
             const postulanteData: any = {
-                names: this.postulanteForm.value.nombre,
                 identification_number:
                     this.postulanteForm.value.numero_documento,
                 password: this.postulanteForm.value.contrasena,
                 domain_id: this.domain_id,
+                ciudad_id: this.config.data.ciudad_id, // Incluir el ciudad_id aquí
             };
 
             console.log('Datos mapeados enviados al backend:', postulanteData);
@@ -221,8 +230,8 @@ export class AeListaPostulantesComponent {
             // Verificar si la acción es actualizar o guardar
             if (this.acciones === 'actualizar') {
                 const id = this.config.data.data.id;
-                this.postulanteService
-                    .actualizarPostulante(id, postulanteData)
+                this.candidatoService
+                    .actualizarCandidato(id, postulanteData)
                     .subscribe(
                         (response: any) => {
                             this.ref?.close();
@@ -242,8 +251,8 @@ export class AeListaPostulantesComponent {
                         }
                     );
             } else {
-                this.postulanteService
-                    .guardarPostulante(postulanteData)
+                this.candidatoService
+                    .guardarCandidato(postulanteData)
                     .subscribe(
                         (response: any) => {
                             this.ref?.close();

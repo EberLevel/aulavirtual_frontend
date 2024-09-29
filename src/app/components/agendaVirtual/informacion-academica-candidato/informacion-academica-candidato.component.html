@@ -1,0 +1,100 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">Información Académica de Candidatos</span>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row mb-4">
+            <div class="grid p-fluid">
+                <div class="field md:col-12">
+                    <p-table
+                        #dt1
+                        [value]="informacionAcademicaList"
+                        [rows]="10"
+                        [loading]="loading"
+                        [rowHover]="true"
+                        styleClass="p-datatable-gridlines"
+                        [paginator]="true"
+                        responsiveLayout="scroll"
+                        class="custom-search-input"
+                    >
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-wrap">
+                                <div class="flex-grow-1 mb-2 mr-2">
+                                    <span class="p-input-icon-left w-full">
+                                        <input
+                                            pInputText
+                                            type="text"
+                                            #filter
+                                            (input)="onGlobalFilter($event)"
+                                            placeholder="Buscar Información Académica"
+                                            class="w-full"
+                                        />
+                                    </span>
+                                </div>
+                                <div class="mb-2" *ngIf="helpersService.getRolId() !== 21 && mostrarAcciones">
+                                    <button
+                                        pButton
+                                        label="Nuevo"
+                                        icon="pi pi-plus"
+                                        id="btnNuevo"
+                                        class="p-button-primary mr-2"
+                                        (click)="navigateAddInformacion()"
+                                        style="border-radius: 30px"
+                                    ></button>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th scope="col" *ngIf="mostrarAcciones">Acciones</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Avance</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Observaciones</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-info>
+                            <tr>
+                                <td *ngIf="mostrarAcciones">
+                                    <button
+                                        pButton
+                                        icon="pi pi-pencil"
+                                        style="width: 70px; border-radius: 30px"
+                                        title="Editar"
+                                        class="p-button-rounded p-button-text p-button-warning"
+                                        (click)="navigateToEdit(info)"
+                                    ></button>
+                                    <button
+                                        pButton
+                                        icon="pi pi-trash"
+                                        style="width: 70px; border-radius: 30px"
+                                        title="Eliminar"
+                                        class="p-button-rounded p-button-text p-button-danger"
+                                        (click)="navigateToDelete(info.id)"
+                                    ></button>
+                                </td>
+                                <td>{{ info.nombre || 'Sin nombre' }}</td>
+                                <td>{{ info.avance || '0' }}%</td>
+                                <td>{{ info.estado || 'Sin estado' }}</td>
+                                <td>{{ info.observaciones || 'Sin observaciones' }}</td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5">No se encontraron registros</td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="5">Cargando registros. Por favor espere.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>
