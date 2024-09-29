@@ -160,64 +160,87 @@ export class AeDatosPersonalesCandidatoComponent {
     ngOnInit(): void {
         this.rolId = this.helpersService.getRolId();
         this.domain_id = this.helpersService.getDominioId();
-    
         // Carga las opciones de dropdown y luego obtiene los datos del candidato
         this.loadDropdownOptions();
-    
+
         if (this.acciones === 'ver' || this.acciones === 'actualizar') {
             const postulanteId = this.config.data.data.id; // Obtén el ID del postulante
-    
+
             // Llamada al servicio para obtener los datos del postulante
             this.candidatoService
                 .getCandidatoById(postulanteId)
                 .subscribe((data: any) => {
                     console.log('Datos recibidos del backend:', data);
-    
+
                     // Asegúrate de que los datos existan antes de hacer el patchValue
                     if (data && data.candidato) {
                         this.postulanteForm.patchValue({
-                            code: data.candidato.code || '', // Aquí se asigna el valor "code"
+                            code: data.candidato.code || '',
                             position_code: data.candidato.position_code || '',
                             nombre: data.candidato.nombre || '',
                             genero: data.candidato.sex || '',
                             telefono: data.candidato.phone || '',
-                            fecha_nacimiento: this.convertToDate(data.candidato.date_birth) || '',
-                            edad: this.calculateAge(data.candidato.date_birth) || '',
+                            fecha_nacimiento:
+                                this.convertToDate(data.candidato.date_birth) ||
+                                '',
+                            edad:
+                                this.calculateAge(data.candidato.date_birth) ||
+                                '',
                             email: data.candidato.email || '',
-                            doc_identidad: data.candidato.identification_document_id || '',
-                            numero_documento: data.candidato.identification_number || '',
-                            estado_civil: data.candidato.marital_status_id !== null ? Number(data.candidato.marital_status_id) : null,
-                            number_children: data.candidato.number_children || '',
-                            grado_instruccion: data.candidato.education_degree_id || '',
+                            doc_identidad:
+                                data.candidato.identification_document_id || '',
+                            numero_documento:
+                                data.candidato.identification_number || '',
+                            estado_civil:
+                                data.candidato.marital_status_id !== null
+                                    ? Number(data.candidato.marital_status_id)
+                                    : null,
+                            number_children:
+                                data.candidato.number_children || '',
+                            grado_instruccion:
+                                data.candidato.education_degree_id || '',
                             profesion: data.candidato.profesion || '',
-                            ocupacion_actual: data.candidato.ocupacion_actual || '', 
-                            estado_actual: data.candidato.estado_actual || '', 
-                            fecha_afiliacion: this.convertToDate(data.candidato.date_affiliation) || '',
+                            ocupacion_actual: this.afiliacionOptions.find(option => option.value === data.candidato.ocupacion_actual)?.value,
+                            estado_actual: this.estadoOptions.find(option => option.value === data.candidato.estado_actual)?.value,
+                            fecha_afiliacion:
+                                this.convertToDate(
+                                    data.candidato.date_affiliation
+                                ) || '',
                         });
+                        console.log('Valor de ocupacion_actual:', this.afiliacionOptions.find(option => option.value === data.candidato.ocupacion_actual)?.value);
+                        console.log('Valor de estado_actual:', this.estadoOptions.find(option => option.value === data.candidato.estado_actual)?.value);
+                        
                     } else {
-                        console.error('No se encontraron datos de candidato en la respuesta.');
+                        console.error(
+                            'No se encontraron datos de candidato en la respuesta.'
+                        );
                     }
                 });
         }
-    
+
         // Si la acción es agregar un nuevo candidato, puedes asignar directamente el código
         if (this.acciones === 'add') {
-            this.candidatoService.getDataCreate(this.domain_id).subscribe((data: any) => {
-                if (data && data.code) {
-                    this.postulanteForm.patchValue({
-                        code: data.code, // Asignar el valor del código para "add"
-                    });
-                }
-            });
+            this.candidatoService
+                .getDataCreate(this.domain_id)
+                .subscribe((data: any) => {
+                    if (data && data.code) {
+                        this.postulanteForm.patchValue({
+                            code: data.code, // Asignar el valor del código para "add"
+                        });
+                    }
+                });
         }
-    
+
         // Escucha cambios en la fecha de nacimiento para calcular la edad automáticamente
-        this.postulanteForm.get('fecha_nacimiento')?.valueChanges.subscribe((birthdate) => {
-            const calculatedAge = this.calculateAge(birthdate);
-            this.postulanteForm.get('edad')?.setValue(calculatedAge || '', { emitEvent: false });
-        });
+        this.postulanteForm
+            .get('fecha_nacimiento')
+            ?.valueChanges.subscribe((birthdate) => {
+                const calculatedAge = this.calculateAge(birthdate);
+                this.postulanteForm
+                    .get('edad')
+                    ?.setValue(calculatedAge || '', { emitEvent: false });
+            });
     }
-    
 
     convertToDate(dateString: string): Date | null {
         return dateString ? new Date(dateString) : null;

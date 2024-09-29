@@ -3,10 +3,10 @@
         <span class="text-primary font-semibold text-xl">
             {{
                 acciones === "add"
-                    ? "Agregar Candidatossssss"
+                    ? "Agregar Candidatos"
                     : acciones === "ver"
-                    ? "Ver Candidatossssssssssssssssss"
-                    : "Editar Candidatossssssssss"
+                    ? "Ver Candidatos"
+                    : "Editar Candidatos"
             }}
         </span>
     </ng-template>
@@ -173,6 +173,7 @@
                                 [options]="afiliacionOptions"
                                 formControlName="ocupacion_actual"
                                 optionLabel="label"
+                                optionValue="value"
                                 placeholder="Seleccione Afiliación"
                             >
                             </p-dropdown>
@@ -200,6 +201,7 @@
                                 [options]="estadoOptions"
                                 formControlName="estado_actual"
                                 optionLabel="label"
+                                optionValue="value"
                                 placeholder="Seleccione Estado"
                                 (onChange)="onEstadoChange($event)"
                                 [style]="{

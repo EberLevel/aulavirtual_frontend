@@ -14,9 +14,12 @@ export class AeCityFormComponent {
     ciudadForm: FormGroup;
     acciones: any;
     ciudadId: number | undefined; // Nueva variable para almacenar el ID de la ciudad
-    estadoOptions = [
-        { label: 'Activo', value: 'activo' },
-        { label: 'Inactivo', value: 'inactivo' },
+    
+    estadoOptions: any[] = [
+        { label: 'Aprobado', value: 'aprobado' },
+        { label: 'Desaprobado', value: 'desaprobado' },
+        { label: 'Observado', value: 'observado' },
+        { label: 'En Evaluación', value: 'en_evaluacion' },
     ];
 
     constructor(

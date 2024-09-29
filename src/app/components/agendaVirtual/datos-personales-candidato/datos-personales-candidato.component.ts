@@ -91,7 +91,7 @@ export class DatosPersonalesCandidatoComponent {
         this.ref = this.dialogService.open(
             AeDatosPersonalesCandidatoComponent,
             {
-                width: '60%',
+                width: '90%',
                 styleClass: 'custom-dialog-header',
                 data: { acciones: 'add', ciudad_id: this.ciudad_id },
             }
@@ -105,7 +105,7 @@ export class DatosPersonalesCandidatoComponent {
         this.ref = this.dialogService.open(
             AeDatosPersonalesCandidatoComponent,
             {
-                width: '80%',
+                width: '90%',
                 styleClass: 'custom-dialog-header',
                 data: { acciones: 'ver', data: data },
             }
@@ -116,7 +116,7 @@ export class DatosPersonalesCandidatoComponent {
         this.ref = this.dialogService.open(
             AeDatosPersonalesCandidatoComponent,
             {
-                width: '60%',
+                width: '90%',
                 styleClass: 'custom-dialog-header',
                 data: {
                     acciones: 'actualizar',
