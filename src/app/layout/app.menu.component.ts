@@ -717,7 +717,7 @@ export class AppMenuComponent implements OnInit {
             {
                 items: [
                     {
-                        label: 'AGENDA VIRTUALaaaaa',
+                        label: 'AGENDA VIRTUAL',
                         icon: 'pi pi-play',
                         items: [
                             {
