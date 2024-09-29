@@ -24,6 +24,7 @@ export class AppMenuComponent implements OnInit {
     model6: any[] = [];
     model7: any[] = [];
     model8: any[] = [];
+    model9: any[] = [];
     menuOpciones: any[] = [];
     authUser: any;
     elementosOcultos: any[] = [];
@@ -64,12 +65,16 @@ export class AppMenuComponent implements OnInit {
                 'Rol Docente detectado. Actualizando menú para Docente...'
             );
             this.actualizarMenuDocente();
-        }
-        else if (rolId === 21) {
+        } else if (rolId === 21) {
             console.log(
                 'Rol Postulante detectado. Actualizando menú para Docente...'
             );
             this.actualizarMenuPostulante();
+        } else if (rolId === 25) {
+            console.log(
+                'Rol Candidato detectado. Actualizando menú para Docente...'
+            );
+            this.actualizarMenuCandidato();
         } else {
             this.permisoService.fetchPermisos(rolId, this.domain_id);
             this.permisoService.permisos$
@@ -193,7 +198,41 @@ export class AppMenuComponent implements OnInit {
             },
         ];
     }
-
+    actualizarMenuCandidato() {
+        console.log('actualizarMenuCandidato llamado');
+        this.model4 = [
+            {
+                items: [
+                    {
+                        label: 'AGENDA VIRTUAL',
+                        icon: 'pi pi-play',
+                        items: [
+                            {
+                                label: 'Mantenimiento',
+                                icon: 'pi pi-play',
+                                items: [
+                                    {
+                                        label: 'Datos Personales del candidato',
+                                        icon: 'pi pi-users',
+                                        routerLink: [
+                                            '/pl-virtual/datos-personales-candidato',
+                                        ],
+                                    },
+                                    {
+                                        label: 'Informacion academica',
+                                        icon: 'pi pi-users',
+                                        routerLink: [
+                                            '/pl-virtual/informacion-academica-candidato',
+                                        ],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ];
+    }
     actualizarMenuAlumno() {
         console.log('actualizarMenuAlumno llamado');
         this.model4 = [
@@ -232,7 +271,7 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Horarios',
                                         icon: 'pi pi-fw pi-calendar',
                                         routerLink: ['/apps/calendar'],
-                                    }
+                                    },
                                 ],
                             },
                         ],
@@ -299,10 +338,36 @@ export class AppMenuComponent implements OnInit {
                             },
                         ],
                     },
+                    {
+                        label: 'AGENDA VIRTUAL',
+                        icon: 'pi pi-play',
+                        items: [
+                            {
+                                label: 'Candidatos',
+                                icon: 'pi pi-users',
+                                routerLink: ['/pl-virtual/lista-ciudades'],
+                            }
+                        ],
+                    },
                 ],
             },
         ];
-
+        // this.model9 = [
+        //     {
+        //         items: [
+        //             {
+        //                 label: 'AGENDA VIRTUAL',
+        //                 icon: 'pi pi-play',
+        //                 items: [
+        //                     {
+        //                         label: 'Agenda',
+        //                         icon: 'pi pi-fw pi-building',
+        //                     },
+        //                 ],
+        //             },
+        //         ],
+        //     },
+        // ];
         this.model2 = [
             {
                 items: [
@@ -420,7 +485,7 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Bolsa de trabajo',
                                 icon: 'pi pi-play',
-                                routerLink: ['/pl-virtual/bolsa-trabajo']
+                                routerLink: ['/pl-virtual/bolsa-trabajo'],
                             },
                         ],
                     },
@@ -542,13 +607,13 @@ export class AppMenuComponent implements OnInit {
                                                   '/pl-virtual/documentos-alumnos',
                                               ],
                                           },
-                                        //   {
-                                        //       label: 'Avance Curricular',
-                                        //       icon: 'pi pi-sitemap',
-                                        //       routerLink: [
-                                        //           '/pl-virtual/avance-curricular',
-                                        //       ],
-                                        //   },
+                                          //   {
+                                          //       label: 'Avance Curricular',
+                                          //       icon: 'pi pi-sitemap',
+                                          //       routerLink: [
+                                          //           '/pl-virtual/avance-curricular',
+                                          //       ],
+                                          //   },
                                           {
                                               label: 'Unidad Didactica',
                                               icon: 'pi pi-fw pi-calendar',
