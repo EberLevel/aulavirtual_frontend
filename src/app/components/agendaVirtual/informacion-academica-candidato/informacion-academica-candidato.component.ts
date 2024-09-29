@@ -76,7 +76,7 @@ export class InformacionAcademicaCandidatoComponent {
         this.ref = this.dialogService.open(
             AeInformacionAcademicaCandidatoComponent,
             {
-                width: '60%',
+                width: '90%',
                 styleClass: 'custom-dialog-header',
                 data: { acciones: 'add', domain_id: this.domain_id },
             }
@@ -90,7 +90,7 @@ export class InformacionAcademicaCandidatoComponent {
         this.ref = this.dialogService.open(
             AeInformacionAcademicaCandidatoComponent,
             {
-                width: '60%',
+                width: '90%',
                 styleClass: 'custom-dialog-header',
                 data: { acciones: 'actualizar', data: data },
             }
