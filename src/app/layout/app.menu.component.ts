@@ -338,8 +338,14 @@ export class AppMenuComponent implements OnInit {
                             },
                         ],
                     },
+                ],
+            },
+        ];
+        this.model9 = [
+            {
+                items: [
                     {
-                        label: 'AGENDA VIRTUAL',
+                        label: 'AGENDA VIRTUASSSL',
                         icon: 'pi pi-play',
                         items: [
                             {
@@ -352,22 +358,6 @@ export class AppMenuComponent implements OnInit {
                 ],
             },
         ];
-        // this.model9 = [
-        //     {
-        //         items: [
-        //             {
-        //                 label: 'AGENDA VIRTUAL',
-        //                 icon: 'pi pi-play',
-        //                 items: [
-        //                     {
-        //                         label: 'Agenda',
-        //                         icon: 'pi pi-fw pi-building',
-        //                     },
-        //                 ],
-        //             },
-        //         ],
-        //     },
-        // ];
         this.model2 = [
             {
                 items: [
@@ -727,13 +717,14 @@ export class AppMenuComponent implements OnInit {
             {
                 items: [
                     {
-                        label: 'AGENDA VIRTUAL',
+                        label: 'AGENDA VIRTUALaaaaa',
                         icon: 'pi pi-play',
                         items: [
                             {
-                                label: 'Agenda',
-                                icon: 'pi pi-fw pi-building',
-                            },
+                                label: 'Candidatos',
+                                icon: 'pi pi-users',
+                                routerLink: ['/pl-virtual/lista-ciudades'],
+                            }
                         ],
                     },
                 ],

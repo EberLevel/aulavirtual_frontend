@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import Swal from 'sweetalert2';
 import { AeCityFormComponent } from './ae-city-form/ae-city-form.component';
@@ -19,10 +19,12 @@ interface City {
     styleUrls: ['./city-list.component.scss']
 })
 export class CityListComponent {
+    @ViewChild('dt1') dt1: any;
     loading: boolean = false;
     ciudadesList: any[] = [];
     ref: DynamicDialogRef | undefined;
     domain_id: any;
+    filteredCities: any[] = [];
 
     constructor(
         private dialogService: DialogService,
@@ -37,12 +39,27 @@ export class CityListComponent {
 
     listarCiudades() {
         this.loading = true;
-        this.ciudadService.getCiudadesByDomain(this.domain_id).subscribe((response: any) => {
-            this.ciudadesList = response.data;
-            this.loading = false;
-        });
-        console.log("ciudadesList" , this.ciudadesList);
+        this.ciudadService.getCiudadesByDomain(this.domain_id).subscribe(
+            (response: any) => {
+                console.log('Datos recibidos del backend:', response); // Ver los datos recibidos
+    
+                // Asigna directamente la respuesta ya que ahora es un array de ciudades
+                this.ciudadesList = response;
+                this.filteredCities = [...this.ciudadesList]; // Inicializa `filteredCities` con la lista completa
+                this.loading = false;
+    
+                // Restablece el paginador
+                if (this.dt1) {
+                    this.dt1.reset();
+                }
+            },
+            (error) => {
+                console.error('Error al obtener las ciudades:', error);
+                this.loading = false;
+            }
+        );
     }
+    
 
     navigateAdd() {
         this.ref = this.dialogService.open(AeCityFormComponent, {
@@ -99,19 +116,23 @@ export class CityListComponent {
         this.ref.onClose.subscribe(() => {
             this.listarCiudades();
         });
-    }    
+    }
 
     onGlobalFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
         if (!filterValue) {
-            this.listarCiudades();
-            return;
+            this.filteredCities = [...this.ciudadesList]; // Restablece la lista filtrada a la lista original
+        } else {
+            this.filteredCities = this.ciudadesList.filter(
+                (ciudad) =>
+                    ciudad.nombre.toLowerCase().includes(filterValue) ||
+                    ciudad.codigo.toLowerCase().includes(filterValue)
+            );
         }
 
-        this.ciudadesList = this.ciudadesList.filter(
-            (ciudad) =>
-                ciudad.nombre.toLowerCase().includes(filterValue) ||
-                ciudad.codigo.toLowerCase().includes(filterValue)
-        );
+        // Restablece el paginador
+        if (this.dt1) {
+            this.dt1.reset();
+        }
     }
 }
