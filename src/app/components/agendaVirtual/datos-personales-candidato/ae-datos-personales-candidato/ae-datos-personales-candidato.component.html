@@ -1,0 +1,268 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">
+            {{
+                acciones === "add"
+                    ? "Agregar Postulante"
+                    : acciones === "ver"
+                    ? "Ver Postulante"
+                    : "Editar Postulante"
+            }}
+        </span>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <form [formGroup]="postulanteForm" (ngSubmit)="guardarPostulante()">
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="code"
+                            />
+                            <label>Código concursante</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="codigo_puesto_asignado"
+                            />
+                            <label>Código de puesto asignado</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="nombre"
+                            />
+                            <label>Nombre</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="generoOptions"
+                                formControlName="genero"
+                            ></p-dropdown>
+                            <label>Género</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="telefono"
+                            />
+                            <label>Teléfono</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-calendar
+                                formControlName="fecha_nacimiento"
+                            ></p-calendar>
+                            <label>Fecha de nacimiento</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="number"
+                                pInputText
+                                formControlName="edad"
+                            />
+                            <label>Edad</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="email"
+                                pInputText
+                                formControlName="email"
+                            />
+                            <label>Email</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="password"
+                                pInputText
+                                formControlName="contrasena"
+                            />
+                            <label>Contraseña</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="identificationDocuments"
+                                formControlName="doc_identidad"
+                                optionLabel="nombre"
+                                optionValue="id"
+                                placeholder="Seleccione un documento"
+                            >
+                            </p-dropdown>
+                            <label for="doc_identidad">Doc. Identidad</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="numero_documento"
+                            />
+                            <label>Número de documento</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="estadoCivilOptions"
+                                formControlName="estado_civil"
+                                optionLabel="nombre"
+                                optionValue="id"
+                                placeholder="Seleccione estado civil"
+                            >
+                            </p-dropdown>
+                            <label>Estado Civil</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="number"
+                                pInputText
+                                formControlName="numero_hijos"
+                            />
+                            <label>Número de hijos</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="gradoInstruccionOptions"
+                                formControlName="grado_instruccion"
+                                optionLabel="nombre"
+                                optionValue="id"
+                                placeholder="Seleccione Grado de Instrucción"
+                            >
+                            </p-dropdown>
+                            <label>Grado de instrucción</label>
+                        </span>
+                    </div>
+                    <div class="field col-6 input">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="profesionOptions"
+                                formControlName="profesion"
+                                optionLabel="nombre"
+                                optionValue="id"
+                                placeholder="Seleccione Profesión"
+                            >
+                            </p-dropdown>
+                            <label>Profesión</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="ocupacionOptions"
+                                formControlName="ocupacion_actual"
+                                optionLabel="nombre"
+                                optionValue="id"
+                                placeholder="Seleccione Ocupación Actual"
+                            >
+                            </p-dropdown>
+                            <label>Ocupación actual</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-fileUpload
+                                mode="basic"
+                                chooseLabel="Adjunte documento"
+                                chooseIcon="pi pi-upload"
+                                (onSelect)="onFileChange($event)"
+                            >
+                            </p-fileUpload>
+                        </span>
+                        <small *ngIf="postulanteForm.get('imagen')?.value">
+                            Archivo cargado con éxito
+                        </small>
+                    </div>
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="estadoActualOptions"
+                                formControlName="estado_actual"
+                                optionLabel="nombre"
+                                optionValue="id"
+                                placeholder="Seleccione Estado Actual"
+                            >
+                            </p-dropdown>
+                            <label>Estado actual</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-calendar
+                                formControlName="fecha_afiliacion"
+                            ></p-calendar>
+                            <label>Fecha de afiliación</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="flex justify-content-end flex-column sm:flex-row">
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            *ngIf="acciones === 'add'"
+                            pButton
+                            icon="pi pi-plus"
+                            label="Guardar"
+                            iconPos="right"
+                            class="p-button-success p-button-sm"
+                            type="submit"
+                        ></button>
+                        <button
+                            *ngIf="acciones === 'actualizar'"
+                            pButton
+                            icon="pi pi-refresh"
+                            label="Actualizar"
+                            iconPos="right"
+                            class="p-button-warning p-button-sm"
+                            type="submit"
+                        ></button>
+                        <button
+                            pButton
+                            label="Cerrar"
+                            icon="pi pi-times"
+                            iconPos="right"
+                            class="p-button-close-clean"
+                            (click)="closeModal($event)"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <app-informacion-academica-candidato
+            *ngIf="acciones === 'actualizar' && rolId === 8"
+            [postulanteId]="postulanteId"
+        ></app-informacion-academica-candidato>
+    </ng-template>
+</p-panel>

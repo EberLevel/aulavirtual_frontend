@@ -22,6 +22,9 @@ import { CapacitacionPostulanteRoutingModule } from './components/onlineclasses/
 import { ReferenciasLaboralesRoutingModule } from './components/onlineclasses/referencias-laborales/referencias-laborales-routing.module';
 import { ReferenciasFamiliaresRoutingModule } from './components/onlineclasses/referencias-familiares/referencias-familiares-routing.module';
 import { ExperienciaLaboralRoutingModule } from './components/onlineclasses/experiencia-laboral/experiencia-laboral-routing.module';
+import { AgendaVirtualRoutingModule } from './components/agendaVirtual/agenda-virtual-routing.module';
+import { DatosPersonalesCandidatoRoutingModule } from './components/agendaVirtual/datos-personales-candidato/datos-personales-candidato-routing.module';
+import { InformacionAcademicaCandidatoRoutingModule } from './components/agendaVirtual/informacion-academica-candidato/informacion-academica-candidato-routing.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
@@ -48,8 +51,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         ReferenciasLaboralesRoutingModule,
         ReferenciasFamiliaresRoutingModule,
         ExperienciaLaboralRoutingModule,
-
-
+        AgendaVirtualRoutingModule,
+        DatosPersonalesCandidatoRoutingModule,
+        InformacionAcademicaCandidatoRoutingModule,
     ],
     providers: [
         MessageService,

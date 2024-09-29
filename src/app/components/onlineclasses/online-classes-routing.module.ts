@@ -55,6 +55,22 @@ const routes: Routes = [];
                     ).then((m) => m.ConfiguracionesModule),
             },
             {
+                path: 'datos-personales-candidato',
+                data: { breadcrumb: 'Datos personales del candidato' },
+                loadChildren: () =>
+                    import(
+                        '../agendaVirtual/datos-personales-candidato/datos-personales-candidato.module'
+                    ).then((m) => m.DatosPersonalesCandidatoModule),
+            },
+            {
+                path: 'informacion-academica-candidato',
+                data: { breadcrumb: 'Informacion academica del candidato' },
+                loadChildren: () =>
+                    import(
+                        '../agendaVirtual/informacion-academica-candidato/informacion-academica-candidato.module'
+                    ).then((m) => m.InformacionAcademicaCandidatoModule),
+            },
+            {
                 path: 'bandeja-alumno',
                 data: { breadcrumb: 'Bandeja de Alumnos' },
                 loadChildren: () =>
@@ -225,6 +241,22 @@ const routes: Routes = [];
                     import(
                         '../onlineclasses/lista-postulantes/lista-postulantes.module'
                     ).then((m) => m.ListaPostulantesModule),
+            },
+            {
+                path: 'lista-candidatos',
+                data: { breadcrumb: 'Lista de Candidatos' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/lista-egresados/lista-egresados.module'
+                    ).then((m) => m.ListaEgresadosModule),
+            },
+            {
+                path: 'lista-ciudades',
+                data: { breadcrumb: 'Candidatos por Ciudad' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/city-list/lista-ciudad.module'
+                    ).then((m) => m.ListaCiudadModule),
             },
             {
                 path: 'capacitacion-postulante',
@@ -527,9 +559,9 @@ const routes: Routes = [];
                 path: 'proyectos',
                 data: { breadcrumb: 'Proyectos' },
                 loadChildren: () =>
-                    import(
-                        '../onlineclasses/proyectos/proyectos.module'
-                    ).then((m) => m.ProyectosModule),
+                    import('../onlineclasses/proyectos/proyectos.module').then(
+                        (m) => m.ProyectosModule
+                    ),
             },
         ]),
     ],
