@@ -63,7 +63,7 @@ export class CityListComponent {
 
     navigateAdd() {
         this.ref = this.dialogService.open(AeCityFormComponent, {
-            width: '60%',
+            width: '90%',
             styleClass: 'custom-dialog-header',
             data: { acciones: 'add' },
         });
@@ -74,7 +74,7 @@ export class CityListComponent {
 
     navigateToEdit(ciudad: any) {
         this.ref = this.dialogService.open(AeCityFormComponent, {
-            width: '60%',
+            width: '90%',
             styleClass: 'custom-dialog-header',
             data: { acciones: 'actualizar', ciudad: ciudad },
         });
@@ -109,7 +109,7 @@ export class CityListComponent {
 
     navigateToOpenEgresados(ciudad: any) {
         this.ref = this.dialogService.open(DatosPersonalesCandidatoComponent, {
-            width: '80%',
+            width: '90%',
             styleClass: 'custom-dialog-header',
             data: { acciones: 'abrir', ciudad: ciudad }, // Pasa la ciudad seleccionada
         });

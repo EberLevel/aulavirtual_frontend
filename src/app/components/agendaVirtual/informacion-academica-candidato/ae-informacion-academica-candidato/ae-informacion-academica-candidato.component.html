@@ -3,10 +3,10 @@
         <span class="text-primary font-semibold text-xl">
             {{
                 acciones === "add"
-                    ? "Agregar Información Académica"
+                    ? "Documentación y Validación"
                     : acciones === "ver"
-                    ? "Ver Información Académica"
-                    : "Editar Información Académica"
+                    ? "Documentación y Validación"
+                    : "Documentación y Validación"
             }}
         </span>
     </ng-template>
@@ -33,7 +33,7 @@
                 <div class="field col-6" style="display: grid; align-items: center">
                     <p-fileUpload
                         mode="basic"
-                        chooseLabel="Adjunte certificado"
+                        chooseLabel="Adjunte imagen y Documentos"
                         chooseIcon="pi pi-upload"
                         name="certificado"
                         (onSelect)="onFileChange($event)"
