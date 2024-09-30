@@ -56,7 +56,7 @@ export class InformacionAcademicaCandidatoComponent {
                 },
                 (error) => {
                     console.error(
-                        'Error al obtener la información académica:',
+                        'Error al obtener la documentación:',
                         error
                     );
                     this.loading = false;

@@ -156,7 +156,7 @@ export class AppMenuComponent implements OnInit {
                                         ],
                                     },
                                     {
-                                        label: 'Informacion academica',
+                                        label: 'Documentación y Validación del Candidatos',
                                         icon: 'pi pi-users',
                                         routerLink: [
                                             '/pl-virtual/informacion-academica',
@@ -219,7 +219,7 @@ export class AppMenuComponent implements OnInit {
                                         ],
                                     },
                                     {
-                                        label: 'Informacion academica',
+                                        label: 'Documentación y Validación del Candidatos',
                                         icon: 'pi pi-users',
                                         routerLink: [
                                             '/pl-virtual/informacion-academica-candidato',

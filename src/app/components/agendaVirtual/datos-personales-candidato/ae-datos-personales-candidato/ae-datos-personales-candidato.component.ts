@@ -161,6 +161,7 @@ export class AeDatosPersonalesCandidatoComponent {
         this.rolId = this.helpersService.getRolId();
         this.domain_id = this.helpersService.getDominioId();
 
+        console.log('Candidato ID que se pasa al componente hijo:', this.postulanteId);
 
         if (this.rolId === 24) {
             this.postulanteForm.get('estado_actual')?.disable();
