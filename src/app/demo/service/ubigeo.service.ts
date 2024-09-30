@@ -21,6 +21,7 @@ export class UbigeoService {
         );
     }
 
+
     // Obtener las provincias de un departamento específico
     getProvincias(departamentoId: string): Observable<any> {
         return this.http
