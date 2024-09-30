@@ -64,16 +64,19 @@
                                     Acciones
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Código de Postulante
-                                </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Código de Puesto Asignado
+                                    Código
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Nombre
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Teléfono
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    % de Avance
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Estado
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Documento de Identidad
@@ -114,16 +117,25 @@
                                     ></button>
                                 </td>
                                 <td>{{ postulante.code || "Sin código" }}</td>
-                                <td>
-                                    {{
-                                        postulante.position_code ||
-                                            "Sin puesto asignado"
-                                    }}
-                                </td>
                                 <td>{{ postulante.nombre || "Sin nombre" }}</td>
                                 <td>
                                     {{ postulante.phone || "Sin teléfono" }}
                                 </td>
+                                <td>
+                                    {{ postulante.education_degree_id || "Sin % de Avance" }}
+                                </td>
+                                <td>
+                                    <div class="estColor"
+                                        [ngClass]="{
+                                            'estado-aprobado': postulante.estado_actual === 'aprobado',
+                                            'estado-desaprobado': postulante.estado_actual === 'desaprobado',
+                                            'estado-observado': postulante.estado_actual === 'observado',
+                                            'estado-evaluacion': postulante.estado_actual === 'en_evaluacion'
+                                        }">
+                                        {{ formatEstado(postulante.estado_actual) }}
+                                    </div>
+                                </td>
+                                
                                 <td>
                                     {{
                                         postulante.identification_number ||

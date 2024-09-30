@@ -93,7 +93,7 @@ export class AeDatosPersonalesCandidatoComponent {
             profesion: [''],
             ocupacion_actual: [''],
             imagen: [''],
-            estado_actual: [''],
+            estado_actual: ['en_evaluacion'],
             fecha_afiliacion: [''],
         });
     }
@@ -290,6 +290,11 @@ export class AeDatosPersonalesCandidatoComponent {
             }
         } else {
             console.error('Formulario inválido');
+            Swal.fire(
+                'Error',
+                'Formulario Invalida, revisar los campos',
+                'error'
+            );
         }
     }
 
@@ -313,9 +318,9 @@ export class AeDatosPersonalesCandidatoComponent {
             age: this.calculateAge(this.postulanteForm.value.fecha_nacimiento),
             education_degree_id: this.postulanteForm.value.grado_instruccion,
             profesion: this.postulanteForm.value.profesion,
-            ocupacion_actual: this.postulanteForm.value.ocupacion_actual?.value,
+            ocupacion_actual: this.postulanteForm.value.ocupacion_actual,
             imagen: this.postulanteForm.value.imagen,
-            estado_actual: this.postulanteForm.value.estado_actual?.value,
+            estado_actual: this.postulanteForm.value.estado_actual,
             fecha_afiliacion: this.postulanteForm.value.fecha_afiliacion,
             domain_id: this.domain_id,
             ciudad_id: this.config.data.ciudad_id, // Ahora seguro de que tenemos el `ciudad_id`

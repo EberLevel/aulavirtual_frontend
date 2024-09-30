@@ -34,49 +34,66 @@ export class DatosPersonalesCandidatoComponent {
         this.domain_id = this.helpersService.getDominioId();
         this.candidato_id = this.helpersService.getCandidatoId();
         console.log('candidato_id:', this.candidato_id);
-        console.log("this.config.data",this.config.data)
+        console.log('this.config.data', this.config.data);
         // Verificar si config y config.data existen antes de acceder a ciudad
         if (this.config && this.config.data) {
             this.ciudad_id = this.config.data.ciudad?.id; // Asegúrate de usar la propiedad correcta del objeto `ciudad`
             console.log('Datos de ciudad recibidos:', this.config.data.ciudad); // Imprime todo el objeto ciudad
             console.log('Ciudad ID recibido:', this.ciudad_id);
         } else {
-            console.error('No se recibieron los datos de configuración necesarios.');
+            console.error(
+                'No se recibieron los datos de configuración necesarios.'
+            );
         }
-    
+
         this.listarPostulantesSegunRol();
     }
-    
 
     listarPostulantesSegunRol() {
         this.loading = true;
-    
+
         if (this.ciudad_id) {
             // Listar candidatos por ciudad
-            this.candidatoService.getCandidatosByCiudad(this.ciudad_id).subscribe(
-                (response: any) => {
-                    console.log('Respuesta del backend para getCandidatosByCiudad:', response);
-                    this.candidatoList = response.data;
-                    this.originalCandidatoList = [...response.data];
-                    this.loading = false;
-                },
-                (error) => {
-                    console.error('Error al obtener los candidatos por ciudad:', error);
-                    this.loading = false;
-                }
-            );
+            this.candidatoService
+                .getCandidatosByCiudad(this.ciudad_id)
+                .subscribe(
+                    (response: any) => {
+                        console.log(
+                            'Respuesta del backend para getCandidatosByCiudad:',
+                            response
+                        );
+                        this.candidatoList = response.data;
+                        this.originalCandidatoList = [...response.data];
+                        this.loading = false;
+                    },
+                    (error) => {
+                        console.error(
+                            'Error al obtener los candidatos por ciudad:',
+                            error
+                        );
+                        this.loading = false;
+                    }
+                );
         } else if (this.candidato_id) {
             // Listar candidatos por candidato_id si ciudad_id no está disponible
             this.candidatoService.getCandidatoById(this.candidato_id).subscribe(
                 (response: any) => {
-                    console.log('Respuesta del backend para getCandidatoById:', response);
+                    console.log(
+                        'Respuesta del backend para getCandidatoById:',
+                        response
+                    );
                     // Acceder correctamente al objeto candidato
-                    this.candidatoList = response.candidato ? [response.candidato] : [];
+                    this.candidatoList = response.candidato
+                        ? [response.candidato]
+                        : [];
                     this.originalCandidatoList = [...this.candidatoList];
                     this.loading = false;
                 },
                 (error) => {
-                    console.error('Error al obtener el candidato por ID:', error);
+                    console.error(
+                        'Error al obtener el candidato por ID:',
+                        error
+                    );
                     this.loading = false;
                 }
             );
@@ -84,8 +101,23 @@ export class DatosPersonalesCandidatoComponent {
             console.error('No se proporcionó ciudad_id ni candidato_id.');
             this.loading = false;
         }
-    }    
-    
+    }
+
+    // En tu archivo .ts del componente
+    formatEstado(estado: string): string {
+        switch (estado) {
+            case 'aprobado':
+                return 'Aprobado';
+            case 'observado':
+                return 'Observado';
+            case 'desaprobado':
+                return 'Desaprobado';
+            case 'en_evaluacion':
+                return 'En Evaluación';
+            default:
+                return estado || 'Sin Estado';
+        }
+    }
 
     navigateAddPostulante() {
         this.ref = this.dialogService.open(
@@ -150,9 +182,11 @@ export class DatosPersonalesCandidatoComponent {
                             'success'
                         );
                         // Remover el candidato de la lista localmente antes de recargar
-                        this.candidatoList = this.candidatoList.filter(candidato => candidato.id !== id);
+                        this.candidatoList = this.candidatoList.filter(
+                            (candidato) => candidato.id !== id
+                        );
                         // Llamar a listarPostulantesSegunRol para obtener la lista actualizada
-                        this.listarPostulantesSegunRol(); 
+                        this.listarPostulantesSegunRol();
                     },
                     (error: any) => {
                         Swal.fire(
@@ -164,7 +198,7 @@ export class DatosPersonalesCandidatoComponent {
                 );
             }
         });
-    }    
+    }
 
     onGlobalFilter(event: Event) {
         const filterValue = (

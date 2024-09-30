@@ -1,0 +1,26 @@
+/* estilos.css o el archivo de estilos que utilices */
+.estado-aprobado {
+    background-color: green;
+    color: white;
+}
+
+.estado-desaprobado {
+    background-color: red;
+    color: white;
+}
+
+.estado-observado {
+    background-color: orange;
+    color: white;
+}
+
+.estado-evaluacion {
+    background-color: grey;
+    color: white;
+}
+
+.estColor {
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 7px;
+}

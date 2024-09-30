@@ -63,6 +63,21 @@ export class CityListComponent {
         );
     }
     
+// En tu archivo .ts del componente
+formatEstado(estado: string): string {
+    switch (estado) {
+        case 'aprobado':
+            return 'Aprobado';
+        case 'observado':
+            return 'Observado';
+        case 'desaprobado':
+            return 'Desaprobado';
+        case 'en_evaluacion':
+            return 'En Evaluación';
+        default:
+            return estado;
+    }
+}
 
     navigateAdd() {
         this.ref = this.dialogService.open(AeCityFormComponent, {

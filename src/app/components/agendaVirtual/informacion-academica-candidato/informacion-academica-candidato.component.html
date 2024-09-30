@@ -76,7 +76,17 @@
                                 </td>
                                 <td>{{ info.nombre || 'Sin nombre' }}</td>
                                 <td>{{ info.avance || '0' }}%</td>
-                                <td>{{ info.estado || 'Sin estado' }}</td>
+                                <td>
+                                    <div class="estColor"
+                                        [ngClass]="{
+                                            'estado-aprobado': info.estado === 'Aprobado',
+                                            'estado-desaprobado': info.estado === 'Desaprobado',
+                                            'estado-observado': info.estado === 'Observado',
+                                            'estado-evaluacion': info.estado === 'En Evaluación'
+                                        }">
+                                        {{ info.estado || 'Sin estado' }}
+                                    </div>
+                                </td>                                
                                 <td>{{ info.observaciones || 'Sin observaciones' }}</td>
                             </tr>
                         </ng-template>

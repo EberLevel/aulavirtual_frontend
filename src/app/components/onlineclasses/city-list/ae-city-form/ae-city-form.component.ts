@@ -36,7 +36,7 @@ export class AeCityFormComponent {
         this.ciudadForm = this.fb.group({
             codigo: ['', Validators.required],
             nombre: ['', Validators.required],
-            estado: ['', Validators.required],
+            estado: ['en_evaluacion', Validators.required],
             observaciones: [''],
             avance: [
                 '',
