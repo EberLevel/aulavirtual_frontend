@@ -12,6 +12,7 @@ export class UbigeoService {
 
     constructor(private http: HttpClient) {}
 
+
     // Obtener todos los departamentos
     getDepartamentos(): Observable<any> {
         return this.http.get<any>(`${this.baseUrl}departamentos`).pipe(
@@ -20,7 +21,6 @@ export class UbigeoService {
             })
         );
     }
-
 
     // Obtener las provincias de un departamento específico
     getProvincias(departamentoId: string): Observable<any> {
