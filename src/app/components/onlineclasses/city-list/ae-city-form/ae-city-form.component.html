@@ -31,9 +31,21 @@
                     <p-dropdown
                         [options]="estadoOptions"
                         formControlName="estado"
-                        [disabled]="acciones === 'ver'"
+                        [disabled]="isEstadoDisabled()"
                     ></p-dropdown>
+                </div>                
+                <div class="field col-6">
+                    <label for="avance">Porcentaje de Avance</label>
+                    <input
+                        pInputText
+                        id="avance"
+                        formControlName="avance"
+                        type="number"
+                        [disabled]="acciones === 'ver'"
+                        placeholder="Ingrese el porcentaje de avance"
+                    />
                 </div>
+                
                 <div class="field col-12">
                     <label for="observaciones">Observaciones</label>
                     <textarea

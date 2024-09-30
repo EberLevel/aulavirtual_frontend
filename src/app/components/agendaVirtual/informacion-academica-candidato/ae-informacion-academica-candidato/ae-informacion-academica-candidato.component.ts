@@ -15,10 +15,10 @@ export class AeInformacionAcademicaCandidatoComponent {
     informacionAcademicaForm: FormGroup;
     acciones: string;
     estadoOptions: any[] = [
-        { label: 'En Evaluación', value: 0 },
         { label: 'Aprobado', value: 1 },
         { label: 'Desaprobado', value: 2 },
         { label: 'Observado', value: 3 },
+        { label: 'En Evaluación', value: 4 },
     ];
     domain_id: any;
     candidato_id: any;
