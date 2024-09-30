@@ -23,9 +23,10 @@ export class InformacionAcademicaCandidatoComponent {
 
     // Define estadoOptions en el componente padre
     estadoOptions: any[] = [
-        { label: 'Completado', value: 1 },
-        { label: 'En Proceso', value: 2 },
-        { label: 'Pendiente', value: 3 },
+        { label: 'Aprobado', value: 1 },
+        { label: 'Desaprobado', value: 2 },
+        { label: 'Observado', value: 3 },
+        { label: 'En Evaluación', value: 4 },
     ];
 
     constructor(
@@ -47,7 +48,6 @@ export class InformacionAcademicaCandidatoComponent {
                 (response: any) => {
                     this.informacionAcademicaList = response.data.map(
                         (item: any) => {
-                            // Mapea el estado al texto correspondiente
                             item.estado = this.getEstadoLabel(item.estado_id);
                             return item;
                         }

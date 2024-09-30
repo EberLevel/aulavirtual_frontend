@@ -1,18 +1,20 @@
 <p-panel>
     <ng-template pTemplate="header">
-        <span class="text-primary font-semibold text-xl">Bandeja de Ciudades</span>
+        <span class="text-primary font-semibold text-xl"
+            >Bandeja de Ciudades</span
+        >
     </ng-template>
     <ng-template pTemplate="content">
         <div class="row mb-4">
             <div class="grid p-fluid">
                 <div class="field md:col-12">
                     <p-table
-                    [value]="ciudadesList"
-                    [rows]="10"
-                    [loading]="loading"
-                    [rowHover]="true"
-                    styleClass="p-datatable-gridlines"
-                    [paginator]="true"
+                        [value]="ciudadesList"
+                        [rows]="10"
+                        [loading]="loading"
+                        [rowHover]="true"
+                        styleClass="p-datatable-gridlines"
+                        [paginator]="true"
                     >
                         <ng-template pTemplate="caption">
                             <div class="flex justify-content-between flex-wrap">
@@ -28,7 +30,10 @@
                                         />
                                     </span>
                                 </div>
-                                <div class="mb-2" *ngIf="rol_id !== 23 && rol_id !== 24">
+                                <div
+                                    class="mb-2"
+                                    *ngIf="rol_id !== 23 && rol_id !== 24"
+                                >
                                     <button
                                         pButton
                                         label="Nueva Ciudad"
@@ -55,7 +60,8 @@
                         <ng-template pTemplate="body" let-ciudad>
                             <tr>
                                 <td>
-                                    <button *ngIf="rol_id !== 23"
+                                    <button
+                                        *ngIf="rol_id !== 23"
                                         pButton
                                         icon="pi pi-pencil"
                                         style="width: 40px; border-radius: 20px"
@@ -77,13 +83,25 @@
                                         style="width: 40px; border-radius: 20px"
                                         title="Ver"
                                         class="p-button-rounded p-button-text p-button-success"
-                                        (click)="navigateToOpenEgresados(ciudad)"
+                                        (click)="
+                                            navigateToOpenEgresados(ciudad)
+                                        "
                                     ></button>
                                 </td>
                                 <td>{{ ciudad.codigo }}</td>
                                 <td>{{ ciudad.nombre }}</td>
                                 <td>{{ ciudad.avance }}</td>
-                                <td>{{ ciudad.estado }}</td>
+                                <td>
+                                    <div class="estColor"
+                                        [ngClass]="{
+                                            'estado-aprobado': ciudad.estado === 'aprobado',
+                                            'estado-desaprobado': ciudad.estado === 'desaprobado',
+                                            'estado-observado': ciudad.estado === 'observado',
+                                            'estado-evaluacion': ciudad.estado === 'en_evaluacion'
+                                        }">
+                                        {{ formatEstado(ciudad.estado) }}
+                                    </div>
+                                </td>                                
                             </tr>
                         </ng-template>
 
@@ -95,7 +113,9 @@
 
                         <ng-template pTemplate="loadingbody">
                             <tr>
-                                <td colspan="4">Cargando registros. Por favor espere.</td>
+                                <td colspan="4">
+                                    Cargando registros. Por favor espere.
+                                </td>
                             </tr>
                         </ng-template>
                     </p-table>

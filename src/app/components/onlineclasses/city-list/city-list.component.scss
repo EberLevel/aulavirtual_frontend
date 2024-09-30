@@ -1,0 +1,22 @@
+.estColor{
+    width: fit-content;
+    padding: 0.5rem;
+    border-radius: 7px;
+    color: white;
+}
+
+.estado-aprobado {
+    background: green;
+}
+
+.estado-desaprobado {
+    background: red;
+}
+
+.estado-observado {
+    background: orange;
+}
+
+.estado-evaluacion {
+    background: grey;
+}
