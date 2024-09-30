@@ -30,9 +30,19 @@
                             <input
                                 type="text"
                                 pInputText
-                                formControlName="position_code"
+                                formControlName="apaterno"
                             />
-                            <label>Código de puesto asignado</label>
+                            <label>Apellido Paterno</label>
+                        </span>
+                    </div>
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                formControlName="amaterno"
+                            />
+                            <label>Apellido Materno</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -42,7 +52,7 @@
                                 pInputText
                                 formControlName="nombre"
                             />
-                            <label>Nombre</label>
+                            <label>Nombres</label>
                         </span>
                     </div>
                     <div class="field col-6">
@@ -180,6 +190,7 @@
                             <label>Estado de Afiliación</label>
                         </span>
                     </div>
+
                     <div class="field col-6">
                         <span class="p-float-label">
                             <p-fileUpload
@@ -218,6 +229,48 @@
                                 formControlName="fecha_afiliacion"
                             ></p-calendar>
                             <label>Fecha de afiliación</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="departamentoOptions"
+                                formControlName="departamentos"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Seleccione Departamento"
+                                (onChange)="onChangeDepartamento($event)"
+                            ></p-dropdown>
+                            <label>Departamento</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="provinciaOptions"
+                                formControlName="provincias"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Seleccione Provincia"
+                                (onChange)="onChangeProvincia($event)"
+                            ></p-dropdown>
+                            <label>Provincia</label>
+                        </span>
+                    </div>
+
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="distritoOptions"
+                                formControlName="distritos"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Seleccione Distrito"
+                                (onChange)="onChangeDistrito($event)"
+                            ></p-dropdown>
+                            <label>Distrito</label>
                         </span>
                     </div>
                 </div>

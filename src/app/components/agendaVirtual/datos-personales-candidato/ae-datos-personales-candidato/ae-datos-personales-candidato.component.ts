@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { CandidatoService } from 'src/app/components/onlineclasses/service/candidato.service';
+import { UbigeoService } from 'src/app/demo/service/ubigeo.service';
 import { HelpersService } from 'src/app/helpers.service';
 import Swal from 'sweetalert2';
 
@@ -23,6 +24,13 @@ export class AeDatosPersonalesCandidatoComponent {
     estadoActualOptions: any[] = []; // Llenar con opciones del backend
     domain_id: any;
     postulanteId: any;
+    departamentoOptions: any[] = [];
+    departamentoId: string = "";
+    provinciaOptions: any[] = [];
+    provinciaId: string = "";
+    distritoOptions: any[] = [];
+    distritoId: string = "";
+
     public afiliacionOptions: any[] = [
         { label: 'Sentimiento Amazonense', value: 'sentimiento_amazonense' },
         { label: 'Somos Perú', value: 'somos_peru' },
@@ -56,6 +64,7 @@ export class AeDatosPersonalesCandidatoComponent {
         public config: DynamicDialogConfig,
         private candidatoService: CandidatoService,
         private helpersService: HelpersService,
+        private ubigeoService: UbigeoService,
         private cd: ChangeDetectorRef
     ) {
         this.acciones = this.config.data.acciones;
@@ -77,7 +86,8 @@ export class AeDatosPersonalesCandidatoComponent {
         // Definir las validaciones del formulario
         this.postulanteForm = this.fb.group({
             code: [{ value: '', disabled: true }],
-            position_code: [''],
+            apaterno: [''],
+            amaterno: [''],
             nombre: [''],
             genero: [''],
             telefono: [''],
@@ -95,8 +105,17 @@ export class AeDatosPersonalesCandidatoComponent {
             imagen: [''],
             estado_actual: [''],
             fecha_afiliacion: [''],
+            distrito_id: ['']
         });
+        this.getDepartamentos();
     }
+
+    getDepartamentos() {
+        this.ubigeoService.getDepartamentos().subscribe((response) => {
+            console.log('departamentos: ', response);
+            this.departamentoOptions = response;
+        });
+    }    
 
     onFileChange(event: any) {
         const file = event.files[0]; // Captura el archivo seleccionado
@@ -182,7 +201,9 @@ export class AeDatosPersonalesCandidatoComponent {
                     if (data && data.candidato) {
                         this.postulanteForm.patchValue({
                             code: data.candidato.code || '',
-                            position_code: data.candidato.position_code || '',
+                            distrito_id: data.candidato.distrito_id,
+                            apaterno: data.candidato.apaterno || '',
+                            amaterno: data.candidato.amaterno || '',
                             nombre: data.candidato.nombre || '',
                             genero: data.candidato.sex || '',
                             telefono: data.candidato.phone || '',
@@ -296,7 +317,8 @@ export class AeDatosPersonalesCandidatoComponent {
     enviarDatosCandidato() {
         const postulanteData: any = {
             code: this.postulanteForm.value.code,
-            position_code: this.postulanteForm.value.position_code,
+            apaterno: this.postulanteForm.value.apaterno,
+            amaterno: this.postulanteForm.value.amaterno,
             nombre: this.postulanteForm.value.nombre,
             genero: this.postulanteForm.value.genero,
             telefono: this.postulanteForm.value.telefono,
@@ -319,6 +341,7 @@ export class AeDatosPersonalesCandidatoComponent {
             fecha_afiliacion: this.postulanteForm.value.fecha_afiliacion,
             domain_id: this.domain_id,
             ciudad_id: this.config.data.ciudad_id, // Ahora seguro de que tenemos el `ciudad_id`
+            distrito_id: this.distritoId
         };
 
         console.log('Datos mapeados enviados al backend:', postulanteData);
@@ -372,10 +395,29 @@ export class AeDatosPersonalesCandidatoComponent {
         event.preventDefault();
         this.ref?.close();
     }
+
     onEstadoChange(event: any) {
         const selectedEstado = this.estadoOptions.find(
             (option) => option.value === event.value
         );
         this.selectedEstadoColor = selectedEstado ? selectedEstado.color : '';
+    }
+
+    onChangeDepartamento(event: any) {
+        this.departamentoId = event.value;
+        this.ubigeoService.getProvincias(this.departamentoId).subscribe((response) => {
+            this.provinciaOptions = response;
+        });
+    }
+
+    onChangeProvincia(event: any) {
+        this.provinciaId = event.value;
+        this.ubigeoService.getDistritos(this.departamentoId, this.provinciaId).subscribe((response) => {
+            this.distritoOptions = response;
+        });
+    }
+
+    onChangeDistrito(event: any) {
+        this.distritoId = event.value;
     }
 }
