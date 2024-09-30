@@ -86,7 +86,8 @@ export class AeDatosPersonalesCandidatoComponent {
         // Definir las validaciones del formulario
         this.postulanteForm = this.fb.group({
             code: [{ value: '', disabled: true }],
-            position_code: [''],
+            apaterno: [''],
+            amaterno: [''],
             nombre: [''],
             genero: [''],
             telefono: [''],
@@ -201,7 +202,8 @@ export class AeDatosPersonalesCandidatoComponent {
                         this.postulanteForm.patchValue({
                             code: data.candidato.code || '',
                             distrito_id: data.candidato.distrito_id,
-                            position_code: data.candidato.position_code || '',
+                            apaterno: data.candidato.apaterno || '',
+                            amaterno: data.candidato.amaterno || '',
                             nombre: data.candidato.nombre || '',
                             genero: data.candidato.sex || '',
                             telefono: data.candidato.phone || '',
@@ -315,7 +317,8 @@ export class AeDatosPersonalesCandidatoComponent {
     enviarDatosCandidato() {
         const postulanteData: any = {
             code: this.postulanteForm.value.code,
-            position_code: this.postulanteForm.value.position_code,
+            apaterno: this.postulanteForm.value.apaterno,
+            amaterno: this.postulanteForm.value.amaterno,
             nombre: this.postulanteForm.value.nombre,
             genero: this.postulanteForm.value.genero,
             telefono: this.postulanteForm.value.telefono,
