@@ -149,7 +149,10 @@ export class DatosPersonalesCandidatoComponent {
                             'El registro ha sido eliminado.',
                             'success'
                         );
-                        this.listarPostulantesSegunRol(); // Asegúrate de volver a listar correctamente
+                        // Remover el candidato de la lista localmente antes de recargar
+                        this.candidatoList = this.candidatoList.filter(candidato => candidato.id !== id);
+                        // Llamar a listarPostulantesSegunRol para obtener la lista actualizada
+                        this.listarPostulantesSegunRol(); 
                     },
                     (error: any) => {
                         Swal.fire(
@@ -161,7 +164,7 @@ export class DatosPersonalesCandidatoComponent {
                 );
             }
         });
-    }
+    }    
 
     onGlobalFilter(event: Event) {
         const filterValue = (

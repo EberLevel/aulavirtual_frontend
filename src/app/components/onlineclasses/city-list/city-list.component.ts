@@ -25,6 +25,7 @@ export class CityListComponent {
     ref: DynamicDialogRef | undefined;
     domain_id: any;
     filteredCities: any[] = [];
+    rol_id: any;
 
     constructor(
         private dialogService: DialogService,
@@ -33,6 +34,8 @@ export class CityListComponent {
     ) {}
 
     ngOnInit(): void {
+        this.rol_id = this.helpersService.getRolId();
+        console.log("rol_id",this.rol_id)
         this.domain_id = this.helpersService.getDominioId();
         this.listarCiudades();
     }
