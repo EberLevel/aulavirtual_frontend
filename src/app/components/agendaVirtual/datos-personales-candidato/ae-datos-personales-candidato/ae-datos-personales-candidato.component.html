@@ -225,11 +225,12 @@
                     <div class="field col-6">
                         <span class="p-float-label">
                             <p-dropdown
-                                [options]="estadoCivilOptions"
-                                formControlName="estado_civil"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="Seleccione estado civil"
+                                [options]="departamentoOptions"
+                                formControlName="departamentos"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Seleccione Departamento"
+                                (onChange)="onChangeDepartamento($event)"
                             ></p-dropdown>
                             <label>Departamento</label>
                         </span>
@@ -238,11 +239,12 @@
                     <div class="field col-6">
                         <span class="p-float-label">
                             <p-dropdown
-                                [options]="estadoCivilOptions"
-                                formControlName="estado_civil"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="Seleccione estado civil"
+                                [options]="provinciaOptions"
+                                formControlName="provincias"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Seleccione Provincia"
+                                (onChange)="onChangeProvincia($event)"
                             ></p-dropdown>
                             <label>Provincia</label>
                         </span>
@@ -251,11 +253,12 @@
                     <div class="field col-6">
                         <span class="p-float-label">
                             <p-dropdown
-                                [options]="estadoCivilOptions"
-                                formControlName="estado_civil"
-                                optionLabel="label"
-                                optionValue="value"
-                                placeholder="Seleccione estado civil"
+                                [options]="distritoOptions"
+                                formControlName="distritos"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Seleccione Distrito"
+                                (onChange)="onChangeDistrito($event)"
                             ></p-dropdown>
                             <label>Distrito</label>
                         </span>
