@@ -28,7 +28,7 @@
                                         />
                                     </span>
                                 </div>
-                                <div class="mb-2">
+                                <div class="mb-2" *ngIf="rol_id !== 23 && rol_id !== 24">
                                     <button
                                         pButton
                                         label="Nueva Ciudad"
@@ -36,6 +36,7 @@
                                         class="p-button-primary mr-2"
                                         (click)="navigateAdd()"
                                         style="border-radius: 30px"
+                                        *ngIf="rol_id !== 23"
                                     ></button>
                                 </div>
                             </div>
@@ -46,6 +47,7 @@
                                 <th scope="col">Acciones</th>
                                 <th scope="col">Código</th>
                                 <th scope="col">Nombre</th>
+                                <th scope="col">% de avance</th>
                                 <th scope="col">Estado</th>
                             </tr>
                         </ng-template>
@@ -53,7 +55,7 @@
                         <ng-template pTemplate="body" let-ciudad>
                             <tr>
                                 <td>
-                                    <button
+                                    <button *ngIf="rol_id !== 23"
                                         pButton
                                         icon="pi pi-pencil"
                                         style="width: 40px; border-radius: 20px"
@@ -80,6 +82,7 @@
                                 </td>
                                 <td>{{ ciudad.codigo }}</td>
                                 <td>{{ ciudad.nombre }}</td>
+                                <td>{{ ciudad.avance }}</td>
                                 <td>{{ ciudad.estado }}</td>
                             </tr>
                         </ng-template>

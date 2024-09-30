@@ -160,6 +160,12 @@ export class AeDatosPersonalesCandidatoComponent {
     ngOnInit(): void {
         this.rolId = this.helpersService.getRolId();
         this.domain_id = this.helpersService.getDominioId();
+
+
+        if (this.rolId === 24) {
+            this.postulanteForm.get('estado_actual')?.disable();
+        }
+
         // Carga las opciones de dropdown y luego obtiene los datos del candidato
         this.loadDropdownOptions();
 

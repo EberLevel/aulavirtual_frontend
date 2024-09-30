@@ -33,22 +33,36 @@
                                         />
                                     </span>
                                 </div>
-                                <div class="mb-2" *ngIf="helpersService.getRolId() !== 25">
+                                <div
+                                    class="mb-2"
+                                    *ngIf="
+                                        helpersService.getRolId() !== 25 &&
+                                        helpersService.getRolId() !== 23 && helpersService.getRolId() !== 24
+                                    "
+                                >
                                     <button
-                                      pButton
-                                      label="Nuevo"
-                                      icon="pi pi-plus"
-                                      id="btnNuevo"
-                                      class="p-button-primary mr-2"
-                                      (click)="navigateAddPostulante()"
-                                      style="border-radius: 30px"
+                                        pButton
+                                        label="Nuevo"
+                                        icon="pi pi-plus"
+                                        id="btnNuevo"
+                                        class="p-button-primary mr-2"
+                                        (click)="navigateAddPostulante()"
+                                        style="border-radius: 30px"
                                     ></button>
-                                  </div>
+                                </div>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="min-width: 10rem" scope="col">Acciones</th>
+                                <th
+                                    style="min-width: 10rem"
+                                    scope="col"
+                                    *ngIf="
+                                        helpersService.getRolId() !== 23
+                                    "
+                                >
+                                    Acciones
+                                </th>
                                 <th style="min-width: 10rem" scope="col">
                                     Código de Postulante
                                 </th>
@@ -72,7 +86,11 @@
 
                         <ng-template pTemplate="body" let-postulante>
                             <tr>
-                                <td>
+                                <td
+                                    *ngIf="
+                                        helpersService.getRolId() !== 23
+                                    "
+                                >
                                     <button
                                         pButton
                                         icon="pi pi-pencil"
@@ -82,23 +100,44 @@
                                         (click)="navigateToEdit(postulante)"
                                     ></button>
                                     <button
+                                    *ngIf="
+                                    helpersService.getRolId() !== 25
+                                "
                                         pButton
                                         icon="pi pi-trash"
                                         style="width: 70px; border-radius: 30px"
                                         title="Eliminar"
                                         class="p-button-rounded p-button-text p-button-danger"
-                                        *ngIf="helpersService.getRolId() !== 21"
                                         (click)="
                                             navigateToDelete(postulante.id)
                                         "
                                     ></button>
                                 </td>
-                                <td>{{ postulante.code || 'Sin código' }}</td>
-                                <td>{{ postulante.position_code || 'Sin puesto asignado' }}</td>
-                                <td>{{ postulante.nombre || 'Sin nombre' }}</td>
-                                <td>{{ postulante.phone || 'Sin teléfono' }}</td>
-                                <td>{{ postulante.identification_number || 'Sin documento' }}</td>
-                                <td>{{ postulante.date_affiliation ? (postulante.date_affiliation | date: 'dd/MM/yyyy') : 'Sin fecha de afiliación' }}</td>                                
+                                <td>{{ postulante.code || "Sin código" }}</td>
+                                <td>
+                                    {{
+                                        postulante.position_code ||
+                                            "Sin puesto asignado"
+                                    }}
+                                </td>
+                                <td>{{ postulante.nombre || "Sin nombre" }}</td>
+                                <td>
+                                    {{ postulante.phone || "Sin teléfono" }}
+                                </td>
+                                <td>
+                                    {{
+                                        postulante.identification_number ||
+                                            "Sin documento"
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                        postulante.date_affiliation
+                                            ? (postulante.date_affiliation
+                                              | date : "dd/MM/yyyy")
+                                            : "Sin fecha de afiliación"
+                                    }}
+                                </td>
                             </tr>
                         </ng-template>
 
