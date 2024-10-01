@@ -98,9 +98,9 @@ export class AeDatosPersonalesCandidatoComponent {
             email: ['', [Validators.email]],
             contrasena: ['', Validators.required],
             doc_identidad: [''],
-            numero_documento: ['', Validators.required],
+            numero_documento: [''],
             estado_civil: [''],
-            number_children: [],
+            puesto: [],
             grado_instruccion: [''],
             profesion: [''],
             ocupacion_actual: [''],
@@ -225,8 +225,8 @@ export class AeDatosPersonalesCandidatoComponent {
                                 data.candidato.marital_status_id !== null
                                     ? Number(data.candidato.marital_status_id)
                                     : null,
-                            number_children:
-                                data.candidato.number_children || '',
+                            puesto:
+                                data.candidato.puesto || '',
                             grado_instruccion:
                                 data.candidato.education_degree_id || '',
                             profesion: data.candidato.profesion || '',
@@ -339,7 +339,7 @@ export class AeDatosPersonalesCandidatoComponent {
                 this.postulanteForm.value.estado_civil !== null
                     ? Number(this.postulanteForm.value.estado_civil)
                     : null,
-            number_children: this.postulanteForm.value.number_children,
+            puesto: this.postulanteForm.value.puesto,
             age: this.calculateAge(this.postulanteForm.value.fecha_nacimiento),
             education_degree_id: this.postulanteForm.value.grado_instruccion,
             profesion: this.postulanteForm.value.profesion,
