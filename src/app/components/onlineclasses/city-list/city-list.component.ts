@@ -44,7 +44,6 @@ export class CityListComponent {
         this.loading = true;
         this.ciudadService.getCiudadesByDomain(this.domain_id).subscribe(
             (response: any) => {
-                console.log('Datos recibidos del backend:', response); // Ver los datos recibidos
     
                 // Asigna directamente la respuesta ya que ahora es un array de ciudades
                 this.ciudadesList = response;

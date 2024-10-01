@@ -309,7 +309,7 @@
             </div>
         </form>
         <app-informacion-academica-candidato
-        *ngIf="rolId === 8 || rolId === 22"
+        *ngIf="(rolId === 8 || rolId === 22) && acciones !== 'add'"
         [candidatoId]="postulanteId"
         [mostrarAcciones]="false"
     ></app-informacion-academica-candidato>

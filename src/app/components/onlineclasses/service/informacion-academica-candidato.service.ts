@@ -64,7 +64,7 @@ export class InformacionAcademicaCandidatoService {
     // Obtener información académica por ID (para detalles o edición)
     getInformacionAcademicaById(id: number): Observable<ApiResponse> {
         return this.http
-            .get<ApiResponse>(`${this.baseUrl}w${id}`)
+            .get<ApiResponse>(`${this.baseUrl}informacion_academica/${id}`)
             .pipe(
                 catchError((error) => {
                     console.error('Error al obtener la información académica por ID:', error);

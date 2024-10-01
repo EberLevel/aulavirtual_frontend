@@ -43,26 +43,29 @@ export class InformacionAcademicaCandidatoComponent {
     listarInformacionAcademica() {
         this.loading = true;
         this.informacionAcademicaService
-            .getInformacionAcademicaByDomainId(this.domain_id)
+            .getInformacionAcademicaById(this.candidatoId)
             .subscribe(
                 (response: any) => {
-                    this.informacionAcademicaList = response.data.map(
-                        (item: any) => {
-                            item.estado = this.getEstadoLabel(item.estado_id);
-                            return item;
-                        }
-                    );
+                    // Verificar si `response.data` es un array antes de llamar a `map`
+                    if (response && Array.isArray(response.data)) {
+                        this.informacionAcademicaList = response.data.map(
+                            (item: any) => {
+                                item.estado = this.getEstadoLabel(item.estado_id);
+                                return item;
+                            }
+                        );
+                    } else {
+                        console.warn('No se encontraron datos en la respuesta:', response);
+                        this.informacionAcademicaList = []; // Asignar un array vacío si no hay datos
+                    }
                     this.loading = false;
                 },
                 (error) => {
-                    console.error(
-                        'Error al obtener la documentación:',
-                        error
-                    );
+                    console.error('Error al obtener la documentación:', error);
                     this.loading = false;
                 }
             );
-    }
+    }    
 
     // Función para obtener la etiqueta del estado
     getEstadoLabel(estadoId: number): string {

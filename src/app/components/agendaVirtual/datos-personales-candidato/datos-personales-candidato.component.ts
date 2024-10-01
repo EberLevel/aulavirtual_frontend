@@ -33,13 +33,9 @@ export class DatosPersonalesCandidatoComponent {
     ngOnInit(): void {
         this.domain_id = this.helpersService.getDominioId();
         this.candidato_id = this.helpersService.getCandidatoId();
-        console.log('candidato_id:', this.candidato_id);
-        console.log('this.config.data', this.config.data);
         // Verificar si config y config.data existen antes de acceder a ciudad
         if (this.config && this.config.data) {
             this.ciudad_id = this.config.data.ciudad?.id; // Asegúrate de usar la propiedad correcta del objeto `ciudad`
-            console.log('Datos de ciudad recibidos:', this.config.data.ciudad); // Imprime todo el objeto ciudad
-            console.log('Ciudad ID recibido:', this.ciudad_id);
         } else {
             console.error(
                 'No se recibieron los datos de configuración necesarios.'
@@ -58,10 +54,6 @@ export class DatosPersonalesCandidatoComponent {
                 .getCandidatosByCiudad(this.ciudad_id)
                 .subscribe(
                     (response: any) => {
-                        console.log(
-                            'Respuesta del backend para getCandidatosByCiudad:',
-                            response
-                        );
                         this.candidatoList = response.data;
                         this.originalCandidatoList = [...response.data];
                         this.loading = false;
