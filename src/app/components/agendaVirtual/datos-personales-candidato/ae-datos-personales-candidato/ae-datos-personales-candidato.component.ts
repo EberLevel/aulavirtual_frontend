@@ -68,10 +68,12 @@ export class AeDatosPersonalesCandidatoComponent {
             console.log('No se recibió el Ciudad ID.');
         }
 
-        if (this.rolId === 8) {
+        if (this.rolId === 8 || 22) {
             this.postulanteId = this.config.data.postulanteId; // Solo asigna el ID del postulante si el rolId es 8
+            console.log("this.postulanteId",this.postulanteId)
         } else if (this.rolId !== 8) {
             this.rolId = 25; // Si el rol no es 8, lo asigna como 21
+            console.log("Cambio")
         }
 
         // Definir las validaciones del formulario
