@@ -56,7 +56,7 @@ export class InformacionAcademicaCandidatoComponent {
                 },
                 (error) => {
                     console.error(
-                        'Error al obtener la información académica:',
+                        'Error al obtener la documentación:',
                         error
                     );
                     this.loading = false;
@@ -73,12 +73,13 @@ export class InformacionAcademicaCandidatoComponent {
     }
 
     navigateAddInformacion() {
+        console.log("asdasdasd", this.candidatoId)
         this.ref = this.dialogService.open(
             AeInformacionAcademicaCandidatoComponent,
             {
                 width: '90%',
                 styleClass: 'custom-dialog-header',
-                data: { acciones: 'add', domain_id: this.domain_id },
+                data: { acciones: 'add', domain_id: this.domain_id, candidato_id: this.candidatoId, },
             }
         );
         this.ref.onClose.subscribe(() => {

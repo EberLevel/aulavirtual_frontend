@@ -45,7 +45,8 @@ export class AeInformacionAcademicaCandidatoComponent {
     ngOnInit(): void {
         // Obtener los valores de dominio y candidato
         this.domain_id = this.helpersService.getDominioId();
-        this.candidato_id = this.helpersService.getCandidatoId();
+        this.candidato_id = this.config.data.candidato_id || this.helpersService.getCandidatoId();
+        console.log("candidato_id AeInformacionAcademicaCandidatoComponent " ,this.candidato_id )
         console.log('Dominio ID:', this.domain_id); // Verificar si se obtiene correctamente
         console.log('candidato_id ID:', this.candidato_id); // Verificar si se obtiene correctamente
 
