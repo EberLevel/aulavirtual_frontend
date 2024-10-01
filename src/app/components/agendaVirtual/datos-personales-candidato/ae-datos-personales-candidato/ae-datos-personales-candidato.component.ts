@@ -58,6 +58,7 @@ export class AeDatosPersonalesCandidatoComponent {
     public gradoInstruccionOptions: any[] = [];
     public profesionOptions: any[] = [];
     public selectedEstadoColor: string = '';
+    passwordStored!: boolean;
     constructor(
         private fb: FormBuilder,
         private ref: DynamicDialogRef,
@@ -95,7 +96,7 @@ export class AeDatosPersonalesCandidatoComponent {
             telefono: [''],
             fecha_nacimiento: [''],
             edad: [{ value: '', disabled: true }],
-            email: ['', [Validators.email]],
+            email: [''],
             contrasena: ['', Validators.required],
             doc_identidad: [''],
             numero_documento: [''],
@@ -195,7 +196,7 @@ export class AeDatosPersonalesCandidatoComponent {
             this.candidatoService
                 .getCandidatoById(postulanteId)
                 .subscribe((data: any) => {
-
+                    console.log("console.log(this.postulanteForm)",this.postulanteForm)
                     // Asegúrate de que los datos existan antes de hacer el patchValue
                     if (data && data.candidato) {
                         this.postulanteForm.patchValue({
@@ -232,10 +233,8 @@ export class AeDatosPersonalesCandidatoComponent {
                                 this.convertToDate(
                                     data.candidato.date_affiliation
                                 ) || '',
+                                contrasena: data.password_stored ? '********' : '',
                         });
-                        console.log('Valor de ocupacion_actual:', this.afiliacionOptions.find(option => option.value === data.candidato.ocupacion_actual)?.value);
-                        console.log('Valor de estado_actual:', this.estadoOptions.find(option => option.value === data.candidato.estado_actual)?.value);
-                        
                     } else {
                         console.error(
                             'No se encontraron datos de candidato en la respuesta.'
@@ -283,42 +282,42 @@ export class AeDatosPersonalesCandidatoComponent {
         if (this.postulanteForm.valid) {
             // Habilita el campo 'code' si está deshabilitado (si es necesario)
             this.postulanteForm.get('code')?.enable();
-
+    
+            // Verifica si la contraseña fue modificada
+            let contrasena = this.postulanteForm.value.contrasena;
+            if (contrasena === '********') {
+                contrasena = null; // No enviar la contraseña si no fue modificada
+            }
+    
             // Verificar si `ciudad_id` está presente; si no, obtenerlo del backend
             if (!this.config.data.ciudad_id && this.acciones === 'actualizar') {
                 const candidatoId = this.config.data.data.id;
-                this.candidatoService
-                    .getCiudadByCandidato(candidatoId)
-                    .subscribe(
-                        (response: any) => {
-                            // Asignar el `ciudad_id` recibido de la respuesta y continuar con el guardado o actualización
-                            this.config.data.ciudad_id = response.ciudad_id;
-                            this.enviarDatosCandidato();
-                        },
-                        (error: any) => {
-                            console.error('Error al obtener ciudad_id:', error);
-                            Swal.fire(
-                                'Error',
-                                'No se pudo obtener el ID de la ciudad para este candidato.',
-                                'error'
-                            );
-                        }
-                    );
+                this.candidatoService.getCiudadByCandidato(candidatoId).subscribe(
+                    (response: any) => {
+                        // Asignar el `ciudad_id` recibido de la respuesta y continuar con el guardado o actualización
+                        this.config.data.ciudad_id = response.ciudad_id;
+                        this.enviarDatosCandidato(contrasena);
+                    },
+                    (error: any) => {
+                        console.error('Error al obtener ciudad_id:', error);
+                        Swal.fire(
+                            'Error',
+                            'No se pudo obtener el ID de la ciudad para este candidato.',
+                            'error'
+                        );
+                    }
+                );
             } else {
                 // Si ya se tiene el `ciudad_id`, continuar directamente con el guardado o actualización
-                this.enviarDatosCandidato();
+                this.enviarDatosCandidato(contrasena);
             }
         } else {
             console.error('Formulario inválido');
-            Swal.fire(
-                'Error',
-                'Formulario Invalida, revisar los campos',
-                'error'
-            );
+            Swal.fire('Error', 'Formulario inválido, revisar los campos', 'error');
         }
     }
-
-    enviarDatosCandidato() {
+    
+    enviarDatosCandidato(contrasena: string | null) {
         const postulanteData: any = {
             code: this.postulanteForm.value.code,
             apaterno: this.postulanteForm.value.apaterno,
@@ -328,7 +327,7 @@ export class AeDatosPersonalesCandidatoComponent {
             telefono: this.postulanteForm.value.telefono,
             fecha_nacimiento: this.postulanteForm.value.fecha_nacimiento,
             email: this.postulanteForm.value.email,
-            password: this.postulanteForm.value.contrasena,
+            password: contrasena, // Usar la variable `contrasena` pasada como argumento
             identification_document_id: this.postulanteForm.value.doc_identidad,
             identification_number: this.postulanteForm.value.numero_documento,
             marital_status_id:
@@ -347,32 +346,30 @@ export class AeDatosPersonalesCandidatoComponent {
             ciudad_id: this.config.data.ciudad_id, // Ahora seguro de que tenemos el `ciudad_id`
             distrito_id: this.distritoId
         };
-
+    
         console.log('Datos mapeados enviados al backend:', postulanteData);
-
+    
         // Verificar si la acción es actualizar o guardar
         if (this.acciones === 'actualizar') {
             const id = this.config.data.data.id;
-            this.candidatoService
-                .actualizarCandidato(id, postulanteData)
-                .subscribe(
-                    (response: any) => {
-                        this.ref?.close();
-                        Swal.fire(
-                            '¡Éxito!',
-                            'Los datos se actualizaron correctamente',
-                            'success'
-                        );
-                    },
-                    (error: any) => {
-                        console.error('Error en la solicitud:', error);
-                        Swal.fire(
-                            'Error',
-                            'Hubo un problema al actualizar el registro',
-                            'error'
-                        );
-                    }
-                );
+            this.candidatoService.actualizarCandidato(id, postulanteData).subscribe(
+                (response: any) => {
+                    this.ref?.close();
+                    Swal.fire(
+                        '¡Éxito!',
+                        'Los datos se actualizaron correctamente',
+                        'success'
+                    );
+                },
+                (error: any) => {
+                    console.error('Error en la solicitud:', error);
+                    Swal.fire(
+                        'Error',
+                        'Hubo un problema al actualizar el registro',
+                        'error'
+                    );
+                }
+            );
         } else {
             this.candidatoService.guardarCandidato(postulanteData).subscribe(
                 (response: any) => {
@@ -394,6 +391,7 @@ export class AeDatosPersonalesCandidatoComponent {
             );
         }
     }
+    
 
     closeModal(event: Event) {
         event.preventDefault();
