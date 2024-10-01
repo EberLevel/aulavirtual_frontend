@@ -46,7 +46,7 @@
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th scope="col" *ngIf="mostrarAcciones">Acciones</th>
+                                <th scope="col">Acciones</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Avance</th>
                                 <th scope="col">Estado</th>
@@ -56,7 +56,7 @@
 
                         <ng-template pTemplate="body" let-info>
                             <tr>
-                                <td *ngIf="mostrarAcciones">
+                                <td>
                                     <button
                                         pButton
                                         icon="pi pi-pencil"

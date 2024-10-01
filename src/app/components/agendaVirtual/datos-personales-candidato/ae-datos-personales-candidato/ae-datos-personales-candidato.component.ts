@@ -114,7 +114,6 @@ export class AeDatosPersonalesCandidatoComponent {
 
     getDepartamentos() {
         this.ubigeoService.getDepartamentos().subscribe((response) => {
-            console.log('departamentos: ', response);
             this.departamentoOptions = response;
         });
     }    
@@ -155,8 +154,6 @@ export class AeDatosPersonalesCandidatoComponent {
         this.candidatoService
             .getDataCreate(this.domain_id)
             .subscribe((data: any) => {
-                console.log('Datos recibidos para dropdowns:', data);
-
                 // Evitar sobrescribir si los datos están vacíos
                 this.identificationDocuments =
                     data.identification_documents &&
@@ -198,7 +195,6 @@ export class AeDatosPersonalesCandidatoComponent {
             this.candidatoService
                 .getCandidatoById(postulanteId)
                 .subscribe((data: any) => {
-                    console.log('Datos recibidos del backend:', data);
 
                     // Asegúrate de que los datos existan antes de hacer el patchValue
                     if (data && data.candidato) {
