@@ -108,7 +108,10 @@ export class AeDatosPersonalesCandidatoComponent {
             imagen: [''],
             estado_actual: ['en_evaluacion'],
             fecha_afiliacion: [''],
-            distrito_id: ['']
+            distrito_id: [''],
+            departamento: [''],
+            provincia: [''],
+            distrito: ['']
         });
         this.getDepartamentos();
     }
@@ -233,8 +236,21 @@ export class AeDatosPersonalesCandidatoComponent {
                                 this.convertToDate(
                                     data.candidato.date_affiliation
                                 ) || '',
-                                contrasena: data.password_stored ? '********' : '',
+                            contrasena: data.password_stored ? '********' : '',
+                            departamento: data.candidato.distrito_id.slice(0, 2),
+                            provincia: data.candidato.distrito_id.slice(0, 4),
+                            distrito: data.candidato.distrito_id.slice(0, 6)
                         });
+                        if (this.postulanteForm.value.departamento !== '') {
+                            this.departamentoId = this.postulanteForm.value.departamento;
+                            this.ubigeoService.getProvincias(this.departamentoId).subscribe((response) => {
+                                this.provinciaOptions = response;
+                                this.provinciaId = this.postulanteForm.value.provincia;
+                                this.ubigeoService.getDistritos(this.departamentoId, this.provinciaId).subscribe((response) => {
+                                    this.distritoOptions = response;
+                                });
+                            });
+                        }
                     } else {
                         console.error(
                             'No se encontraron datos de candidato en la respuesta.'

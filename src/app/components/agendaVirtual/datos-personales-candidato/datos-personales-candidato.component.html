@@ -37,7 +37,8 @@
                                     class="mb-2"
                                     *ngIf="
                                         helpersService.getRolId() !== 25 &&
-                                        helpersService.getRolId() !== 23 && helpersService.getRolId() !== 24
+                                        helpersService.getRolId() !== 23 &&
+                                        helpersService.getRolId() !== 24
                                     "
                                 >
                                     <button
@@ -57,9 +58,7 @@
                                 <th
                                     style="min-width: 10rem"
                                     scope="col"
-                                    *ngIf="
-                                        helpersService.getRolId() !== 23
-                                    "
+                                    *ngIf="helpersService.getRolId() !== 23"
                                 >
                                     Acciones
                                 </th>
@@ -67,10 +66,19 @@
                                     Código
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Nombre
+                                    DNI
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Teléfono
+                                    A. Paterno
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    A. Materno
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Nombres
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Celular
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
                                     % de Avance
@@ -79,21 +87,20 @@
                                     Estado
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Documento de Identidad
+                                    Región
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
-                                    Fecha de Afiliación
+                                    Provincia
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Distrito
                                 </th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-postulante>
                             <tr>
-                                <td
-                                    *ngIf="
-                                        helpersService.getRolId() !== 23
-                                    "
-                                >
+                                <td *ngIf="helpersService.getRolId() !== 23">
                                     <button
                                         pButton
                                         icon="pi pi-pencil"
@@ -103,9 +110,7 @@
                                         (click)="navigateToEdit(postulante)"
                                     ></button>
                                     <button
-                                    *ngIf="
-                                    helpersService.getRolId() !== 25
-                                "
+                                        *ngIf="helpersService.getRolId() !== 25"
                                         pButton
                                         icon="pi pi-trash"
                                         style="width: 70px; border-radius: 30px"
@@ -117,38 +122,65 @@
                                     ></button>
                                 </td>
                                 <td>{{ postulante.code || "Sin código" }}</td>
+                                <td>
+                                    {{
+                                        postulante.identification_number ||
+                                            "Sin DNI"
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                        postulante.apaterno || "Sin A. Paterno"
+                                    }}
+                                </td>
+                                <td>
+                                    {{
+                                        postulante.amaterno || "Sin A. Materno"
+                                    }}
+                                </td>
                                 <td>{{ postulante.nombre || "Sin nombre" }}</td>
                                 <td>
                                     {{ postulante.phone || "Sin teléfono" }}
                                 </td>
                                 <td>
-                                    {{ postulante.education_degree_id || "Sin % de Avance" }}
+                                    {{
+                                        postulante.education_degree_id ||
+                                            "Sin % de Avance"
+                                    }}
                                 </td>
                                 <td>
-                                    <div class="estColor"
+                                    <div
+                                        class="estColor"
                                         [ngClass]="{
-                                            'estado-aprobado': postulante.estado_actual === 'aprobado',
-                                            'estado-desaprobado': postulante.estado_actual === 'desaprobado',
-                                            'estado-observado': postulante.estado_actual === 'observado',
-                                            'estado-evaluacion': postulante.estado_actual === 'en_evaluacion'
-                                        }">
-                                        {{ formatEstado(postulante.estado_actual) }}
+                                            'estado-aprobado':
+                                                postulante.estado_actual ===
+                                                'aprobado',
+                                            'estado-desaprobado':
+                                                postulante.estado_actual ===
+                                                'desaprobado',
+                                            'estado-observado':
+                                                postulante.estado_actual ===
+                                                'observado',
+                                            'estado-evaluacion':
+                                                postulante.estado_actual ===
+                                                'en_evaluacion'
+                                        }"
+                                    >
+                                        {{
+                                            formatEstado(
+                                                postulante.estado_actual
+                                            )
+                                        }}
                                     </div>
                                 </td>
-                                
                                 <td>
-                                    {{
-                                        postulante.identification_number ||
-                                            "Sin documento"
-                                    }}
+                                    {{ postulante?.distrito?.department?.name }}
                                 </td>
                                 <td>
-                                    {{
-                                        postulante.date_affiliation
-                                            ? (postulante.date_affiliation
-                                              | date : "dd/MM/yyyy")
-                                            : "Sin fecha de afiliación"
-                                    }}
+                                    {{ postulante?.distrito?.province?.name }}
+                                </td>
+                                <td>
+                                    {{ postulante?.distrito?.name }}
                                 </td>
                             </tr>
                         </ng-template>
