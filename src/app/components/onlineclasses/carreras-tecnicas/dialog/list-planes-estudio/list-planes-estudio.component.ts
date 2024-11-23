@@ -8,7 +8,7 @@ import { PlanDeEstudiosService } from '../../../service/plan-de-estudios.service
     styleUrls: ['./list-planes-estudio.component.scss'],
 })
 export class ListPlanesEstudioComponent implements OnInit {
-    planEstudio: any = null;
+    planEstudio: any[] = []; // Ahora es un arreglo de objetos
     loading: boolean = true;
 
     constructor(
@@ -22,25 +22,26 @@ export class ListPlanesEstudioComponent implements OnInit {
     }
 
     obtenerPlanDeEstudio(carreraId: number): void {
-        this.planDeEstudiosService.getPlanDeEstudioPorCarrera(carreraId).subscribe(
-            (response: any) => {
-                this.planEstudio = {
-                    ...response,
-                    formattedDate: this.formatDate(response.created_at),
-                };
-                this.loading = false;
-            },
-            (error) => {
-                console.error('Error al obtener el plan de estudios:', error);
-                this.loading = false;
-            }
-        );
-    }
-
-    formatDate(dateString: string): string {
-        const date = new Date(dateString);
-        return `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1)
-            .toString()
-            .padStart(2, '0')}-${date.getFullYear()}`;
+        this.planDeEstudiosService
+            .getPlanDeEstudioPorCarrera(carreraId)
+            .subscribe(
+                (response: any) => {
+                    if (response && response.length > 0) {
+                        this.planEstudio = response; // Asignar directamente el arreglo recibido
+                    } else {
+                        // Si no hay datos, dejamos planEstudio como un arreglo vacío
+                        this.planEstudio = [];
+                    }
+                    this.loading = false;
+                },
+                (error) => {
+                    console.error(
+                        'Error al obtener el plan de estudios:',
+                        error
+                    );
+                    this.planEstudio = []; // Para manejar casos de error
+                    this.loading = false;
+                }
+            );
     }
 }

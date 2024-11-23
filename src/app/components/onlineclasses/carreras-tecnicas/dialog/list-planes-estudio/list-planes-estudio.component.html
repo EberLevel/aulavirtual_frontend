@@ -10,7 +10,7 @@
                 <div class="field md:col-12">
                     <p-table
                         #dt1
-                        [value]="[planEstudio]"
+                        [value]="planEstudio"
                         [rows]="10"
                         [loading]="loading"
                         [rowHover]="true"
@@ -18,29 +18,29 @@
                         responsiveLayout="scroll"
                         class="custom-search-input"
                     >
-                        <!-- Tabla con nombre y fecha -->
+                        <!-- Tabla con estado_id y nombre_plan_de_estudio -->
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="min-width: 15rem" scope="col">
-                                    Nombre del Plan de Estudio
+                                <th style="min-width: 10rem" scope="col">
+                                    ID
                                 </th>
                                 <th style="min-width: 15rem" scope="col">
-                                    Fecha de Creación
+                                    Nombre del Plan de Estudio
                                 </th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-plan>
-                            <tr *ngIf="plan">
-                                <td>{{ plan.nombre }}</td>
-                                <td>{{ plan.formattedDate }}</td>
+                            <tr>
+                                <td>{{ plan.estado_id }}</td>
+                                <td>{{ plan.nombre_plan_de_estudio }}</td>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td colspan="2">
-                                    No se encontró el plan de estudio.
+                                <td colspan="2" class="text-center">
+                                    No se encontraron Planes de Estudio para esta carrera.
                                 </td>
                             </tr>
                         </ng-template>
