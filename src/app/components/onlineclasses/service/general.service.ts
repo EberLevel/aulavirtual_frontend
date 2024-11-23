@@ -52,7 +52,7 @@ export class GeneralService {
     getPromedioCurso(cursoId: number) {
         return this.http.get<any>(`${this.baseUrl}cursos/promedio/${cursoId}`);
     }
-    
+
     guardarCarreraTecnica(parametro: any): Observable<ApiResponse> {
         return this.http
             .post<ApiResponse>(`${this.baseUrl}carreras`, parametro, {
@@ -76,7 +76,6 @@ export class GeneralService {
                 })
             );
     }
-    
 
     editarCarreraTecnica(parametro: any): Observable<ApiResponse> {
         return this.http
@@ -273,30 +272,45 @@ export class GeneralService {
             );
     }
 
+    getAllCursos(): Observable<any[]> {
+        return this.http
+            .get<any[]>(`${this.baseUrl}unidades/all`) // Cambia ApiResponse por any[]
+            .pipe(
+                tap((response) => {
+                    console.log('Cursos obtenidos:', response); // Depuración
+                }),
+                catchError((error) => {
+                    console.error('Error al obtener los cursos:', error);
+                    return throwError(
+                        () => new Error('Error al obtener los cursos.')
+                    );
+                })
+            );
+    }
+
     getCursos(id: number) {
-      return this.http
-          .get<ApiResponse>(`${this.baseUrl}cursos/carrera/${id}`, {
-              observe: 'response',
-          })
-          .pipe(
-              tap((response: HttpResponse<ApiResponse>) => {
-                  // console.log('HTTP Status Code:', response.status);
-              }),
-              map((response: HttpResponse<ApiResponse>) => {
-                  // console.log('Response body:', response.body);
-                  if (response.status === 200 && response.body) {
-                      return response.body;
-                  } else {
-                      throw new Error(
-                          response.body
-                              ? response.body.responseMessage
-                              : 'Unknown error'
-                      );
-                  }
-              })
-          );
-  }
-  
+        return this.http
+            .get<ApiResponse>(`${this.baseUrl}cursos/carrera/${id}`, {
+                observe: 'response',
+            })
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    // console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    // console.log('Response body:', response.body);
+                    if (response.status === 200 && response.body) {
+                        return response.body;
+                    } else {
+                        throw new Error(
+                            response.body
+                                ? response.body.responseMessage
+                                : 'Unknown error'
+                        );
+                    }
+                })
+            );
+    }
 
     getSyllabusByCurso(idCurso: number) {
         return this.http
@@ -1062,19 +1076,28 @@ export class GeneralService {
                 })
             );
     }
-    
+
     getNotasPorAlumnoYGrupo(alumnoId: number, grupoId: number) {
-        return this.http.get(`${this.baseUrl}evaluaciones/alumno/${alumnoId}/${grupoId}`);
-      }
-
-      getPromedioPorAlumno(alumnoId: number, grupoId: number) {
-        return this.http.get<any>(`${this.baseUrl}evaluacionesByAlumno/alumno/${alumnoId}/${grupoId}`);
+        return this.http.get(
+            `${this.baseUrl}evaluaciones/alumno/${alumnoId}/${grupoId}`
+        );
     }
 
-    getEvaluacionesPorGrupo(grupoId: number, alumnoId: number): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}evaluacionesBygrupo/grupo/${grupoId}/${alumnoId}`);
+    getPromedioPorAlumno(alumnoId: number, grupoId: number) {
+        return this.http.get<any>(
+            `${this.baseUrl}evaluacionesByAlumno/alumno/${alumnoId}/${grupoId}`
+        );
     }
-    
+
+    getEvaluacionesPorGrupo(
+        grupoId: number,
+        alumnoId: number
+    ): Observable<any> {
+        return this.http.get<any>(
+            `${this.baseUrl}evaluacionesBygrupo/grupo/${grupoId}/${alumnoId}`
+        );
+    }
+
     getListadoDeEvaluacionesPorGrupo(parametro: any): Observable<ApiResponse> {
         return this.http
             .get<ApiResponse>(`${this.baseUrl}evaluaciones/${parametro.id}`, {
@@ -1161,7 +1184,7 @@ export class GeneralService {
                 map((response: HttpResponse<any[]>) => {
                     console.log('Response body:', response.body);
                     if (response.status === 200 && response.body) {
-                        return response.body;  // Si la respuesta es un array, la retornamos directamente
+                        return response.body; // Si la respuesta es un array, la retornamos directamente
                     } else {
                         throw new Error('Error obteniendo los alumnos');
                     }
@@ -1169,9 +1192,11 @@ export class GeneralService {
             );
     }
     getPromedioEvaluaciones(cursoId: number, alumnoId: number) {
-        return this.http.get<any>(`${this.baseUrl}evaluacionesByalumnos/promedio/${cursoId}/${alumnoId}`);
+        return this.http.get<any>(
+            `${this.baseUrl}evaluacionesByalumnos/promedio/${cursoId}/${alumnoId}`
+        );
     }
-    
+
     updateAlumnoCurso(data: any): Observable<ApiResponse> {
         return this.http
             .post<ApiResponse>(`${this.baseUrl}participantes`, data, {
@@ -1931,31 +1956,38 @@ export class GeneralService {
 
     guardarPreguntaAlumno(parametro: any): Observable<ApiResponse> {
         return this.http
-          .post<ApiResponse>(`${this.baseUrl}alumno-preguntas/`, parametro, {
-            observe: 'response',
-          })
-          .pipe(
-            tap((response: HttpResponse<ApiResponse>) => {
-              console.log('HTTP Status Code:', response.status);
-            }),
-            map((response: HttpResponse<ApiResponse>) => {
-              console.log('Response body:', response.body);
-      
-              // Si la respuesta tiene un status 200 o 201, la tratamos como éxito.
-              if ((response.status === 201 || response.status === 200) && response.body) {
-                return response.body;
-              } else {
-                // Lanzar un error solo si el status no es exitoso.
-                throw new Error('Respuesta no válida o falta información del servidor.');
-              }
-            }),
-            catchError((error) => {
-              console.error('Error en la solicitud:', error);
-              return throwError(() => new Error('Error en la solicitud al servidor'));
+            .post<ApiResponse>(`${this.baseUrl}alumno-preguntas/`, parametro, {
+                observe: 'response',
             })
-          );
-      }
-         
+            .pipe(
+                tap((response: HttpResponse<ApiResponse>) => {
+                    console.log('HTTP Status Code:', response.status);
+                }),
+                map((response: HttpResponse<ApiResponse>) => {
+                    console.log('Response body:', response.body);
+
+                    // Si la respuesta tiene un status 200 o 201, la tratamos como éxito.
+                    if (
+                        (response.status === 201 || response.status === 200) &&
+                        response.body
+                    ) {
+                        return response.body;
+                    } else {
+                        // Lanzar un error solo si el status no es exitoso.
+                        throw new Error(
+                            'Respuesta no válida o falta información del servidor.'
+                        );
+                    }
+                }),
+                catchError((error) => {
+                    console.error('Error en la solicitud:', error);
+                    return throwError(
+                        () => new Error('Error en la solicitud al servidor')
+                    );
+                })
+            );
+    }
+
     getListadoDeEvaluacionesPorCurso(parametro: any): Observable<ApiResponse> {
         return this.http
             .get<ApiResponse>(
@@ -1981,8 +2013,10 @@ export class GeneralService {
             );
     }
     getSumaCalificaciones(alumnoId: number, evaluacionId: number) {
-        return this.http.get(`${this.baseUrl}suma-calificaciones?alumno_id=${alumnoId}&evaluacion_id=${evaluacionId}`);
-      }
+        return this.http.get(
+            `${this.baseUrl}suma-calificaciones?alumno_id=${alumnoId}&evaluacion_id=${evaluacionId}`
+        );
+    }
     getListadoDePreguntasPorCorregir(parametro: any): Observable<ApiResponse> {
         return this.http
             .get<ApiResponse>(
@@ -2113,7 +2147,10 @@ export class GeneralService {
     }
 
     // actualizarOfertaLaboral
-    actualizarOfertaLaboral(parametro: any, id: number): Observable<ApiResponse> {
+    actualizarOfertaLaboral(
+        parametro: any,
+        id: number
+    ): Observable<ApiResponse> {
         return this.http
             .put<ApiResponse>(
                 `${this.urlparametro}ofertas-empleo/${id}`,
@@ -2165,11 +2202,9 @@ export class GeneralService {
 
     guardarProyecto(parametro: any): Observable<ApiResponse> {
         return this.http
-            .post<ApiResponse>(
-                `${this.urlparametro}proyectos`,
-                parametro,
-                { observe: 'response' }
-            )
+            .post<ApiResponse>(`${this.urlparametro}proyectos`, parametro, {
+                observe: 'response',
+            })
             .pipe(
                 tap((response: HttpResponse<ApiResponse>) => {
                     // console.log('HTTP Status Code:', response.status);
@@ -2271,9 +2306,12 @@ export class GeneralService {
 
     getModulos(proyecto_id: string) {
         return this.http
-            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyecto_id}/modulos`, {
-                observe: 'response',
-            })
+            .get<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyecto_id}/modulos`,
+                {
+                    observe: 'response',
+                }
+            )
             .pipe(
                 tap((response: HttpResponse<ApiResponse>) => {
                     // console.log('HTTP Status Code:', response.status);
@@ -2319,7 +2357,11 @@ export class GeneralService {
             );
     }
 
-    actualizarModulo(parametro: any, proyectoId: number, id: number): Observable<ApiResponse> {
+    actualizarModulo(
+        parametro: any,
+        proyectoId: number,
+        id: number
+    ): Observable<ApiResponse> {
         return this.http
             .put<ApiResponse>(
                 `${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`,
@@ -2347,9 +2389,12 @@ export class GeneralService {
 
     getTarea(proyectoId: number, moduloId: number, id: number) {
         return this.http
-            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`, {
-                observe: 'response',
-            })
+            .get<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`,
+                {
+                    observe: 'response',
+                }
+            )
             .pipe(
                 tap((response: HttpResponse<ApiResponse>) => {
                     // console.log('HTTP Status Code:', response.status);
@@ -2371,9 +2416,12 @@ export class GeneralService {
 
     getModulo(proyectoId: number, id: number) {
         return this.http
-            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`, {
-                observe: 'response',
-            })
+            .get<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`,
+                {
+                    observe: 'response',
+                }
+            )
             .pipe(
                 tap((response: HttpResponse<ApiResponse>) => {
                     // console.log('HTTP Status Code:', response.status);
@@ -2395,9 +2443,12 @@ export class GeneralService {
 
     eliminarModulo(proyectoId: number, id: number): Observable<ApiResponse> {
         return this.http
-            .delete<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`, {
-                observe: 'response',
-            })
+            .delete<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos/${id}`,
+                {
+                    observe: 'response',
+                }
+            )
             .pipe(
                 tap((response: HttpResponse<ApiResponse>) => {
                     // console.log('HTTP Status Code:', response.status);
@@ -2423,11 +2474,18 @@ export class GeneralService {
             );
     }
 
-    eliminarTarea(proyectoId: number, moduloId: number, id: number): Observable<ApiResponse> {
+    eliminarTarea(
+        proyectoId: number,
+        moduloId: number,
+        id: number
+    ): Observable<ApiResponse> {
         return this.http
-            .delete<ApiResponse>(`${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`, {
-                observe: 'response',
-            })
+            .delete<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`,
+                {
+                    observe: 'response',
+                }
+            )
             .pipe(
                 tap((response: HttpResponse<ApiResponse>) => {
                     // console.log('HTTP Status Code:', response.status);
@@ -2455,9 +2513,12 @@ export class GeneralService {
 
     getTareas(proyecto_id: string, modulo_id: string) {
         return this.http
-            .get<ApiResponse>(`${this.urlparametro}proyectos/${proyecto_id}/modulos/${modulo_id}/tareas`, {
-                observe: 'response',
-            })
+            .get<ApiResponse>(
+                `${this.urlparametro}proyectos/${proyecto_id}/modulos/${modulo_id}/tareas`,
+                {
+                    observe: 'response',
+                }
+            )
             .pipe(
                 tap((response: HttpResponse<ApiResponse>) => {
                     // console.log('HTTP Status Code:', response.status);
@@ -2477,7 +2538,11 @@ export class GeneralService {
             );
     }
 
-    guardarTarea(parametro: any, proyectoId: any, moduloId: number): Observable<ApiResponse> {
+    guardarTarea(
+        parametro: any,
+        proyectoId: any,
+        moduloId: number
+    ): Observable<ApiResponse> {
         return this.http
             .post<ApiResponse>(
                 `${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas`,
@@ -2503,7 +2568,12 @@ export class GeneralService {
             );
     }
 
-    actualizarTarea(parametro: any, proyectoId: number, moduloId: number, id: number): Observable<ApiResponse> {
+    actualizarTarea(
+        parametro: any,
+        proyectoId: number,
+        moduloId: number,
+        id: number
+    ): Observable<ApiResponse> {
         return this.http
             .put<ApiResponse>(
                 `${this.urlparametro}proyectos/${proyectoId}/modulos/${moduloId}/tareas/${id}`,

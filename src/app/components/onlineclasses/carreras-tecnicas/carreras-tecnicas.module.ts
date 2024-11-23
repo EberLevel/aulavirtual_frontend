@@ -57,6 +57,7 @@ import { VerTemasComponent } from './dialog/ver-curso-de-carrera/opciones/ver-te
 import { ListadoEvaluacionPresencialComponent } from './dialog/ver-curso-de-carrera/opciones/listado-evaluacion-presencial/listado-evaluacion-presencial.component';
 import { VerGEvAlumnoComponent } from './dialog/ver-curso-de-carrera/opciones/ver-g-ev-alumno/ver-g-ev-alumno.component';
 import { VerLisEvalGrupoAlumnoComponent } from './dialog/ver-curso-de-carrera/opciones/ver-lis-eval-grupo-alumno/ver-lis-eval-grupo-alumno.component';
+import { ListPlanesEstudioComponent } from './dialog/list-planes-estudio/list-planes-estudio.component';
 
 @NgModule({
     declarations: [
@@ -80,6 +81,7 @@ import { VerLisEvalGrupoAlumnoComponent } from './dialog/ver-curso-de-carrera/op
         ListadoEvaluacionPresencialComponent,
         VerGEvAlumnoComponent,
         VerLisEvalGrupoAlumnoComponent,
+        ListPlanesEstudioComponent,
     ],
     imports: [
         CommonModule,

@@ -12,6 +12,7 @@ import { VerCursoDeCarreraComponent } from '../dialog/ver-curso-de-carrera/ver-c
 
 import Swal from 'sweetalert2';	
 import { HelpersService } from 'src/app/helpers.service';
+import { ListPlanesEstudioComponent } from '../dialog/list-planes-estudio/list-planes-estudio.component';
 
 @Component({
   selector: 'app-bandeja-carreratecnica',
@@ -56,7 +57,6 @@ export class BandejaCarreratecnicaComponent {
 
     this.ref = this.dialogService.open(RegCarrerastecnicasComponent, {
       width: '60%',
-      height: '75%',
       styleClass: 'custom-dialog-header'
     });
 
@@ -79,17 +79,18 @@ export class BandejaCarreratecnicaComponent {
   }
 
 
-  navigateTocurso(data: any) {
-    this.ref = this.dialogService.open(VerCursoDeCarreraComponent, {
-      width: '80%',
-      styleClass: 'custom-dialog-header',
-      data: { data: data}
+  navigateListPlan(data: any) {
+    this.ref = this.dialogService.open(ListPlanesEstudioComponent, {
+        width: '80%',
+        styleClass: 'custom-dialog-header',
+        data: { carreraId: data.id } // Pasar solo el ID de la carrera
     });
 
-    this.ref.onClose.subscribe((data: any) => {
-      this.listarCarrerasTecnicas(); // Recargar los datos de la tabla
+    this.ref.onClose.subscribe(() => {
+        this.listarCarrerasTecnicas(); // Recargar los datos de la tabla después de cerrar el diálogo
     });
-  }
+}
+
 
   navigateToDetalle(data: any) {
     this.ref = this.dialogService.open(VerCarreraTecnicaComponent, {
