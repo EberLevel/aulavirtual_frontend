@@ -352,7 +352,7 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Candidatos',
                                 icon: 'pi pi-users',
                                 routerLink: ['/pl-virtual/lista-ciudades'],
-                            }
+                            },
                         ],
                     },
                 ],
@@ -568,6 +568,13 @@ export class AppMenuComponent implements OnInit {
                                       ],
                                   }
                                 : null,
+                            {
+                                label: 'Unidades Didacticas',
+                                icon: 'pi pi-book',
+                                routerLink: [
+                                    '/pl-virtual/list-unidades-didacticas',
+                                ],
+                            },
                             this.tienePermiso('aula_virtual_alumno')
                                 ? {
                                       label: 'Alumno',
@@ -724,7 +731,7 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Candidatos',
                                 icon: 'pi pi-users',
                                 routerLink: ['/pl-virtual/lista-ciudades'],
-                            }
+                            },
                         ],
                     },
                 ],

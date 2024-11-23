@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { HelpersService } from 'src/app/helpers.service';
 import { CommonService } from '../../../service/common.service';
 import { Subscription } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
     selector: 'app-reg-cursos',
@@ -34,7 +35,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
     estado: any = {};
     acciones: string = '';
     domain_id = 1;
-
+    loading: boolean = true;
     subscriptions: Subscription[] = [];
     curso: any = {};
     carrera_id: any;
@@ -51,67 +52,71 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
 
     ngOnInit(): void {
         if (this.config.data.acciones !== 'add') {
-            this.idCurso = this.config.data.data.id; // ID Curso
+            this.idCurso = this.config.data.data.id; // ID del curso
         }
 
         this.cantidadTotalCreditos = this.config.data.total_creditos;
         this.acciones = this.config.data.acciones;
         this.domain_id = this.helperService.getDominioId();
-        this.carrera_id = this.curso.carrera_id;
-        // Carga de datos basada en la acción
-        if (
-            this.acciones === 'editar' ||
-            this.acciones === 'ver' ||
-            this.acciones === 'duplicar'
-        ) {
-            this.obtenerDatosCurso(this.idCurso).then(() => {
-                this.codigo = this.curso.codigo;
-                this.nombreCurso = this.curso.nombre;
-                this.ciclo = this.curso.ciclo_id;
-                this.areaFormacion = this.curso.area_de_formacion_id;
-                this.moduloFormativo = this.curso.modulo_formativo_id;
-                this.cantidadCreditos = this.curso.cantidad_de_creditos;
-                this.porcentajeCreditos = this.curso.porcentaje_de_creditos;
-                this.cantidadHoras = this.curso.cantidad_de_horas;
-                this.horasPracticas = this.curso.horas_practicas;
-                this.syllabus = this.curso.syllabus;
-                this.carrera_id = this.curso.carrera_id;
-                //console.log("carrera_id" ,this.carrera_id)
-                this.tema = this.curso.tema;
-                this.asignacionDocentes = this.curso.docente_id;
-                this.estado = this.curso.estado_id;
-
-                if (this.acciones === 'duplicar') {
-                    this.getCarrerasDropdown(this.estado);
-                }
-            });
-        } else {
-            // En el modo de agregar, inicializa las variables necesarias sin necesidad de cargar un curso existente
-            this.codigo = '';
-            this.nombreCurso = '';
-            this.ciclo = {};
-            this.areaFormacion = {};
-            this.moduloFormativo = {};
-            this.cantidadCreditos = 0;
-            this.porcentajeCreditos = 0;
-            this.cantidadHoras = 0;
-            this.horasPracticas = 0;
-            this.syllabus = '';
-            this.tema = '';
-            this.asignacionDocentes = {};
-            this.carrera_id = null;
-            this.estado = null;
-        }
-
-        // Cargar listas independientes de la acción
+        this.loading = true;
+        // Carga todas las listas necesarias en paralelo
         Promise.all([
+            this.getAllCarrerasDropdown(this.domain_id),
             this.listarModulosFormativos(),
             this.listarAreasFormacion(),
             this.listarCiclos(),
             this.listarEstados(),
             this.listarDocentes(this.domain_id),
         ]).then(() => {
-            //console.log('Datos cargados para el formulario de curso.');
+            if (
+                this.acciones === 'editar' ||
+                this.acciones === 'ver' ||
+                this.acciones === 'duplicar'
+            ) {
+                // Una vez que todas las listas se cargaron, carga los datos del curso
+                this.obtenerDatosCurso(this.idCurso).then(() => {
+                    // Asigna los valores del curso al formulario
+                    this.codigo = this.curso.codigo;
+                    this.nombreCurso = this.curso.nombre;
+                    this.ciclo = this.curso.ciclo_id;
+                    this.areaFormacion = this.curso.area_de_formacion_id;
+                    this.moduloFormativo = this.curso.modulo_formativo_id;
+                    this.cantidadCreditos = this.curso.cantidad_de_creditos;
+                    this.porcentajeCreditos = this.curso.porcentaje_de_creditos;
+                    this.cantidadHoras = this.curso.cantidad_de_horas;
+                    this.horasPracticas = this.curso.horas_practicas;
+                    this.syllabus = this.curso.syllabus;
+                    this.tema = this.curso.tema;
+                    this.asignacionDocentes = this.curso.docente_id;
+                    this.estado = this.curso.estado_id;
+
+                    // Asigna la carrera seleccionada al dropdown
+                    this.carreraSeleccionada = this.carrerasList.find(
+                        (carrera) => carrera.value === this.curso.carrera_id
+                    );
+
+                    if (this.acciones === 'duplicar') {
+                        this.getCarrerasDropdown(this.estado);
+                    }
+                });
+            } else {
+                // En el modo de agregar, inicializa las variables necesarias
+                this.codigo = '';
+                this.nombreCurso = '';
+                this.ciclo = {};
+                this.areaFormacion = {};
+                this.moduloFormativo = {};
+                this.cantidadCreditos = 0;
+                this.porcentajeCreditos = 0;
+                this.cantidadHoras = 0;
+                this.horasPracticas = 0;
+                this.syllabus = '';
+                this.tema = '';
+                this.asignacionDocentes = {};
+                this.carrera_id = null;
+                this.estado = null;
+            }
+            this.loading = false;
         });
     }
 
@@ -132,11 +137,11 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             syllabus: this.syllabus,
             tema: this.tema,
             asignacionDocentesId: this.asignacionDocentes,
-            carreraId: this.config.data.id,
+            carreraId: this.carreraSeleccionada?.value,
             estadoId: this.estado,
             domain_id: this.domain_id,
         };
-        console.log("curso",curso)
+        console.log('Datos enviados al backend (curso):', curso);
 
         if (curso) {
             this.parametroService.guardarCurso(curso).subscribe(
@@ -158,23 +163,28 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
         }
     }
 
+    onCarreraChange(event: any): void {
+        console.log('Carrera seleccionada:', this.carreraSeleccionada);
+    }
+
     // Función para obtener las carreras filtradas por el Plan de Estudio
-    getCarrerasDropdown(planDeEstudioId: number) {
-        this.commonService
-            .getCarrerasDropdownByPlanDeEstudio(planDeEstudioId)
-            .subscribe(
-                (response) => {
-                    this.carrerasList = response.map((carrera: any) => {
-                        return {
-                            name: carrera.nombres,
-                            value: carrera.id,
-                        };
-                    });
+    getAllCarrerasDropdown(domain_id: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.commonService.getCarrerasDropdown(domain_id).subscribe(
+                (response: any[]) => {
+                    this.carrerasList = response.map((carrera) => ({
+                        name: carrera.nombres, // Texto visible en el dropdown
+                        value: carrera.id, // Valor único de la carrera
+                    }));
+                    console.log('Carreras cargadas:', this.carrerasList);
+                    resolve(); // Resuelve la promesa cuando los datos se cargan correctamente
                 },
                 (error) => {
-                    //console.error('Error obteniendo carreras', error);
+                    console.error('Error al listar carreras:', error);
+                    reject(error); // Rechaza la promesa en caso de error
                 }
             );
+        });
     }
 
     onPlanDeEstudioChange(event: any) {
@@ -247,15 +257,17 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             horasPracticas: this.horasPracticas,
             syllabus: this.syllabus,
             tema: this.tema,
-            asignacionDocentesId: this.asignacionDocentes ? this.asignacionDocentes.value : null, // Verifica si asignacionDocentes tiene valor
-            carreraId: this.carrera_id,
+            asignacionDocentesId: this.asignacionDocentes
+                ? this.asignacionDocentes.value
+                : null, // Verifica si asignacionDocentes tiene valor
+            carreraId: this.carreraSeleccionada.value,
             estadoId: this.estado,
             cursoId: this.config.data.data.id,
             domain_id: this.domain_id,
         };
-    
+
         console.log('Curso a actualizar', curso);
-    
+
         if (curso) {
             this.parametroService.actualizarCurso(curso).subscribe(
                 (response: any) => {
@@ -275,7 +287,6 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             console.error('Formulario inválido');
         }
     }
-    
 
     onCantidadCreditosChange(newValue: number) {
         if (
@@ -305,6 +316,24 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
                 (error: any) => reject(error)
             );
         });
+    }
+
+    getCarrerasDropdown(planDeEstudioId: number) {
+        this.commonService
+            .getCarrerasDropdownByPlanDeEstudio(planDeEstudioId)
+            .subscribe(
+                (response) => {
+                    this.carrerasList = response.map((carrera: any) => {
+                        return {
+                            name: carrera.nombres,
+                            value: carrera.id,
+                        };
+                    });
+                },
+                (error) => {
+                    //console.error('Error obteniendo carreras', error);
+                }
+            );
     }
 
     listarModulosFormativos(): Promise<void> {
@@ -355,7 +384,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             );
         });
     }
-    
+
     listarDocentes(domain_id: any): Promise<void> {
         return new Promise((resolve, reject) => {
             this.commonService.getDocentesDropdown(this.domain_id).subscribe(

@@ -1,0 +1,60 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl">
+            Reporte de Planes de Estudio
+        </span>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row mb-4">
+            <div class="grid p-fluid">
+                <div class="field md:col-12">
+                    <p-table
+                        #dt1
+                        [value]="planEstudio"
+                        [rows]="10"
+                        [loading]="loading"
+                        [rowHover]="true"
+                        styleClass="p-datatable-gridlines"
+                        responsiveLayout="scroll"
+                        class="custom-search-input"
+                    >
+                        <!-- Tabla con estado_id y nombre_plan_de_estudio -->
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 10rem" scope="col">
+                                    ID
+                                </th>
+                                <th style="min-width: 15rem" scope="col">
+                                    Nombre del Plan de Estudio
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-plan>
+                            <tr>
+                                <td>{{ plan.estado_id }}</td>
+                                <td>{{ plan.nombre_plan_de_estudio }}</td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    No se encontraron Planes de Estudio para esta carrera.
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="2">
+                                    Cargando registros. Por favor espere.
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

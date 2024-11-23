@@ -23,7 +23,7 @@ export class CommonService{
         this.httpClientFormData = new HttpClient(this.handler);
     }
     getCarrerasDropdown(domain_id:number):Observable<any>{
-        return this.http.get(`${this.baseUrl}carreras-dropdown/${domain_id}`);
+        return this.http.get(`${this.baseUrl}carreras-list/${domain_id}`);
     }
     getCarrerasDropdownByPlanDeEstudio(planDeEstudioId: number): Observable<any> {
         return this.http.get(`${this.baseUrl}carreras-dropdown/${planDeEstudioId}`);
