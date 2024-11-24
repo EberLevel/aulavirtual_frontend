@@ -19,19 +19,9 @@ export class PagoService {
     this.httpClientFormData = new HttpClient(this.handler)
   }
 
-  getCode() {
+  listarPagos(domain_id: number): Observable<any> {
     return this.http
-      .get<string>(`${this.urlparametro}capacitaciones-codigo`)
-      .pipe(
-        map((response: any) => {
-          return response;
-        })
-      );
-  }
-
-  listarPagos() {
-    return this.http
-      .get<Base>(`${this.baseUrl}pagos`)
+      .get<Base>(`${this.baseUrl}pagos/${domain_id}`)
       .pipe(
         map((response: Base) => {
           if (response.responseCode === 200) {

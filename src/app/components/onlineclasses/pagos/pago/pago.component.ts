@@ -65,18 +65,11 @@ export class PagoComponent implements OnInit {
     this.listarEstados();
   }
 
-  listarPagos() {
-    this.pagoService.listarPagos().subscribe((response: any) => {
+  listarPagos(): void {
+    this.pagoService.listarPagos(this.domain_id).subscribe((response: any) => {
       this.pagosList = response;
       console.log('Pagos:', this.pagosList);
     })
-  }
-
-  onGlobalFilter(table: Table, event: Event) {
-    table.filterGlobal(
-      (event.target as HTMLInputElement).value,
-      'contains'
-    )
   }
 
   listarCiclos(): void {
@@ -109,12 +102,6 @@ export class PagoComponent implements OnInit {
     ]
   }
 
-  openAlumnoModal(pago: any): void {
-    this.selectedPago = pago;
-    this.listarAlumnos();
-    this.showModal = true;
-  }
-
   listarAlumnos(): void {
     this.pagoService.listarAlumnos(this.domain_id).subscribe((response: any) => {
       this.alumnosList = response
@@ -126,39 +113,6 @@ export class PagoComponent implements OnInit {
     })
 
     // Aplica filtro por texto si hay un valor de búsqueda
-  }
-
-  applyFilters(): void {
-    // Comienza con la lista original
-    this.filteredAlumnos = [...this.alumnosList];
-
-    // Filtrar por ciclo si está seleccionado
-    if (this.selectedCiclo) {
-      this.filteredAlumnos = this.filteredAlumnos.filter(alumno => alumno.ciclo_id === this.selectedCiclo);
-    }
-
-    // Filtrar por texto si hay un valor
-    if (this.searchText && this.searchText.trim() !== '') {
-      const searchTextLower = this.searchText.toLowerCase();
-
-      this.filteredAlumnos = this.filteredAlumnos.filter(alumno =>
-        alumno.nombres?.toLowerCase().includes(searchTextLower) ||
-        alumno.codigo?.toLowerCase().includes(searchTextLower)
-      );
-    }
-  }
-
-  onCicloChange(): void {
-    // Filtra la lista de alumnos según el ciclo seleccionado
-    this.applyFilters();
-  }
-
-  onSearchChange(): void {
-    this.applyFilters();
-  }
-
-  abrirModalNuevoPago(): void {
-    this.showCreatePagoModal = true;
   }
 
   guardarPago(): void {
@@ -214,6 +168,52 @@ export class PagoComponent implements OnInit {
     // Limpia las selecciones y cierra el modal
     this.selectedAlumnos = [];
     this.showModal = false;
+  }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal(
+      (event.target as HTMLInputElement).value,
+      'contains'
+    )
+  }
+
+  openAlumnoModal(pago: any): void {
+    this.selectedPago = pago;
+    this.listarAlumnos();
+    this.showModal = true;
+  }
+
+  applyFilters(): void {
+    // Comienza con la lista original
+    this.filteredAlumnos = [...this.alumnosList];
+
+    // Filtrar por ciclo si está seleccionado
+    if (this.selectedCiclo) {
+      this.filteredAlumnos = this.filteredAlumnos.filter(alumno => alumno.ciclo_id === this.selectedCiclo);
+    }
+
+    // Filtrar por texto si hay un valor
+    if (this.searchText && this.searchText.trim() !== '') {
+      const searchTextLower = this.searchText.toLowerCase();
+
+      this.filteredAlumnos = this.filteredAlumnos.filter(alumno =>
+        alumno.nombres?.toLowerCase().includes(searchTextLower) ||
+        alumno.codigo?.toLowerCase().includes(searchTextLower)
+      );
+    }
+  }
+
+  onCicloChange(): void {
+    // Filtra la lista de alumnos según el ciclo seleccionado
+    this.applyFilters();
+  }
+
+  onSearchChange(): void {
+    this.applyFilters();
+  }
+
+  abrirModalNuevoPago(): void {
+    this.showCreatePagoModal = true;
   }
 
   formatDate(date: Date): string {
