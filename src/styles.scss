@@ -27,3 +27,40 @@ $gutter: 1rem; //for primeflex grid system
     height: 19rem;
     display: flex;
 }
+
+.custom-dialog {
+    width: 80vw !important; /* Ajusta el ancho al 80% de la ventana */
+    max-width: 90vw !important; /* Máximo ancho */
+    height: auto !important; /* Ajusta automáticamente la altura */
+}
+
+.custom-dialog-footer {
+    display: flex;
+    justify-content: center; /* Centra los botones horizontalmente */
+    margin-top: 20px;        /* Espaciado superior */
+    gap: 10px;               /* Espacio entre los botones */
+}
+
+.p-dropdownv2 {
+    width: 33% !important;
+}
+
+textarea {
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    color: #1e293b;
+    background: #ffffff;
+    padding: 0.75rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    border-radius: 6px;
+    width: 100%;
+}
+
+textarea:focus-visible {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #C7D2FE;
+    border-color: #6366F1;
+}
