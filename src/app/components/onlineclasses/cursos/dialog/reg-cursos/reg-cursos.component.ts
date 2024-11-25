@@ -257,9 +257,7 @@ export class RegCursosComponent implements OnInit, AfterViewInit {
             horasPracticas: this.horasPracticas,
             syllabus: this.syllabus,
             tema: this.tema,
-            asignacionDocentesId: this.asignacionDocentes
-                ? this.asignacionDocentes.value
-                : null, // Verifica si asignacionDocentes tiene valor
+            asignacionDocentesId: this.asignacionDocentes,
             carreraId: this.carreraSeleccionada.value,
             estadoId: this.estado,
             cursoId: this.config.data.data.id,

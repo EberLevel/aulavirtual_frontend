@@ -4,3 +4,12 @@
     align-items: center;
     height: 200px;
 }
+.ng-invalid {
+    border: 1px solid red !important; /* Resalta campos inválidos */
+    border-radius: 4px; /* Opcional */
+}
+
+.p-error {
+    color: red; /* Mensajes de error en rojo */
+    font-size: 12px;
+}
