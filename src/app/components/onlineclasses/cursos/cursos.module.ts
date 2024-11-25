@@ -38,6 +38,7 @@ import { ResponderPreguntaComponent } from './bandeja-cursos/responder-pregunta/
 import { ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule
 import {NgxSpinnerModule} from 'ngx-spinner';
 import { VerGrupoEvaluacionesAlumnoComponent } from './bandeja-cursos/ver-grupo-evaluaciones-alumno/ver-grupo-evaluaciones-alumno.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { VerGrupoEvaluacionesAlumnoComponent } from './bandeja-cursos/ver-grupo-
     TooltipModule,
     ToastModule,
     PanelModule,
+    ProgressSpinnerModule,
     TableModule,
     ConfirmPopupModule,
     ConfirmDialogModule,
