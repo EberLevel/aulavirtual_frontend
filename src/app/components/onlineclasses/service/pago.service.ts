@@ -35,9 +35,16 @@ export class PagoService {
 
   listarAlumnos(domain_id: number): Observable<any> {
     console.log(domain_id);
-    
+
     return this.http
       .get(`${this.baseUrl}alumnos/${domain_id}`);
+  }
+
+  listarPagoVinculadoPorAlumno(domain_id: number, pago_id: number): Observable<any> {
+    console.log(domain_id);
+
+    return this.http
+      .get(`${this.baseUrl}pagos/${domain_id}/${pago_id}/alumnos`);
   }
 
   listarCiclos(domain_id: number): Observable<any> {
@@ -48,8 +55,25 @@ export class PagoService {
   guardarPago(pago: any): Observable<any> {
 
     console.log(pago);
-    
+
     return this.http
       .post(`${this.baseUrl}pagos/`, pago);
+  }
+
+  vincularPagoAlumnos(pagoAlumnos: object): Observable<any> {
+    return this.http
+      .post(`${this.baseUrl}asignar-pagos`, pagoAlumnos);
+  }
+
+  confirmPayment(domain_id: number, alumno_id: number, pago_id: number): Observable<any> {
+    console.log(domain_id);
+    
+    const datosValidar = {
+      alumno_id,
+      pago_id
+    }
+
+    return this.http
+      .post(`${this.baseUrl}pagos/${domain_id}/validar-pago`, datosValidar);
   }
 }

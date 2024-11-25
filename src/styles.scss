@@ -19,26 +19,33 @@ $gutter: 1rem; //for primeflex grid system
 @import "assets/demo/styles/code.scss";
 
 
-.p-dropdown , .p-inputtext{
+.p-dropdown,
+.p-inputtext {
     width: 100% !important;
 }
 
-.TdEstado{
+.TdEstado {
     height: 19rem;
     display: flex;
 }
 
 .custom-dialog {
-    width: 80vw !important; /* Ajusta el ancho al 80% de la ventana */
-    max-width: 90vw !important; /* Máximo ancho */
-    height: auto !important; /* Ajusta automáticamente la altura */
+    width: 80vw !important;
+    /* Ajusta el ancho al 80% de la ventana */
+    max-width: 90vw !important;
+    /* Máximo ancho */
+    height: auto !important;
+    /* Ajusta automáticamente la altura */
 }
 
 .custom-dialog-footer {
     display: flex;
-    justify-content: center; /* Centra los botones horizontalmente */
-    margin-top: 20px;        /* Espaciado superior */
-    gap: 10px;               /* Espacio entre los botones */
+    justify-content: center;
+    /* Centra los botones horizontalmente */
+    margin-top: 20px;
+    /* Espaciado superior */
+    gap: 10px;
+    /* Espacio entre los botones */
 }
 
 .p-dropdownv2 {
@@ -63,4 +70,95 @@ textarea:focus-visible {
     outline-offset: 0;
     box-shadow: 0 0 0 0.2rem #C7D2FE;
     border-color: #6366F1;
+}
+
+.voucher-preview {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+}
+
+/* General Modal Styling */
+.custom-dialog .ui-dialog {
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.custom-dialog .ui-dialog-titlebar {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+    border-radius: 12px 12px 0 0;
+}
+
+.custom-dialog .ui-dialog-content {
+    padding: 20px;
+}
+
+/* Label Styling */
+.custom-label {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+/* Select Input Styling */
+.custom-select {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* File Upload Styling */
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+
+.custom-file-upload input[type="file"] {
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Footer Buttons */
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.custom-button {
+    width: 45%;
+    border-radius: 8px;
+    font-size: 14px;
+    padding: 10px;
+}
+
+/* Green Success Button */
+.p-button-success {
+    background-color: #28a745;
+    border: none;
+}
+
+.p-button-success:hover {
+    background-color: #218838;
+}
+
+/* Gray Cancel Button */
+.p-button-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+
+.p-button-secondary:hover {
+    background-color: #5a6268;
 }

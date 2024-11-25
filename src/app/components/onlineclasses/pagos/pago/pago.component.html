@@ -15,17 +15,13 @@
               <div class="flex justify-content-between flex-wrap">
                 <div class="flex-grow-1 mb-2 mr-2">
                   <span class="p-input-icon-left w-full">
-                    <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Buscar derechos de pago" class="w-full" />
+                    <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)"
+                      placeholder="Buscar derechos de pago" class="w-full" />
                   </span>
                 </div>
                 <div class="mb-2">
-                  <button 
-                    pButton label="Nuevo"
-                    icon="pi pi-user-plus"
-                    id="btnNuevo"
-                    class="p-button-primary mr-2"
-                    style="border-radius: 30px;"
-                    (click)="abrirModalNuevoPago()"></button>
+                  <button pButton label="Nuevo" icon="pi pi-user-plus" id="btnNuevo" class="p-button-primary mr-2"
+                    style="border-radius: 30px;" (click)="abrirModalNuevoPago()"></button>
                 </div>
               </div>
             </ng-template>
@@ -85,23 +81,22 @@
                 <td>{{ documento.fecha_pago }}</td>
                 <td>
 
-                  <div 
-                    [style.backgroundColor]="documento.estados.color"
-                    class="flex justify-content-center flex-wrap gap-3 mb-4"
+                  <div [style.backgroundColor]="documento.estados.color"
+                    class="flex justify-content-center flex-wrap gap-3 mb-1"
                     style="padding: 2px; border-radius: 5px; color: #ffffff; text-align: center;">
                     {{ documento.estados.nombre }}
                   </div>
                 </td>
                 <td>
-                  <div class="flex justify-content-center flex-wrap gap-3 mb-4">
+                  <div class="flex items-center gap-3">
                     <p-button icon="pi pi-users" severity="info" pTooltip="Anexar alumnos" tooltipPosition="top"
-                      (click)="openAlumnoModal(documento)" size="small" />
+                      (click)="openAlumnoModal(documento)" size="small">
+                    </p-button>
+
+                    <p-button icon="pi pi-search" pTooltip="Revisar pago de alumnos"
+                      (click)="openPagoAlumnoModal(documento)" [disabled]="false" size="small">
+                    </p-button>
                   </div>
-                  <button pButton 
-                    label="Revisar Pagos" 
-                    icon="pi pi-search" 
-                    [disabled]="true">
-                  </button>
                 </td>
               </tr>
             </ng-template>
@@ -143,15 +138,12 @@
     </ng-template>
   </p-confirmDialog>
 
-  <p-dialog [(visible)]="showModal" [modal]="true" [header]="'Vincular Alumnos al Pago: ' + selectedPago?.nombre" styleClass="custom-dialog">
+  <p-dialog [(visible)]="showModal" [modal]="true" [header]="'Vincular Alumnos al Pago: ' + selectedPago?.nombre"
+    styleClass="custom-dialog">
     <div>
       <!-- Filtro por ciclo -->
-      <p-dropdown 
-        [options]="ciclosList"
-        [(ngModel)]="selectedCiclo"
-        placeholder="Seleccione un ciclo"
-        styleClass="p-dropdownv2"
-        (onChange)="onCicloChange()">
+      <p-dropdown [options]="ciclosList" [(ngModel)]="selectedCiclo" placeholder="Seleccione un ciclo"
+        styleClass="p-dropdownv2" (onChange)="onCicloChange()">
       </p-dropdown>
 
       <!-- Filtro por texto -->
@@ -159,15 +151,14 @@
         <span class="p-inputgroup-addon">
           <i class="pi pi-search"></i>
         </span>
-        <input pInputText
-          placeholder="Buscar por código o nombre"
-          [(ngModel)]="searchText"
+        <input pInputText placeholder="Buscar por código o nombre" [(ngModel)]="searchText"
           (input)="onSearchChange()" />
       </div>
     </div>
 
     <!-- Tabla de alumnos -->
-    <p-table [value]="filteredAlumnos" selectionMode="multiple" [(selection)]="selectedAlumnos" responsiveLayout="scroll">
+    <p-table [value]="filteredAlumnos" selectionMode="multiple" [(selection)]="selectedAlumnos"
+      responsiveLayout="scroll">
       <ng-template pTemplate="header">
         <tr>
           <th style="width: 3rem">
@@ -195,7 +186,6 @@
         </tr>
       </ng-template>
     </p-table>
-
     <!-- Botones del modal -->
     <div class="p-dialog-footer custom-dialog-footer">
       <button pButton label="Cancelar" icon="pi pi-times" (click)="showModal = false"></button>
@@ -215,58 +205,139 @@
       <!-- desc del Pago -->
       <div class="field">
         <label for="descripcion">Descripción</label>
-        <textarea id="descripcion" pInputTextarea rows="3" placeholder="Ingrese una descripción" [(ngModel)]="newPago.descripcion"></textarea>
+        <textarea id="descripcion" pInputTextarea rows="3" placeholder="Ingrese una descripción"
+          [(ngModel)]="newPago.descripcion"></textarea>
       </div>
-  
+
       <!-- Monto -->
       <div class="field">
         <label for="monto">Monto</label>
-        <input id="monto" type="number" pInputText  placeholder="Ejemplo: 50" [(ngModel)]="newPago.monto">
+        <input id="monto" type="number" pInputText placeholder="Ejemplo: 50" [(ngModel)]="newPago.monto">
       </div>
-  
+
       <!-- Fecha de pago -->
       <div class="field">
         <label for="fechaPago">Fecha de pago</label>
-        <p-calendar
-          dateFormat="yy-mm-dd"
-          [showIcon]="true" 
-          placeholder="Seleccione una fecha"
-          [appendTo]="'body'"
+        <p-calendar dateFormat="yy-mm-dd" [showIcon]="true" placeholder="Seleccione una fecha" [appendTo]="'body'"
           [(ngModel)]="newPago.fecha_pago"></p-calendar>
       </div>
 
       <!-- Fecha de Vencimiento -->
       <div class="field">
         <label for="fechaVencimiento">Fecha de Vencimiento</label>
-        <p-calendar
-          dateFormat="yy-mm-dd"
-          [showIcon]="true" 
-          placeholder="Seleccione una fecha"
-          [appendTo]="'body'"
+        <p-calendar dateFormat="yy-mm-dd" [showIcon]="true" placeholder="Seleccione una fecha" [appendTo]="'body'"
           [(ngModel)]="newPago.fecha_vencimiento">
         </p-calendar>
       </div>
-  
+
       <!-- Estado -->
       <div class="field">
         <label for="estado">Estado</label>
-        <p-dropdown
-          [options]="estadosList" 
-          placeholder="Seleccione un estado"
-          [appendTo]="'body'"
+        <p-dropdown [options]="estadosList" placeholder="Seleccione un estado" [appendTo]="'body'"
           [(ngModel)]="newPago.estado_id"></p-dropdown>
       </div>
     </div>
-  
+
     <!-- Botones del Modal -->
     <div class="p-dialog-footer" style="text-align: center;">
       <button pButton label="Cancelar" icon="pi pi-times" (click)="showCreatePagoModal = false"></button>
-      <button pButton label="Guardar" icon="pi pi-check" (click)="guardarPago()"></button> 
+      <button pButton label="Guardar" icon="pi pi-check" (click)="guardarPago()"></button>
       <!-- (click)="guardarPago()" -->
     </div>
   </p-dialog>
 
-  <p-toast></p-toast>
+  <p-dialog [(visible)]="showPagoAlumnoModal" styleClass="custom-dialog">
+    <div>
+      <!-- Filtro por ciclo -->
+      <p-dropdown [options]="ciclosList" [(ngModel)]="selectedCiclo" placeholder="Seleccione un ciclo"
+        styleClass="p-dropdownv2" (onChange)="onCicloChange2()">
+      </p-dropdown>
 
-  
+      <!-- Filtro por texto -->
+      <div class="p-inputgroup mt-3">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-search"></i>
+        </span>
+        <input pInputText placeholder="Buscar por código o nombre" [(ngModel)]="searchText"
+          (input)="onSearchChange2()" />
+      </div>
+    </div>
+
+    <!-- Tabla de alumnos -->
+    <p-table [value]="filteredPagoAlumnos" selectionMode="multiple" responsiveLayout="scroll"
+      [(selection)]="selectedPagoAlumnos" [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5, 10, 20]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Codígo</th>
+          <th>Nombre</th>
+          <th>Apellidos</th>
+          <th>Dni</th>
+          <th>Ciclo</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-alumno let-i="rowIndex">
+        <tr>
+          <td>{{ alumno.codigo }}</td>
+          <td>{{ alumno.nombres }}</td>
+          <td>{{ alumno.apellidos }}</td>
+          <td>{{ alumno.dni }}</td>
+          <td>{{ alumno.ciclo }}</td>
+          <td>
+            <div [style.backgroundColor]="alumno.estado_color"
+              class="flex justify-content-center flex-wrap gap-3 mb-4"
+              style="padding: 2px; border-radius: 5px; color: #ffffff; text-align: center;">
+              {{ alumno.estado }}
+            </div>
+          </td>
+          <td>
+            <!-- Botón que llama al método validatePayment -->
+            <button pButton label="Validar Pago" class="p-button-success" (click)="validatePayment(alumno)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <!-- Botones del modal -->
+    <div class="p-dialog-footer custom-dialog-footer">
+      <button pButton label="Cancelar" icon="pi pi-times" (click)="showPagoAlumnoModal = false"></button>
+    </div>
+  </p-dialog>
+
+  <p-dialog [(visible)]="showVoucherModal" header="Detalles del Pago" [style]="{width: '500px'}" [closable]="true">
+    <div class="p-fluid">
+      <div class="p-field">
+        <label>Código</label>
+        <input pInputText [value]="selectedAlumno?.codigo" disabled />
+      </div>
+      <div class="p-field">
+        <label>Nombre</label>
+        <input pInputText [value]="selectedAlumno?.nombres" disabled />
+      </div>
+      <div class="p-field">
+        <label>Apellidos</label>
+        <input pInputText [value]="selectedAlumno?.apellidos" disabled />
+      </div>
+      <div class="p-field">
+        <label>DNI</label>
+        <input pInputText [value]="selectedAlumno?.dni" disabled />
+      </div>
+      <div class="p-field">
+        <label>Voucher</label>
+        <img [src]="selectedAlumno?.voucher_pago || 'default-image-path.jpg'" alt="Voucher del Pago"
+          class="voucher-preview" />
+      </div>
+      <div class="p-field">
+        <label>Fecha de Pago</label>
+        <input pInputText [value]="selectedAlumno?.fecha_pago" disabled />
+      </div>
+    </div>
+    <div class="p-dialog-footer custom-dialog-footer">
+      <button pButton label="Validar" class="p-button-info" (click)="confirmPayment(selectedAlumno)"></button>
+      <button pButton label="Cerrar" icon="pi pi-times" (click)="showVoucherModal = false"></button>
+    </div>
+  </p-dialog>
+
+  <p-toast></p-toast>
 </p-panel>
