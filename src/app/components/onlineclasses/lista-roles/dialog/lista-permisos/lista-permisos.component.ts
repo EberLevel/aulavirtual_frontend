@@ -758,6 +758,18 @@ export class ListaPermisosComponent {
                         ],
                         isExpanded: false,
                     },
+                    {
+                        id: null,
+                        nombre: 'PAGOS',
+                        seleccionado: false,
+                        hijos: [
+                            { id: 33, nombre: 'Nuevo', seleccionado: false },
+                            { id: 34, nombre: 'Editar', seleccionado: false },
+                            { id: 35, nombre: 'Ver', seleccionado: false },
+                            { id: 36, nombre: 'Eliminar', seleccionado: false },
+                        ],
+                        isExpanded: false,
+                    },
                 ],
                 isExpanded: false,
             },
@@ -958,6 +970,11 @@ export class ListaPermisosComponent {
                     grupos['AulaVirtual'].permisos[4].seleccionado =
                         this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
                     break;
+                case 'aula_virtual_pagos':
+                    grupos['AulaVirtual'].permisos[5].id = permiso.id;
+                    grupos['AulaVirtual'].permisos[5].seleccionado =
+                        this.buscarPermiso(permiso.id, permiso.proyecto_id ?? null)
+                    break;
                 case 'ver_modulo_estructura_organica':
                     grupos['EstructuraOrganica'].id = permiso.id;
                     grupos['EstructuraOrganica'].seleccionado =
@@ -1071,6 +1088,8 @@ export class ListaPermisosComponent {
 
     buscarPermiso(permiso_id: number, proyecto_id: number | null) {
         for (const permiso of this.permisosSeleccionados) {
+            console.log(permiso);
+            
             if (permiso.permiso_id === permiso_id && (permiso.proyecto_id ?? null) === proyecto_id) {
                 return true; // Si el permiso con ambos IDs existe
             }

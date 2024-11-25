@@ -484,6 +484,14 @@ const routes: Routes = [];
                     ).then((m) => m.CapacitacionesModule),
             },
             {
+                path: 'pagos',
+                data: { breadcrumb: 'Sección de pagos' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/pagos/pago/pago.module'
+                    ).then((m) => m.PagoModule),
+            },
+            {
                 path: 'foro-alumnos',
                 data: { breadcrumb: 'Foro de alumnos' },
                 loadChildren: () =>

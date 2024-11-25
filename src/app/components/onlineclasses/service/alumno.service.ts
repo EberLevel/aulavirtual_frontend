@@ -41,5 +41,14 @@ export class AlumnoService{
     showAlumno(data:any):Observable<any>{
         return this.http.get(`${this.baseUrl}alumnos/logged/${data.id}/${data.domain_id}`);
     }
+
+    listarPagoDeAlumno(alumno_id: number, domain_id: number,available: boolean = false):Observable<any>{
+        return this.http
+            .post(`${this.baseUrl}alumnos/${alumno_id}/${domain_id}`, available);
+    }
+
+    subirComprobante(data: any) {
+        return this.http.post(`${this.baseUrl}alumnos/subir-comprobante`, data);
+    }
     
 } 

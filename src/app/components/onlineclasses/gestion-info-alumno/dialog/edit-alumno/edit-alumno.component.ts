@@ -66,6 +66,12 @@ export class EditAlumnoComponent {
         { label: 'EN PROCESO', value: 'EN PROCESO' },
         { label: 'RETIRADO', value: 'RETIRADO' }
     ];
+    showModalPagos: boolean = false
+    pagoAlumnosList: any[] = []
+    pagosPendientes: any[] = []
+    uploadForm!: FormGroup; // Formulario para subir el comprobante
+    voucherBase64: string = ''; // Aquí se almacenará la imagen en Base64
+
     constructor(
         private router: Router,
         private ref: DynamicDialogRef,
@@ -105,18 +111,22 @@ export class EditAlumnoComponent {
             contraseña: ['', Validators.required]
         });
         this.domain_id = this.helpersService.getDominioId();
+
+        this.uploadForm = this.fb.group({
+            pago_id: ['', Validators.required]
+          });
     }
 
     ngOnInit() {
         this.listarPlanEstudio();
 
         this.alumnoForm
-        .get('estadoId')
-        ?.valueChanges.subscribe((selectedEstadoId) => {
-            if (selectedEstadoId) {
-                this.getCarrerasDropdown(selectedEstadoId); // Pasar el ID del plan de estudios para filtrar las carreras
-            }
-        });
+            .get('estadoId')
+            ?.valueChanges.subscribe((selectedEstadoId) => {
+                if (selectedEstadoId) {
+                    this.getCarrerasDropdown(selectedEstadoId); // Pasar el ID del plan de estudios para filtrar las carreras
+                }
+            });
 
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
@@ -155,6 +165,8 @@ export class EditAlumnoComponent {
         }
         this.getCiclosDropdown();
         this.getPromocionesDropdown();
+        this.listarPagoDeAlumno();
+        this.cargarSelectPagos();
     }
 
     estadosList: { name: string, value: number }[] = [];
@@ -165,8 +177,8 @@ export class EditAlumnoComponent {
                 (response: any) => {
                     this.estadosList = response.map((estado: any) => {
                         return {
-                            name: estado.nombre,  
-                            value: estado.id      
+                            name: estado.nombre,
+                            value: estado.id
                         };
                     });
                     resolve();
@@ -224,16 +236,16 @@ export class EditAlumnoComponent {
 
     navigateToAvanceCurricular(alumno: any) {
         const id = this.alumno.id;
-        console.log("ALUMNO" , id)
+        console.log("ALUMNO", id)
 
         const data = {
             domain_id: alumno.domain_id ?? 1,
             id: this.alumno.id,
         };
 
-        console.log("data" , data)
+        console.log("data", data)
 
-    
+
         this.alumnoService.showAlumno(data).subscribe(
             (response: any) => {
                 this.ref = this.dialogService.open(BandejaAvanceCurricularComponent, {
@@ -243,7 +255,7 @@ export class EditAlumnoComponent {
                     width: '60%',
                     styleClass: 'custom-dialog-header',
                 });
-    
+
                 // Cuando el modal se cierra
                 this.ref.onClose.subscribe((result: any) => {
                     if (result) {
@@ -257,8 +269,8 @@ export class EditAlumnoComponent {
             }
         );
     }
-    
-    
+
+
     actualizarAlumno() {
         if (this.alumnoForm.valid) {
             const alumnoData = {
@@ -281,17 +293,17 @@ export class EditAlumnoComponent {
                 contraseña: this.alumnoForm.get('contraseña')?.value,
                 estadoAlumno: this.alumnoForm.get('estadoAlumno')?.value
             };
-    
+
             console.log('Datos enviados como JSON:', alumnoData);
-    
+
             this.loading = true;
             this.spinner.show();
-    
+
             const id = this.alumno.id;
-            console.log("ALUMNO" , id)
-        
+            console.log("ALUMNO", id)
+
             const domain_id = this.domain_id;
-    
+
             this.alumnoService.editAlumno(alumnoData, id, domain_id).subscribe(
                 (response) => {
                     this.loading = false;
@@ -324,7 +336,7 @@ export class EditAlumnoComponent {
             });
         }
     }
-    
+
     translateChange(lang: string): void {
         if (this.translate) {
             this.translate.use(lang);
@@ -348,7 +360,7 @@ export class EditAlumnoComponent {
             });
         });
     }
-    
+
     onCarnetSelect(event: any) {
         const file = event.files[0];
         this.convertImageToBase64(file, (base64Image: string) => {
@@ -367,7 +379,7 @@ export class EditAlumnoComponent {
             console.error('Error al convertir la imagen a base64:', error);
         };
     }
-    
+
 
     capturarFecha(event: any) {
         const fecha = new Date(event);
@@ -377,4 +389,79 @@ export class EditAlumnoComponent {
     closeModal() {
         this.ref.close({ register: false });
     }
+
+    openModalPagos() {
+        this.showModalPagos = true;
+    }
+
+    listarPagoDeAlumno() {
+        this.alumnoService.listarPagoDeAlumno(this.alumno.id, this.domain_id).subscribe(
+            (response: any) => {
+                const pagos = response
+                this.pagoAlumnosList = pagos["pagos"]
+                console.log('pago alumnos ', pagos["pagos"]);
+                console.log(this.pagoAlumnosList);
+                this.cargarSelectPagos()
+            })
+    }
+
+    cargarSelectPagos() {
+        // Filtrar pagos con estado pendiente (estado_id === 1)
+        console.log(this.pagoAlumnosList);
+        
+        this.pagosPendientes = this.pagoAlumnosList.filter((pago: any) => pago.estado_id === 1);
+        console.log('Pagos pendientes:', this.pagosPendientes);
+    }
+
+    // Manejar la selección del archivo y convertirlo a Base64
+onFileSelect(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+        this.voucherBase64 = file; // Convertir el archivo a Base64
+        console.log('line 423');
+        
+        console.log(this.voucherBase64);
+    }
+  }
+
+  // Subir el comprobante
+  onSubmit() {
+
+    console.log(this.voucherBase64);
+    
+    if (this.uploadForm.valid && this.voucherBase64) {
+
+        const formData = new FormData();
+        formData.append('pago_id', this.uploadForm.get('pago_id')?.value);
+        formData.append('voucher_pago', this.voucherBase64); // Agregar el archivo seleccionado
+        formData.append('alumno_id', this.alumno.id.toString()); // Añadir otros datos necesarios
+        formData.append('domain_id', this.domain_id.toString());
+
+      this.alumnoService.subirComprobante(formData).subscribe(
+        (response) => {
+        
+          this.uploadForm.reset(); // Reiniciar formulario
+          this.voucherBase64 = ''; // Limpiar imagen
+          this.listarPagoDeAlumno(); // Recargar pagos pendientes
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'El pago se subio correctamente!',
+            life: 3000,
+            });
+        },
+        (error) => {
+          console.error('Error al subir comprobante:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'error',
+            detail: 'Error al subir el pago',
+            life: 3000,
+            });
+        }
+      );
+    } else {
+      alert('Por favor, completa todos los campos antes de enviar.');
+    }
+  }
 }
