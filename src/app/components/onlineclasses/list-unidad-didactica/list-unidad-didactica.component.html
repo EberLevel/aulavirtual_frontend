@@ -1,0 +1,223 @@
+<p-panel>
+    <ng-template pTemplate="header">
+        <span class="text-primary font-semibold text-xl"
+            >Bandeja de Unidad Didactica</span
+        >
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row mb-4">
+            <div class="grid p-fluid">
+                <div class="field md:col-12">
+                    <p-table
+                        #dt1
+                        [value]="carrerastecnicasList"
+                        [rows]="10"
+                        [loading]="loading"
+                        [rowHover]="true"
+                        styleClass="p-datatable-gridlines"
+                        [paginator]="true"
+                        responsiveLayout="scroll"
+                        class="custom-search-input"
+                    >
+                        <ng-template pTemplate="caption">
+                            <div class="flex justify-content-between flex-wrap">
+                                <div class="flex-grow-1 mb-2 mr-2">
+                                    <span class="p-input-icon-left w-full">
+                                        <input
+                                            pInputText
+                                            type="text"
+                                            #filter
+                                            (input)="onGlobalFilter($event)"
+                                            placeholder="Buscar Unidad Didactica"
+                                            class="w-full"
+                                        />
+                                    </span>
+                                </div>
+                                <div class="mb-2">
+                                    <button
+                                        pButton
+                                        label="Nuevo"
+                                        icon="pi pi-user-plus"
+                                        id="btnNuevo"
+                                        class="p-button-primary mr-2"
+                                        (click)="navigateAddCurso()"
+                                        style="border-radius: 30px"
+                                    ></button>
+                                </div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="min-width: 10rem" scope="col">
+                                    Código
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Nombre de la Unidad Didactica
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Acciones
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Configuración
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Créditos
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    % Créditos
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Horas Teóricas
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Horas Practicas
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Total Horas
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Ciclo
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Carrera técnica
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Módulo
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
+                                    Competencia
+                                </th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-carrera>
+                            <tr>
+                                <td>{{ carrera.codigo }}</td>
+                                <td>{{ carrera.nombre }}</td>
+                                <td>
+                                    <div class="button-group">
+                                        <button
+                                            pButton
+                                            class="p-button-rounded p-button-info button-custom  w-auto"
+                                            style="background: gray"
+                                            (click)="verSyllabus(carrera.id)"
+                                            pTooltip="Ver Syllabus"
+                                            tooltipPosition="top"
+                                        >
+                                            Sy
+                                        </button>
+                                        <button
+                                            pButton
+                                            class="p-button-rounded p-button-success button-custom  w-auto"
+                                            style="background: blue"
+                                            (click)="verAlumnos(carrera)"
+                                            pTooltip="Ver Alumnos"
+                                            tooltipPosition="top"
+                                        >
+                                            Al
+                                        </button>
+                                        <button
+                                            *ngIf="rolId !== 8"
+                                            pButton
+                                            class="p-button-rounded p-button-warning button-custom  w-auto"
+                                            style="background: yellow"
+                                            (click)="verHorarios(carrera)"
+                                            pTooltip="Ver Horarios"
+                                            tooltipPosition="top"
+                                        >
+                                            Ho
+                                        </button>
+                                        <button
+                                            *ngIf="rolId !== 8"
+                                            pButton
+                                            class="p-button-rounded p-button-primary button-custom  w-auto"
+                                            style="background: rgb(103, 87, 87)"
+                                            (click)="verAsistencia(carrera)"
+                                            pTooltip="Ver Asistencia"
+                                            tooltipPosition="top"
+                                        >
+                                            As
+                                        </button>
+                                        <button
+                                            pButton
+                                            class="p-button-rounded p-button-secondary button-custom  w-auto"
+                                            style="background: green"
+                                            (click)="verTemas(carrera.id)"
+                                            pTooltip="Ver Temas"
+                                            tooltipPosition="top"
+                                        >
+                                            Te
+                                        </button>
+                                        <button
+                                            *ngIf="rolId !== 8"
+                                            pButton
+                                            class="p-button-rounded p-button-help button-custom  w-auto"
+                                            style="background: rgb(24, 15, 67)"
+                                            (click)="verEvaluaciones(carrera)"
+                                            pTooltip="Ver Evaluaciones"
+                                            tooltipPosition="top"
+                                        >
+                                            Ev
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button
+                                        pButton
+                                        icon="pi pi-pencil"
+                                        style="width: 70px; border-radius: 30px"
+                                        title="Editar"
+                                        class="p-button-rounded p-button-text p-button-warning"
+                                        (click)="navigateToEdit(carrera)"
+                                    ></button>
+                                    <button
+                                        pButton
+                                        icon="pi pi-trash"
+                                        style="width: 70px; border-radius: 30px"
+                                        title="Eliminar"
+                                        class="p-button-rounded p-button-text p-button-danger"
+                                        (click)="navigateToDelete(carrera.id)"
+                                    ></button>
+                                    <!-- <button
+                                        pButton
+                                        icon="pi pi-copy"
+                                        style="width: 70px; border-radius: 30px"
+                                        title="Duplicar"
+                                        class="p-button-rounded p-button-text p-button-secondary"
+                                        (click)="navigateToDuplicar(carrera)"
+                                    ></button> -->
+                                </td>
+                                <td>{{ carrera.cantidad_de_creditos }}</td>
+                                <td>{{ carrera.porcentaje_de_creditos }}</td>
+                                <td>{{ carrera.cantidad_de_horas }}</td>
+                                <td>{{ carrera.horas_practicas }}</td>
+                                <td>{{ carrera.totalHoras }}</td>
+                                <td>{{ carrera.ciclo_nombre }}</td>
+                                <td>{{ carrera.carrera_nombre }}</td>
+                                <td>{{ carrera.area_de_formacion_nombre }}</td>
+                                <td>{{ carrera.modulo_formativo_nombre }}</td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="23">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="23">
+                                    Cargando registros. Por favor espere.
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

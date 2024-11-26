@@ -177,6 +177,14 @@ const routes: Routes = [];
                     ).then((m) => m.CarrerasTecnicasModule),
             },
             {
+                path: 'list-unidades-didacticas',
+                data: { breadcrumb: 'Bandeja de Unidades Didacticas' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/list-unidad-didactica/list-unidad-didactica.module'
+                    ).then((m) => m.ListUnidadDidacticaModule),
+            },
+            {
                 path: 'bandeja-curso',
                 data: { breadcrumb: 'Bandeja de cursos' },
                 loadChildren: () =>

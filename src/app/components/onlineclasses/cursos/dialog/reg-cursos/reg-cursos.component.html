@@ -4,155 +4,293 @@
             <span *ngIf="acciones === 'add'">Registro de Unidad Didáctica</span>
             <span *ngIf="acciones === 'ver'">Visualizar Unidad Didactica</span>
             <span *ngIf="acciones === 'editar'">Editar Unidad Didactica</span>
-            <span *ngIf="acciones === 'duplicar'">Duplicar Unidad Didactica</span>
+            <span *ngIf="acciones === 'duplicar'"
+                >Duplicar Unidad Didactica</span
+            >
         </span>
     </ng-template>
 
     <ng-template pTemplate="content">
-        <div class="row">
-            <div class="grid p-fluid ">
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="codigo" [disabled]="acciones === 'ver'">
-                        <label class="required">Código</label>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="nombreCurso" [disabled]="acciones === 'ver'">
-                        <label class="required">Nombre de la Unidad Didactica</label>
-                    </span>
-                </div>
-            </div>
+        <div
+            *ngIf="loading"
+            class="flex justify-content-center align-items-center"
+            style="height: 200px"
+        >
+            <p-progressSpinner></p-progressSpinner>
         </div>
-        <div class="row">
-            <div class="grid p-fluid ">
-                <div class="field md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdownCiclo" [options]="ciclos" optionLabel="nombre" [(ngModel)]="ciclo"
-                        optionValue="id" [disabled]="acciones === 'ver'"></p-dropdown>
-                        <label for="dropdownCiclo">Ciclo </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdownAreaFormacion" [options]="areasFormacion" optionLabel="nombre" [(ngModel)]="areaFormacion"
-                        optionValue="id" [disabled]="acciones === 'ver'"></p-dropdown>
-                        <label for="dropdownAreaFormacion">Módulo </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid ">
-                <div class="field md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdownModuloFormativo" [options]="modulosFormativos" optionLabel="nombre" [(ngModel)]="moduloFormativo"
-                        optionValue="id" [disabled]="acciones === 'ver'"></p-dropdown>
-                        <label for="dropdownModuloFormativo">Competencia </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="cantidadCreditos" [disabled]="acciones === 'ver'">
-                        <label class="required">Cantidad de créditos</label>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid ">
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="porcentajeCreditos" [disabled]="acciones === 'ver'">
-                        <label class="required">% de créditos</label>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="cantidadHoras" [disabled]="acciones === 'ver'">
-                        <label class="required">Horas Teóricas</label>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <input type="text" pInputText [(ngModel)]="horasPracticas" [disabled]="acciones === 'ver'">
-                        <label class="required">Horas Practicas</label>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="grid p-fluid">
-                <div class="field col-12 md:col-12">
-                    <label >Digite el syllabus</label>
-                    <p-editor [style]="{ height: '90px' }" [(ngModel)]="syllabus" [readonly]=" acciones === 'ver' "></p-editor>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="grid p-fluid">
-                <div class="field col-12 md:col-12">
-                    <label >Digite el tema</label>
-                    <p-editor [style]="{ height: '90px' }" [(ngModel)]="tema" [readonly]=" acciones === 'ver' "></p-editor>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="grid p-fluid ">
-                <div class="field md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdownAsignacionDocentes" [options]="asignacionesDocentes" optionLabel="label" [(ngModel)]="asignacionDocentes"
-                        optionValue="value" [disabled]="acciones === 'ver'"></p-dropdown>
-                        <label for="dropdownAsignacionDocentes">Asignación de docentes </label>
-                        <small style="color: brown;">Campo obligatorio * </small>
-                    </span>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdownEstado" 
-                        [options]="estados" 
-                        optionLabel="nombre" 
-                        [(ngModel)]="estado"
-                        optionValue="id" 
-                        [disabled]="acciones === 'ver'"
-                        (onChange)="onPlanDeEstudioChange($event)">
-                        </p-dropdown>
-                    <label for="dropdownEstado">Plan de Estudios</label>
-                    <small style="color: brown;">Campo obligatorio *</small>
-                    
-                    </span>
-                </div>
-            </div>
-            <div class="row" *ngIf="acciones === 'duplicar'">
-                <div class="grid p-fluid ">
+
+        <div *ngIf="!loading">
+            <div class="row">
+                <div class="grid p-fluid">
                     <div class="field col-12 md:col-6">
                         <span class="p-float-label">
-                            <p-dropdown inputId="dropdownCarreraId" 
-                                [options]="carrerasList" 
-                                optionLabel="name" 
-                                [(ngModel)]="carreraSeleccionada" 
-                                optionValue="value"
-                            >
-                            </p-dropdown>
-                            <label for="dropdownCarreraId">Carrera Profesional</label>
-                            <small style="color: brown;">Campo obligatorio *</small>
+                            <input
+                                type="text"
+                                pInputText
+                                [(ngModel)]="codigo"
+                                [disabled]="acciones === 'ver'"
+                            />
+                            <label class="required">Código</label>
                         </span>
                     </div>
-                    
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                [(ngModel)]="nombreCurso"
+                                [disabled]="acciones === 'ver'"
+                            />
+                            <label class="required"
+                                >Nombre de la Unidad Didactica</label
+                            >
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="flex justify-content-end flex-column sm:flex-row">
-                <div class="flex flex-wrap gap-2">
-                    <button *ngIf="acciones === 'add'" pButton icon="pi pi-plus" label="Guardar" iconPos="right" class="p-button-success p-button-sm" (click)="GuardarCurso()"></button>
-                    <button *ngIf="acciones === 'editar'" pButton icon="pi pi-pencil" label="Editar Unidad Didactica" iconPos="right" class="p-button-warning p-button-sm" (click)="editarCurso()"></button>
-                    <button *ngIf="acciones === 'duplicar'" pButton icon="pi pi-copy" label="Duplicar Unidad Didactica" iconPos="right" class="p-button-secondary p-button-sm" (click)="GuardarCursoDuplicado()"></button>
-                    <button pButton label="Cerrar" icon="pi pi-times" iconPos="right" class="p-button-close-clean" (click)="closeModal()"></button>
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdownCiclo"
+                                [options]="ciclos"
+                                optionLabel="nombre"
+                                [(ngModel)]="ciclo"
+                                optionValue="id"
+                                [disabled]="acciones === 'ver'"
+                            ></p-dropdown>
+                            <label for="dropdownCiclo">Ciclo </label>
+                            <small style="color: brown"
+                                >Campo obligatorio *
+                            </small>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdownAreaFormacion"
+                                [options]="areasFormacion"
+                                optionLabel="nombre"
+                                [(ngModel)]="areaFormacion"
+                                optionValue="id"
+                                [disabled]="acciones === 'ver'"
+                            ></p-dropdown>
+                            <label for="dropdownAreaFormacion">Módulo </label>
+                            <small style="color: brown"
+                                >Campo obligatorio *
+                            </small>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdownModuloFormativo"
+                                [options]="modulosFormativos"
+                                optionLabel="nombre"
+                                [(ngModel)]="moduloFormativo"
+                                optionValue="id"
+                                [disabled]="acciones === 'ver'"
+                            ></p-dropdown>
+                            <label for="dropdownModuloFormativo"
+                                >Competencia
+                            </label>
+                            <small style="color: brown"
+                                >Campo obligatorio *
+                            </small>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                [(ngModel)]="cantidadCreditos"
+                                [disabled]="acciones === 'ver'"
+                            />
+                            <label class="required">Cantidad de créditos</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                [(ngModel)]="porcentajeCreditos"
+                                [disabled]="acciones === 'ver'"
+                            />
+                            <label class="required">% de créditos</label>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                [(ngModel)]="cantidadHoras"
+                                [disabled]="acciones === 'ver'"
+                            />
+                            <label class="required">Horas Teóricas</label>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <input
+                                type="text"
+                                pInputText
+                                [(ngModel)]="horasPracticas"
+                                [disabled]="acciones === 'ver'"
+                            />
+                            <label class="required">Horas Practicas</label>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                [options]="carrerasList"
+                                [(ngModel)]="carreraSeleccionada"
+                                optionLabel="name"
+                                placeholder="Seleccione una carrera"
+                                (onChange)="onCarreraChange($event)"
+                            >
+                            </p-dropdown>
+                            <label class="required">Seleccionar Carrera</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="grid p-fluid">
+                    <div class="field col-12 md:col-12">
+                        <label>Digite el syllabus</label>
+                        <p-editor
+                            [style]="{ height: '90px' }"
+                            [(ngModel)]="syllabus"
+                            [readonly]="acciones === 'ver'"
+                        ></p-editor>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="grid p-fluid">
+                    <div class="field col-12 md:col-12">
+                        <label>Digite el tema</label>
+                        <p-editor
+                            [style]="{ height: '90px' }"
+                            [(ngModel)]="tema"
+                            [readonly]="acciones === 'ver'"
+                        ></p-editor>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="grid p-fluid">
+                    <div class="field md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdownAsignacionDocentes"
+                                [options]="asignacionesDocentes"
+                                optionLabel="label"
+                                [(ngModel)]="asignacionDocentes"
+                                optionValue="value"
+                                [disabled]="acciones === 'ver'"
+                            ></p-dropdown>
+                            <label for="dropdownAsignacionDocentes"
+                                >Asignación de docentes
+                            </label>
+                            <small style="color: brown"
+                                >Campo obligatorio *
+                            </small>
+                        </span>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <span class="p-float-label">
+                            <p-dropdown
+                                inputId="dropdownEstado"
+                                [options]="estados"
+                                optionLabel="nombre"
+                                [(ngModel)]="estado"
+                                optionValue="id"
+                                [disabled]="acciones === 'ver'"
+                            >
+                            </p-dropdown>
+                            <label for="dropdownEstado">Plan de Estudios</label>
+                            <small style="color: brown"
+                                >Campo obligatorio *</small
+                            >
+                        </span>
+                    </div>
+                </div>
+                <div class="row" *ngIf="acciones === 'duplicar'">
+                    <div class="grid p-fluid">
+                        <div class="field col-12 md:col-6">
+                            <span class="p-float-label">
+                                <p-dropdown
+                                    inputId="dropdownCarreraId"
+                                    [options]="carrerasList"
+                                    optionLabel="name"
+                                    [(ngModel)]="carreraSeleccionada"
+                                    optionValue="value"
+                                >
+                                </p-dropdown>
+                                <label for="dropdownCarreraId"
+                                    >Carrera Profesional</label
+                                >
+                                <small style="color: brown"
+                                    >Campo obligatorio *</small
+                                >
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="flex justify-content-end flex-column sm:flex-row">
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            *ngIf="acciones === 'add'"
+                            pButton
+                            icon="pi pi-plus"
+                            label="Guardar"
+                            iconPos="right"
+                            class="p-button-success p-button-sm"
+                            (click)="GuardarCurso()"
+                        ></button>
+                        <button
+                            *ngIf="acciones === 'editar'"
+                            pButton
+                            icon="pi pi-pencil"
+                            label="Editar Unidad Didactica"
+                            iconPos="right"
+                            class="p-button-warning p-button-sm"
+                            (click)="editarCurso()"
+                        ></button>
+                        <button
+                            *ngIf="acciones === 'duplicar'"
+                            pButton
+                            icon="pi pi-copy"
+                            label="Duplicar Unidad Didactica"
+                            iconPos="right"
+                            class="p-button-secondary p-button-sm"
+                            (click)="GuardarCursoDuplicado()"
+                        ></button>
+                        <button
+                            pButton
+                            label="Cerrar"
+                            icon="pi pi-times"
+                            iconPos="right"
+                            class="p-button-close-clean"
+                            (click)="closeModal()"
+                        ></button>
+                    </div>
                 </div>
             </div>
         </div>
