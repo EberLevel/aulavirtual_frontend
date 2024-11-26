@@ -67,6 +67,16 @@ export class Capacitaciones {
     public txUseModificado: string | null = null
 }
 
+export class Pagos {
+    public id: number | null = null
+    public nombre: string | null = null
+    public descripcion: string | null = null
+    public monto: number | null = null
+    public fecha_vencimiento: string | null = null
+    public fecha_pago: string | null = null
+    public estado_id: string | null = null
+}
+
 export class SelectDocente {
     public id: number | null = null
     public nombres: string | null = ''
