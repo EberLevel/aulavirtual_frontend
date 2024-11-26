@@ -1,0 +1,64 @@
+<p-panel header="Subir Comprobante de Pago" class="custom-panel">
+  <p-toast></p-toast>
+  <p-table 
+    [value]="pagoAlumnosList2"
+    [paginator]="true" 
+    [rows]="5" 
+    responsiveLayout="scroll" 
+    [selectionMode]="'single'"
+    class="custom-table"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Pago</th>
+        <th>Monto</th>
+        <th>Estado</th>
+        <th>Fecha Vencimiento</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td>{{ rowData.nombre }}</td>
+        <td>{{ rowData.monto }}</td>
+        <td>{{ rowData.estado }}</td>
+        <td>{{ rowData.fecha_vencimiento }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+    <div class="form-group mt-3">
+      <label for="pago" class="custom-label">Seleccionar Pago</label>
+      <select formControlName="pago_id" class="form-control custom-select">
+        <option *ngFor="let pago of pagosPendientes" [value]="pago.pago_alumno_id">
+          {{ pago.nombre }} - {{ pago.monto }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group mt-3">
+      <label for="voucher" class="custom-label">Subir Comprobante</label>
+      <div class="custom-file-upload">
+        <input
+          type="file"
+          id="voucher"
+          class="form-control-file"
+          (change)="onFileSelect($event)"
+        />
+      </div>
+    </div>
+
+    <p-footer class="modal-footer mt-4 text-center" style="justify-content: center; ">
+      <button
+        type="submit"
+        pButton
+        label="Subir pago"
+        icon="pi pi-upload"
+        class="p-button-success custom-button"
+        [disabled]="!uploadForm.valid || !voucherBase64"
+        style="max-width: 300px;"
+      ></button>
+    </p-footer>
+  </form>
+
+</p-panel>

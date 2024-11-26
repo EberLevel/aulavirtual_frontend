@@ -151,7 +151,7 @@ export class EditAlumnoComponent {
             .get('estadoId')
             ?.valueChanges.subscribe((selectedEstadoId) => {
                 if (selectedEstadoId) {
-                    this.getCarrerasDropdown(selectedEstadoId); // Pasar el ID del plan de estudios para filtrar las carreras
+                    this.getCarrerasDropdown(); // Pasar el ID del plan de estudios para filtrar las carreras
                 }
             });
 
@@ -467,7 +467,7 @@ export class EditAlumnoComponent {
     }
 
     // Manejar la selección del archivo y convertirlo a Base64
-onFileSelect(event: any) {
+    onFileSelect(event: any) {
     const file = event.target.files[0];
     if (file) {
         this.voucherBase64 = file; // Convertir el archivo a Base64
@@ -475,10 +475,10 @@ onFileSelect(event: any) {
         
         console.log(this.voucherBase64);
     }
-  }
+    }
 
   // Subir el comprobante
-  onSubmit() {
+    onSubmit() {
 
     console.log(this.voucherBase64);
     
@@ -516,5 +516,5 @@ onFileSelect(event: any) {
     } else {
       alert('Por favor, completa todos los campos antes de enviar.');
     }
-  }
+    }
 }

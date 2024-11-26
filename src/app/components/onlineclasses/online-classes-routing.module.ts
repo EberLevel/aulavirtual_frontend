@@ -492,6 +492,14 @@ const routes: Routes = [];
                     ).then((m) => m.PagoModule),
             },
             {
+                path: 'pagos-alumno',
+                data: { breadcrumb: 'Sección de pagos' },
+                loadChildren: () =>
+                    import(
+                        '../onlineclasses/pagos/pago-modal/pago-modal.module'
+                    ).then((m) => m.PagoModalModule),
+            },
+            {
                 path: 'foro-alumnos',
                 data: { breadcrumb: 'Foro de alumnos' },
                 loadChildren: () =>
