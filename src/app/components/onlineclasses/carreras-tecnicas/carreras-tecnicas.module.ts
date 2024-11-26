@@ -58,6 +58,7 @@ import { ListadoEvaluacionPresencialComponent } from './dialog/ver-curso-de-carr
 import { VerGEvAlumnoComponent } from './dialog/ver-curso-de-carrera/opciones/ver-g-ev-alumno/ver-g-ev-alumno.component';
 import { VerLisEvalGrupoAlumnoComponent } from './dialog/ver-curso-de-carrera/opciones/ver-lis-eval-grupo-alumno/ver-lis-eval-grupo-alumno.component';
 import { ListPlanesEstudioComponent } from './dialog/list-planes-estudio/list-planes-estudio.component';
+import { ListCursosPlanEstudioComponent } from './dialog/list-cursos-plan-estudio/list-cursos-plan-estudio.component';
 
 @NgModule({
     declarations: [
@@ -82,6 +83,7 @@ import { ListPlanesEstudioComponent } from './dialog/list-planes-estudio/list-pl
         VerGEvAlumnoComponent,
         VerLisEvalGrupoAlumnoComponent,
         ListPlanesEstudioComponent,
+        ListCursosPlanEstudioComponent,
     ],
     imports: [
         CommonModule,

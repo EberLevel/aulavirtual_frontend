@@ -1,7 +1,7 @@
 <p-panel>
     <ng-template pTemplate="header">
         <span class="text-primary font-semibold text-xl">
-            Reporte de Planes de Estudio
+            Reporte de Unidades Didácticas
         </span>
     </ng-template>
     <ng-template pTemplate="content">
@@ -10,7 +10,7 @@
                 <div class="field md:col-12">
                     <p-table
                         #dt1
-                        [value]="planEstudio"
+                        [value]="unidadesDidacticas"
                         [rows]="10"
                         [loading]="loading"
                         [rowHover]="true"
@@ -20,45 +20,37 @@
                     >
                         <ng-template pTemplate="header">
                             <tr>
-                                <th style="min-width: 10rem" scope="col">
-                                    ID
+                                <th style="min-width: 15rem" scope="col">
+                                    Nombre de la Unidad Didáctica
                                 </th>
                                 <th style="min-width: 15rem" scope="col">
-                                    Nombre del Plan de Estudio
+                                    Carrera
                                 </th>
-                                <th style="min-width: 10rem" scope="col">
-                                    Reporte
+                                <th style="min-width: 15rem" scope="col">
+                                    Plan de Estudios
                                 </th>
                             </tr>
                         </ng-template>
 
-                        <ng-template pTemplate="body" let-plan>
+                        <ng-template pTemplate="body" let-unidad>
                             <tr>
-                                <td>{{ plan.estado_id }}</td>
-                                <td>{{ plan.nombre_plan_de_estudio }}</td>
-                                <td>
-                                    <button
-                                        pButton
-                                        icon="pi pi-chart-bar"
-                                        title="Ver Reporte"
-                                        class="p-button-rounded p-button-text p-button-info"
-                                        (click)="navigateListPlan(plan)"
-                                    ></button>
-                                </td>
+                                <td>{{ unidad.curso_nombre }}</td>
+                                <td>{{ unidad.carrera_nombre }}</td>
+                                <td>{{ unidad.plan_de_estudio_nombre }}</td>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="emptymessage">
                             <tr>
-                                <td colspan="3" class="text-center">
-                                    No se encontraron Planes de Estudio para esta carrera.
+                                <td colspan="4" class="text-center">
+                                    No se encontraron Unidades Didácticas asociadas.
                                 </td>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="loadingbody">
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     Cargando registros. Por favor espere.
                                 </td>
                             </tr>

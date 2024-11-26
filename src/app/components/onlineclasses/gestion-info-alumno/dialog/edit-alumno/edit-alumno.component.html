@@ -141,7 +141,7 @@
                         <span class="p-float-label p-input-icon-left">
                             <i class="pi pi-user-edit"></i>
                             <input
-                                type="text"
+                                type="password"
                                 id="contraseña"
                                 pInputText
                                 formControlName="contraseña"
@@ -373,6 +373,15 @@
             <div class="row mb-5 text-right">
                 <button
                 *ngIf="role_id === 12"
+                pButton
+                label="Ver pagos"
+                icon="pi pi-shopping-cart"
+                id="btnnavigateToAvanceCurricular"
+                class="p-button-warning mr-2"
+                (click)="openModalPagos()"
+                type="button"
+            ></button>            
+                <button
                 pButton
                 label="Ver pagos"
                 icon="pi pi-shopping-cart"

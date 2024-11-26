@@ -57,7 +57,7 @@ export class PagoService {
     console.log(pago);
 
     return this.http
-      .post(`${this.baseUrl}pagos/`, pago);
+      .post(`${this.baseUrl}pagos`, pago);
   }
 
   vincularPagoAlumnos(pagoAlumnos: object): Observable<any> {

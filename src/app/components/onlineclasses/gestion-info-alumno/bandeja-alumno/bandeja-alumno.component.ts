@@ -152,6 +152,7 @@ export class BandejaAlumnoComponent {
         };
         this.alumnoService.showAlumno(data).subscribe(
             (data: any) => {
+                console.log('Datos recibidos del backend:', data);
                 this.ref = this.dialogService.open(EditAlumnoComponent, {
                     data: {
                         alumno: data,
@@ -160,16 +161,13 @@ export class BandejaAlumnoComponent {
                     styleClass: 'custom-dialog-header',
                 });
 
-                // Cuando el modal de edición se cierra
                 this.ref.onClose.subscribe((data: any) => {
                     if (data) {
-                        // Si la edición fue exitosa, recargamos la lista de alumnos
                         if (data.register) {
                             this.cargaInicial(); // Recargar la lista de alumnos
                         }
                     }
 
-                    // Asegúrate de que la ruta se recargue completamente si es necesario
                     this.router.routeReuseStrategy.shouldReuseRoute = () =>
                         false;
                     this.router.onSameUrlNavigation = 'reload';

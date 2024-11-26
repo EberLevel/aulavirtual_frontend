@@ -2,7 +2,11 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CalendarOptions } from '@fullcalendar/core';
 import esLocale from '@fullcalendar/core/locales/es';
-import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import {
+    DialogService,
+    DynamicDialogConfig,
+    DynamicDialogRef,
+} from 'primeng/dynamicdialog';
 import { GeneralService } from '../../../service/general.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -36,6 +40,27 @@ interface Ciclos {
     value: number;
 }
 
+interface AlumnoData {
+    codigo: string;
+    tipoDocumento: number;
+    dni: string;
+    nombres: string;
+    apellidos: string;
+    email: string;
+    nroCelular: string;
+    carreraId: number;
+    cicloId: number;
+    estadoId: number;
+    direccion: string;
+    fechaNacimiento: string;
+    promocion_id: number;
+    domain_id: number;
+    fotoPerfil?: string | null;
+    fotoCarnet?: string | null;
+    estadoAlumno: string;
+    contraseña?: string;
+}
+
 @Component({
     selector: 'app-edit-alumno',
     templateUrl: './edit-alumno.component.html',
@@ -65,7 +90,7 @@ export class EditAlumnoComponent {
     role_id: number = 1; 
     estadoAlumnoOptions: { label: string, value: string }[] = [
         { label: 'EN PROCESO', value: 'EN PROCESO' },
-        { label: 'RETIRADO', value: 'RETIRADO' }
+        { label: 'RETIRADO', value: 'RETIRADO' },
     ];
     showModalPagos: boolean = false
     pagoAlumnosList: any[] = []
@@ -109,7 +134,7 @@ export class EditAlumnoComponent {
             fotoPerfil: [null as string | null],
             fotoCarnet: [null as string | null],
             estadoAlumno: ['', Validators.required],
-            contraseña: ['', Validators.required]
+            contraseña: ['', [Validators.minLength(6)]],
         });
         this.domain_id = this.helpersService.getDominioId();
         this.role_id = this.helpersService.getRolId();
@@ -155,26 +180,36 @@ export class EditAlumnoComponent {
                     carreraId: this.alumno.carrera_id,
                     cicloId: this.alumno.ciclo_id,
                     estadoId: this.alumno.estado_id,
-                    contraseña: this.alumno.contraseña,
+                    contraseña: '*******',
                     promocionId: this.alumno.promocion_id,
                     direccion: this.alumno.direccion,
                     fechaNacimiento: new Date(this.alumno.fecha_nacimiento),
                     fotoPerfil: this.alumno.foto_perfil,
                     fotoCarnet: this.alumno.foto_carnet,
-                    estadoAlumno: this.alumno.estadoAlumno || 'EN PROCESO'
+                    estadoAlumno: this.alumno.estadoAlumno || 'EN PROCESO',
                 });
+
+                this.alumnoForm
+                    .get('contraseña')
+                    ?.valueChanges.subscribe((value) => {
+                        if (
+                            value &&
+                            value !== '*******' &&
+                            value.includes('*')
+                        ) {
+                            // Si el valor contiene partes de "*******", limpiarlo completamente
+                            this.alumnoForm.get('contraseña')?.setValue('');
+                        }
+                    });
             }
         }
         this.getCiclosDropdown();
         this.getPromocionesDropdown();
         this.listarPagoDeAlumno();
         this.cargarSelectPagos();
-
-        console.log(this.role_id);
-        
     }
 
-    estadosList: { name: string, value: number }[] = [];
+    estadosList: { name: string; value: number }[] = [];
 
     listarPlanEstudio(): Promise<void> {
         return new Promise((resolve, reject) => {
@@ -193,10 +228,10 @@ export class EditAlumnoComponent {
         });
     }
 
-    getCarrerasDropdown(planDeEstudioId: number) {
-        // Llamar a la API para obtener las carreras filtradas por el Plan de Estudio seleccionado
-        this.commonService.getCarrerasDropdownByPlanDeEstudio(planDeEstudioId).subscribe(
+    getCarrerasDropdown() {
+        this.commonService.getCarrerasDropdown(this.domain_id).subscribe(
             (response) => {
+                console.log('Lista de carrerasList', response);
                 this.carrerasList = response.map((carrera: any) => {
                     return {
                         name: carrera.nombres,
@@ -241,31 +276,32 @@ export class EditAlumnoComponent {
 
     navigateToAvanceCurricular(alumno: any) {
         const id = this.alumno.id;
-        console.log("ALUMNO", id)
-
         const data = {
             domain_id: alumno.domain_id ?? 1,
             id: this.alumno.id,
         };
 
-        console.log("data", data)
-
-
         this.alumnoService.showAlumno(data).subscribe(
             (response: any) => {
-                this.ref = this.dialogService.open(BandejaAvanceCurricularComponent, {
-                    data: {
-                        alumno: response,
-                    },
-                    width: '60%',
-                    styleClass: 'custom-dialog-header',
-                });
+                this.ref = this.dialogService.open(
+                    BandejaAvanceCurricularComponent,
+                    {
+                        data: {
+                            alumno: response,
+                        },
+                        width: '60%',
+                        styleClass: 'custom-dialog-header',
+                    }
+                );
 
                 // Cuando el modal se cierra
                 this.ref.onClose.subscribe((result: any) => {
                     if (result) {
                         // Maneja los datos que se devuelven al cerrar el diálogo
-                        console.log('Datos recibidos al cerrar el diálogo:', result);
+                        console.log(
+                            'Datos recibidos al cerrar el diálogo:',
+                            result
+                        );
                     }
                 });
             },
@@ -275,10 +311,9 @@ export class EditAlumnoComponent {
         );
     }
 
-
     actualizarAlumno() {
         if (this.alumnoForm.valid) {
-            const alumnoData = {
+            const alumnoData: AlumnoData = {
                 codigo: this.alumnoForm.get('codigo')?.value,
                 tipoDocumento: this.alumnoForm.get('tipoDocumento')?.value,
                 dni: this.alumnoForm.get('numeroDocumento')?.value,
@@ -290,14 +325,21 @@ export class EditAlumnoComponent {
                 cicloId: this.alumnoForm.get('cicloId')?.value,
                 estadoId: this.alumnoForm.get('estadoId')?.value,
                 direccion: this.alumnoForm.get('direccion')?.value,
-                fechaNacimiento: this.alumnoForm.get('fechaNacimiento')?.value.toISOString().split('T')[0],
+                fechaNacimiento: this.alumnoForm
+                    .get('fechaNacimiento')
+                    ?.value.toISOString()
+                    .split('T')[0],
                 promocion_id: this.alumnoForm.get('promocionId')?.value,
                 domain_id: this.domain_id,
                 fotoPerfil: this.alumnoForm.get('fotoPerfil')?.value,
                 fotoCarnet: this.alumnoForm.get('fotoCarnet')?.value,
-                contraseña: this.alumnoForm.get('contraseña')?.value,
-                estadoAlumno: this.alumnoForm.get('estadoAlumno')?.value
+                estadoAlumno: this.alumnoForm.get('estadoAlumno')?.value,
             };
+            // Solo incluir contraseña si se cambió y no es el valor fake
+            const contraseñaValue = this.alumnoForm.get('contraseña')?.value;
+            if (contraseñaValue && contraseñaValue !== '*******') {
+                alumnoData.contraseña = contraseñaValue;
+            }
 
             console.log('Datos enviados como JSON:', alumnoData);
 
@@ -305,8 +347,6 @@ export class EditAlumnoComponent {
             this.spinner.show();
 
             const id = this.alumno.id;
-            console.log("ALUMNO", id)
-
             const domain_id = this.domain_id;
 
             this.alumnoService.editAlumno(alumnoData, id, domain_id).subscribe(
@@ -314,9 +354,14 @@ export class EditAlumnoComponent {
                     this.loading = false;
                     this.spinner.hide();
                     this.ref.close({ register: true });
+                    const mensajeExito =
+                        contraseñaValue && contraseñaValue !== '*******'
+                            ? 'Alumno y contraseña actualizados correctamente.'
+                            : 'Alumno actualizado correctamente.';
+
                     Swal.fire({
                         title: '¡Éxito!',
-                        text: 'Alumno actualizado correctamente',
+                        text: mensajeExito,
                         icon: 'success',
                         confirmButtonText: 'Aceptar',
                     });
@@ -374,7 +419,10 @@ export class EditAlumnoComponent {
             });
         });
     }
-    convertImageToBase64(file: File, callback: (base64Image: string) => void): void {
+    convertImageToBase64(
+        file: File,
+        callback: (base64Image: string) => void
+    ): void {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {

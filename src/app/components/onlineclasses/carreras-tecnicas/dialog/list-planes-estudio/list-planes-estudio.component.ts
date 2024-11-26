@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog';
+import {
+    DynamicDialogConfig,
+    DynamicDialogRef,
+    DialogService,
+} from 'primeng/dynamicdialog';
 import { PlanDeEstudiosService } from '../../../service/plan-de-estudios.service';
+import { ListCursosPlanEstudioComponent } from '../list-cursos-plan-estudio/list-cursos-plan-estudio.component';
 
 @Component({
     selector: 'app-list-planes-estudio',
@@ -13,7 +18,9 @@ export class ListPlanesEstudioComponent implements OnInit {
 
     constructor(
         private planDeEstudiosService: PlanDeEstudiosService,
-        public config: DynamicDialogConfig // Recibir datos
+        public config: DynamicDialogConfig, // Recibir datos
+        private dialogService: DialogService, // Para abrir el modal
+        private ref: DynamicDialogRef
     ) {}
 
     ngOnInit(): void {
@@ -43,5 +50,19 @@ export class ListPlanesEstudioComponent implements OnInit {
                     this.loading = false;
                 }
             );
+    }
+
+    navigateListPlan(plan: any): void {
+
+
+        this.ref = this.dialogService.open(ListCursosPlanEstudioComponent, {
+            width: '80%',
+            styleClass: 'custom-dialog-header',
+            data: { carreraId: plan.estado_id }, // Pasar el ID del plan de estudio
+        });
+
+        this.ref.onClose.subscribe(() => {
+            console.log('Reporte cerrado');
+        });
     }
 }
