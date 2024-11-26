@@ -372,12 +372,14 @@
             </div>
             <div class="row mb-5 text-right">
                 <button
+                *ngIf="role_id === 12"
                 pButton
                 label="Ver pagos"
                 icon="pi pi-shopping-cart"
                 id="btnnavigateToAvanceCurricular"
                 class="p-button-warning mr-2"
                 (click)="openModalPagos()"
+                style="display: none;"
                 type="button"
             ></button>            
                 <button

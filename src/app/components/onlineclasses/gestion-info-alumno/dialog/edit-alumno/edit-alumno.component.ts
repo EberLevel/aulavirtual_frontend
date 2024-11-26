@@ -87,7 +87,8 @@ export class EditAlumnoComponent {
     translateService: any;
     loading: boolean = false;
     domain_id: number = 1;
-    estadoAlumnoOptions: { label: string; value: string }[] = [
+    role_id: number = 1; 
+    estadoAlumnoOptions: { label: string, value: string }[] = [
         { label: 'EN PROCESO', value: 'EN PROCESO' },
         { label: 'RETIRADO', value: 'RETIRADO' },
     ];
@@ -136,6 +137,7 @@ export class EditAlumnoComponent {
             contraseña: ['', [Validators.minLength(6)]],
         });
         this.domain_id = this.helpersService.getDominioId();
+        this.role_id = this.helpersService.getRolId();
 
         this.uploadForm = this.fb.group({
             pago_id: ['', Validators.required]
@@ -144,7 +146,14 @@ export class EditAlumnoComponent {
 
     ngOnInit() {
         this.listarPlanEstudio();
-        this.getCarrerasDropdown();
+
+        this.alumnoForm
+            .get('estadoId')
+            ?.valueChanges.subscribe((selectedEstadoId) => {
+                if (selectedEstadoId) {
+                    this.getCarrerasDropdown(); // Pasar el ID del plan de estudios para filtrar las carreras
+                }
+            });
 
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
@@ -209,8 +218,7 @@ export class EditAlumnoComponent {
                     this.estadosList = response.map((estado: any) => {
                         return {
                             name: estado.nombre,
-                            value: estado.id,
-
+                            value: estado.id
                         };
                     });
                     resolve();
@@ -268,11 +276,11 @@ export class EditAlumnoComponent {
 
     navigateToAvanceCurricular(alumno: any) {
         const id = this.alumno.id;
-        console.log('ALUMNO', id);
         const data = {
             domain_id: alumno.domain_id ?? 1,
             id: this.alumno.id,
         };
+
         this.alumnoService.showAlumno(data).subscribe(
             (response: any) => {
                 this.ref = this.dialogService.open(
@@ -302,6 +310,7 @@ export class EditAlumnoComponent {
             }
         );
     }
+
     actualizarAlumno() {
         if (this.alumnoForm.valid) {
             const alumnoData: AlumnoData = {
@@ -332,14 +341,12 @@ export class EditAlumnoComponent {
                 alumnoData.contraseña = contraseñaValue;
             }
 
-
             console.log('Datos enviados como JSON:', alumnoData);
 
             this.loading = true;
             this.spinner.show();
 
             const id = this.alumno.id;
-
             const domain_id = this.domain_id;
 
             this.alumnoService.editAlumno(alumnoData, id, domain_id).subscribe(
@@ -460,7 +467,7 @@ export class EditAlumnoComponent {
     }
 
     // Manejar la selección del archivo y convertirlo a Base64
-onFileSelect(event: any) {
+    onFileSelect(event: any) {
     const file = event.target.files[0];
     if (file) {
         this.voucherBase64 = file; // Convertir el archivo a Base64
@@ -468,10 +475,10 @@ onFileSelect(event: any) {
         
         console.log(this.voucherBase64);
     }
-  }
+    }
 
   // Subir el comprobante
-  onSubmit() {
+    onSubmit() {
 
     console.log(this.voucherBase64);
     
@@ -509,5 +516,5 @@ onFileSelect(event: any) {
     } else {
       alert('Por favor, completa todos los campos antes de enviar.');
     }
-  }
+    }
 }

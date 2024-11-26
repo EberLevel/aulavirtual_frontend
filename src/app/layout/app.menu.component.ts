@@ -274,6 +274,11 @@ export class AppMenuComponent implements OnInit {
                                         icon: 'pi pi-fw pi-calendar',
                                         routerLink: ['/apps/calendar'],
                                     },
+                                    {
+                                        label: 'Pagos',
+                                        icon: 'pi pi-shopping-cart',
+                                        routerLink: ['/pl-virtual/pagos-alumno'],
+                                    }
                                 ],
                             },
                         ],
@@ -630,7 +635,7 @@ export class AppMenuComponent implements OnInit {
                                             label: 'Horarios',
                                             icon: 'pi pi-fw pi-calendar',
                                             routerLink: ['/apps/calendar'],
-                                        },
+                                        }
 
                                         // {
                                         //     label: 'Foros',
@@ -854,6 +859,7 @@ export class AppMenuComponent implements OnInit {
             });
         }
     }
+    
 }
 
 
