@@ -26,7 +26,7 @@ export class CommonService{
         return this.http.get(`${this.baseUrl}carreras-list/${domain_id}`);
     }
     getCarrerasDropdownByPlanDeEstudio(planDeEstudioId: number): Observable<any> {
-        return this.http.get(`${this.baseUrl}carreras-dropdown/${planDeEstudioId}`);
+        return this.http.get(`${this.baseUrl}carreras-list/${planDeEstudioId}`);
     }
     
     getCiclosDropdown(domain_id:number):Observable<any>{

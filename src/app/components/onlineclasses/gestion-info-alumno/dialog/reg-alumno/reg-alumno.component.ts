@@ -109,16 +109,7 @@ export class RegAlumnoComponent {
     ngOnInit() {
         this.domain_id = this.helpersService.getDominioId();
         this.listarPlanEstudio();
-
-        // Detectar cuando se selecciona un plan de estudios
-        this.alumnoForm
-            .get('estadoId')
-            ?.valueChanges.subscribe((selectedEstadoId) => {
-                if (selectedEstadoId) {
-                    this.getCarrerasDropdown(selectedEstadoId); // Pasar el ID del plan de estudios para filtrar las carreras
-                }
-            });
-
+        this.getCarrerasDropdown();
         this.tipodocu = [
             { name: 'DNI', value: 1, code: 'NY' },
             { name: 'PASAPORTE', value: 2, code: 'RM' },
@@ -163,8 +154,6 @@ export class RegAlumnoComponent {
         return new Promise((resolve, reject) => {
             this.parametroService.getEstadoDeCurso().subscribe(
                 (response: any) => {
-                    console.log('Lista de listarPlanEstudio', response);
-                    // Mapear los datos obtenidos para que el dropdown los entienda
                     this.estadosList = response.map((estado: any) => {
                         return {
                             name: estado.nombre,
@@ -177,10 +166,10 @@ export class RegAlumnoComponent {
             );
         });
     }
-    getCarrerasDropdown(planDeEstudioId: number) {
-        // Llamar a la API para obtener las carreras filtradas por el Plan de Estudio seleccionado
-        this.commonService.getCarrerasDropdownByPlanDeEstudio(planDeEstudioId).subscribe(
+    getCarrerasDropdown() {
+        this.commonService.getCarrerasDropdown(this.domain_id).subscribe(
             (response) => {
+                console.log('Lista de carrerasList', response);
                 this.carrerasList = response.map((carrera: any) => {
                     return {
                         name: carrera.nombres,
