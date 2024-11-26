@@ -62,6 +62,7 @@ export class EditAlumnoComponent {
     translateService: any;
     loading: boolean = false;
     domain_id: number = 1;
+    role_id: number = 1; 
     estadoAlumnoOptions: { label: string, value: string }[] = [
         { label: 'EN PROCESO', value: 'EN PROCESO' },
         { label: 'RETIRADO', value: 'RETIRADO' }
@@ -111,6 +112,7 @@ export class EditAlumnoComponent {
             contraseña: ['', Validators.required]
         });
         this.domain_id = this.helpersService.getDominioId();
+        this.role_id = this.helpersService.getRolId();
 
         this.uploadForm = this.fb.group({
             pago_id: ['', Validators.required]
@@ -167,6 +169,9 @@ export class EditAlumnoComponent {
         this.getPromocionesDropdown();
         this.listarPagoDeAlumno();
         this.cargarSelectPagos();
+
+        console.log(this.role_id);
+        
     }
 
     estadosList: { name: string, value: number }[] = [];
