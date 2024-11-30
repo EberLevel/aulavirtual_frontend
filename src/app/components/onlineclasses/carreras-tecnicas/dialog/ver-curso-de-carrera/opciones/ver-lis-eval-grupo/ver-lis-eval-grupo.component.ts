@@ -36,6 +36,7 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     @Output() miembrosActualizados = new EventEmitter<Miembro[]>();
 
     grupoEvaluacionesList: any[] = [];
+    filteredExamenes: any[] = [];
     originalgrupoEvaluacionesList: any[] = [];
 
     ref: DynamicDialogRef | undefined;
@@ -44,14 +45,19 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     porcentajeTotal: number = 0;
     grupoEvaluaciones: any;
     evaluacion: any;
+    recursos: any[] = [];  // Lista de recursos
+    mostrarModalRecursos: boolean = false;  // Controla la visibilidad del modal
+    filterType: number = 0;
+    // Variable para almacenar el texto de búsqueda
+    searchText: string = '';
 
     constructor(
-      public helpersService: HelpersService,
+        public helpersService: HelpersService,
         private dialogService: DialogService,
         private grupoEvaluacionesService: GeneralService,
         private router: Router,
         public config: DynamicDialogConfig
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.grupoEvaluaciones = this.config.data.data;
@@ -77,7 +83,7 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
     getModalidad(modalidad: number): string {
         return modalidad === 0 ? 'Presencial' : 'Remoto';
     }
-    
+
     calcularTotales() {
         let totalPromedio = 0;
         let totalPorcentaje = 0;
@@ -204,12 +210,10 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
 
         this.grupoEvaluacionesList = this.originalgrupoEvaluacionesList.filter(
             (carrera) =>
-                (carrera.codigo &&
-                    carrera.codigo.toLowerCase().includes(filterValue)) ||
-                (carrera.nombres &&
-                    carrera.nombres.toLowerCase().includes(filterValue)) ||
-                (carrera.cursos &&
-                    carrera.cursos.toLowerCase().includes(filterValue))
+                (carrera.nombre &&
+                    carrera.nombre.toLowerCase().includes(filterValue)) ||
+                (carrera.tipo_evaluacion_nombre &&
+                    carrera.tipo_evaluacion_nombre.toLowerCase().includes(filterValue))
         );
     }
 
@@ -250,4 +254,54 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
             this.listarGrupoEvaluaciones();
         });
     }
+
+    mostrarRecursos(evaluacion: any) {
+        console.log(evaluacion);
+        console.log(evaluacion.id);
+
+        this.mostrarModalRecursos = true;
+
+        this.grupoEvaluacionesService.getEvaluacionPorId(evaluacion.id).subscribe((data: any) => {
+            this.recursos = JSON.parse(data.contenido) ?? [];  // Convierte el string JSON a un array de URLs
+            console.log(this.recursos);
+        })
+    }
+
+    isImage(url: string): boolean {
+        return url.match(/\.(jpeg|jpg|gif|png)$/) !== null;
+    }
+
+    // Método para verificar si el recurso es un video
+    isVideo(url: string): boolean {
+        return url.match(/\.(mp4)$/) !== null;
+    }
+
+    // Método para verificar si el recurso es un PDF
+    isPdf(url: string): boolean {
+        return url.match(/\.(pdf)$/) !== null;
+    }
+
+    applyFilters(): void {
+        // Comienza con la lista original
+
+        console.log(this.originalgrupoEvaluacionesList);
+        console.log(this.grupoEvaluacionesList);
+        
+        if (this.filterType === 0) {
+            this.grupoEvaluacionesList = [
+                ...this.originalgrupoEvaluacionesList,
+            ];
+            return;
+        }
+        this.grupoEvaluacionesList = this.originalgrupoEvaluacionesList.filter(
+            (examen) => +examen.tipo_evaluacion_id === +this.filterType
+        );
+    }
+
+    onGlobalFilter2() {
+        console.log('cambio');
+        
+        this.applyFilters()
+    }
+
 }
