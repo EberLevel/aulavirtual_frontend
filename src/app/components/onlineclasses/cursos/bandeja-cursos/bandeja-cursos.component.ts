@@ -56,76 +56,82 @@ export class BandejaCursosComponent {
     ) {}
 
     ngOnInit(): void {
-        this.rolId = this.helpersService.getRolId();
-        console.log('ROL ID', this.rolId);
-
-        // Obtener el objeto 'user' del localStorage
         const user = localStorage.getItem('user');
 
-        let alumnoId = null;
-
-        // Verificar si el objeto existe en el localStorage
         if (user) {
-            // Parsear el objeto JSON
             const userObj = JSON.parse(user);
+            const alumnoId = userObj.alumno_id;
 
-            // Acceder a la propiedad docente_id
-            alumnoId = userObj.alumno_id || 1;
+            if (alumnoId) {
+                this.cursoAlumnoService.getAlumnoById(alumnoId).subscribe(
+                    (alumno) => {
+                        console.log('Datos del alumno:', alumno);
+
+                        // Obtener estado_id (plan de estudio) y carrera_id
+                        const planEstudioId = alumno.estado_id;
+                        const carreraId = alumno.carrera_id;
+
+                        console.log('Plan de Estudio ID:', planEstudioId);
+                        console.log('Carrera ID:', carreraId);
+
+                        // Configurar `this.config` para usarlo en listarCursos
+                        this.config = {
+                            data: {
+                                data: {
+                                    id: alumnoId,
+                                    planEstudioId: planEstudioId,
+                                    carreraId: carreraId,
+                                },
+                            },
+                        };
+
+                        // Llamar a listarCursos después de configurar `config`
+                        this.listarCursos();
+                    },
+                    (error) => {
+                        console.error(
+                            'Error al obtener datos del alumno:',
+                            error
+                        );
+                    }
+                );
+            } else {
+                console.error(
+                    'No se encontró el ID del alumno en el objeto usuario'
+                );
+            }
         } else {
             console.error('No se encontró el objeto user en el localStorage');
         }
-
-        this.config = {
-            data: {
-                data: {
-                    id: alumnoId,
-                    total_creditos: 30,
-                },
-            },
-        };
-
-        this.listarCursos();
     }
 
     listarCursos() {
-        this.loading = true; // Inicia el estado de carga
-        console.log(
-            'Iniciando la carga de cursos para el alumno:',
-            this.config.data.data.id
-        );
+        this.loading = true;
+
+        const planEstudioId = this.config.data.data.planEstudioId;
+        const carreraId = this.config.data.data.carreraId;
 
         this.cursoAlumnoService
-            .getCursosByAlumno(this.config.data.data.id)
+            .getCursosByPlanEstudioYCarrera(planEstudioId, carreraId)
             .subscribe(
                 (response: any) => {
-                    console.log('Datos recibidos del servicio:', response);
-
                     this.carrerastecnicasList = response.map((curso: any) => {
                         const horasTeoricas =
                             parseFloat(curso.cantidad_de_horas) || 0;
                         const horasPracticas =
                             parseFloat(curso.horas_practicas) || 0;
 
-                        const totalHoras = horasTeoricas + horasPracticas;
-                        console.log(
-                            `Curso: ${curso.nombre}, Horas Teóricas: ${horasTeoricas}, Horas Prácticas: ${horasPracticas}, Total Horas: ${totalHoras}`
-                        );
-
-                        curso.totalHoras = totalHoras;
+                        curso.totalHoras = horasTeoricas + horasPracticas;
                         return curso;
                     });
 
                     this.originalCarrerastecnicasList = [
                         ...this.carrerastecnicasList,
                     ];
-                    console.log(
-                        'Lista final de cursos procesados:',
-                        this.carrerastecnicasList
-                    );
                     this.loading = false;
                 },
                 (error) => {
-                    console.error('Error al obtener cursos por alumno', error);
+                    console.error('Error al obtener cursos:', error);
                     this.loading = false;
                 }
             );
@@ -279,15 +285,14 @@ export class BandejaCursosComponent {
             styleClass: 'custom-dialog-header',
             data: {
                 contenido: curso.tema, // Envía el tema
-                titulo: 'Visualizar Tema'
-            }
+                titulo: 'Visualizar Tema',
+            },
         });
-    
+
         this.ref.onClose.subscribe(() => {
             console.log('El diálogo del tema ha sido cerrado.');
         });
     }
-    
 
     verEvaluaciones(evaluaciones: any) {
         this.ref = this.dialogService.open(

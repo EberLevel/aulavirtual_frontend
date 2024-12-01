@@ -56,9 +56,6 @@ export class AppMenuComponent implements OnInit {
 
         // Verifica si el rol es "Alumno"
         if (rolId === 12) {
-            console.log(
-                'Rol Alumno detectado. Actualizando menú para Alumno...'
-            );
             this.actualizarMenuAlumno();
         }
         // Verifica si el rol es "Docente"
@@ -236,7 +233,6 @@ export class AppMenuComponent implements OnInit {
         ];
     }
     actualizarMenuAlumno() {
-        console.log('actualizarMenuAlumno llamado');
         this.model4 = [
             {
                 items: [

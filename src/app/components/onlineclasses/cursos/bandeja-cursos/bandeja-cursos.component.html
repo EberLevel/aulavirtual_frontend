@@ -8,11 +8,15 @@
         <div class="row mb-4">
             <div class="grid p-fluid">
                 <div class="field md:col-12">
-                    <div *ngIf="loading" class="flex justify-content-center align-items-center" style="height: 200px">
+                    <div
+                        *ngIf="loading"
+                        class="flex justify-content-center align-items-center"
+                        style="height: 200px"
+                    >
                         <p-progressSpinner></p-progressSpinner>
                     </div>
                     <p-table
-                    *ngIf="!loading"
+                        *ngIf="!loading"
                         #dt1
                         [value]="carrerastecnicasList"
                         [rows]="10"
@@ -189,7 +193,7 @@
                                 <td>{{ carrera.totalHoras }}</td>
                                 <td>{{ carrera.ciclo_nombre }}</td>
                                 <td>{{ carrera.carrera_nombre }}</td>
-                                <td>{{ carrera.area_de_formacion_nombre }}</td>
+                                <td>{{ carrera.area_formacion_nombre }}</td>
                                 <td>{{ carrera.modulo_formativo_nombre }}</td>
                             </tr>
                         </ng-template>

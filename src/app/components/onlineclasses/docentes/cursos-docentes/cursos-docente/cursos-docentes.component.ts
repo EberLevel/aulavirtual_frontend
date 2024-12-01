@@ -56,7 +56,6 @@ export class CursosDocentesComponent {
 
     ngOnInit(): void {
         this.rolId = this.helpersService.getRolId();
-        console.log("ROL ID" , this.rolId)
         this.docenteId = this.helpersService.getDocenteId();
         this.domain_id = this.helpersService.getDominioId();
     
