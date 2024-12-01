@@ -32,7 +32,7 @@ export class CursoService {
     updateCursoEstado(estadoData: { cursoId: number; estadoId: number; alumnoId: number }): Observable<any> {
         return this.http.put<any>(`${this.baseUrl}curso/estado`, estadoData);
     }      
-    getCursosByPlanEstudio(planEstudioId: number): Observable<any> {
-        return this.http.get(`${this.baseUrl}cursos/plan-estudio/${planEstudioId}`);
+    getCursosByPlanEstudioYCarrera(planEstudioId: number, carreraId: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}cursos/plan-estudio/${planEstudioId}/${carreraId}`);
     }
 }
