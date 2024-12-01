@@ -24,7 +24,8 @@ export class ListPlanesEstudioComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        const carreraId = this.config.data.carreraId; // Extraer el ID de la carrera
+        const carreraId = this.config.data.carreraId;
+        console.log('carreraIdcarreraId', carreraId);
         this.obtenerPlanDeEstudio(carreraId);
     }
 
@@ -53,12 +54,14 @@ export class ListPlanesEstudioComponent implements OnInit {
     }
 
     navigateListPlan(plan: any): void {
-
-
+        const carreraId = this.config.data.carreraId; 
         this.ref = this.dialogService.open(ListCursosPlanEstudioComponent, {
             width: '80%',
             styleClass: 'custom-dialog-header',
-            data: { carreraId: plan.estado_id }, // Pasar el ID del plan de estudio
+            data: {
+                planEstudioId: plan.estado_id, 
+                carreraId: carreraId,
+            },
         });
 
         this.ref.onClose.subscribe(() => {

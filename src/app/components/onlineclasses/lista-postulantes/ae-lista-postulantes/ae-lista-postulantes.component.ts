@@ -44,12 +44,12 @@ export class AeListaPostulantesComponent {
         this.postulanteForm = this.fb.group({
             code: [{ value: '', disabled: true }],
             codigo_puesto_asignado: [''],
-            nombre: ['', Validators.required],
+            nombre: ['',],
             genero: [''],
             telefono: [''],
             fecha_nacimiento: [''],
             edad: [{ value: '', disabled: true }],
-            email: ['', [, Validators.email]],
+            email: ['', [, ]],
             contrasena: ['', Validators.required],
             doc_identidad: [''],
             numero_documento: ['', Validators.required],
@@ -194,31 +194,60 @@ export class AeListaPostulantesComponent {
     convertToDate(dateString: string): Date | null {
         return dateString ? new Date(dateString) : null;
     }
-    formatDate(date: string): string {
+    formatDate(date: string | null): string {
+        if (!date) {
+            const today = new Date(); // Si la fecha es null o no válida, usa la fecha de hoy
+            return `${today.getFullYear()}-${('0' + (today.getMonth() + 1)).slice(-2)}-${('0' + today.getDate()).slice(-2)}`;
+        }
         const d = new Date(date);
+        if (isNaN(d.getTime())) {
+            const today = new Date(); // Si la fecha es inválida, usa la fecha de hoy
+            return `${today.getFullYear()}-${('0' + (today.getMonth() + 1)).slice(-2)}-${('0' + today.getDate()).slice(-2)}`;
+        }
         const year = d.getFullYear();
         const month = ('0' + (d.getMonth() + 1)).slice(-2); // Añade cero si es necesario
         const day = ('0' + d.getDate()).slice(-2); // Añade cero si es necesario
         return `${year}-${month}-${day}`;
     }
+    
 
     guardarPostulante() {
         if (this.postulanteForm.valid) {
-            // Habilita el campo 'code' si está deshabilitado (si es necesario)
             this.postulanteForm.get('code')?.enable();
-
-            // Crea un objeto solo con los campos obligatorios
-            const postulanteData: any = {
-                names: this.postulanteForm.value.nombre,
+            const postulanteData = {
+                position_code: this.postulanteForm.value.codigo_puesto_asignado,
+                code: this.postulanteForm.value.code,
+                identification_document_id:
+                    this.postulanteForm.value.doc_identidad,
                 identification_number:
                     this.postulanteForm.value.numero_documento,
-                password: this.postulanteForm.value.contrasena,
+                names: this.postulanteForm.value.nombre,
+                phone: this.postulanteForm.value.telefono,
+                marital_status_id: this.postulanteForm.value.estado_civil,
+                number_children: this.postulanteForm.value.numero_hijos,
+                date_birth: this.formatDate(
+                    this.postulanteForm.value.fecha_nacimiento
+                ),
+                age: this.calculateAge(
+                    this.postulanteForm.value.fecha_nacimiento
+                ),
+                education_degree_id:
+                    this.postulanteForm.value.grado_instruccion,
+                profession_id: this.postulanteForm.value.profesion,
+                email: this.postulanteForm.value.email,
+                sex: this.postulanteForm.value.genero,
+                date_affiliation: this.formatDate(
+                    this.postulanteForm.value.fecha_afiliacion
+                ),
+                estado_actual_id: this.postulanteForm.value.estado_actual,
+                ocupacion_actual_id:  this.postulanteForm.value.ocupacion_actual,
                 domain_id: this.domain_id,
+                password: this.postulanteForm.value.contrasena,
+                imagen: this.postulanteForm.value.imagen
             };
 
             console.log('Datos mapeados enviados al backend:', postulanteData);
 
-            // Verificar si la acción es actualizar o guardar
             if (this.acciones === 'actualizar') {
                 const id = this.config.data.data.id;
                 this.postulanteService
@@ -233,7 +262,6 @@ export class AeListaPostulantesComponent {
                             );
                         },
                         (error: any) => {
-                            console.error('Error en la solicitud:', error);
                             Swal.fire(
                                 'Error',
                                 'Hubo un problema al actualizar el registro',
@@ -254,7 +282,6 @@ export class AeListaPostulantesComponent {
                             );
                         },
                         (error: any) => {
-                            console.error('Error en la solicitud:', error);
                             Swal.fire(
                                 'Error',
                                 'Hubo un problema al registrar el postulante',
