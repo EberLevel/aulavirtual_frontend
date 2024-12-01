@@ -8,39 +8,41 @@
     <ng-template pTemplate="content">
         <div class="row mb-4">
             <div class="grid p-fluid">
-                <div class="field col-12 md:col-6">
+                <div class="field p-col-12 md:col-5">
                     <span class="p-float-label">
                         <input type="text" pInputText [(ngModel)]="nombre">
                         <label class="required">Nombre</label>
                     </span>
                 </div>
-            </div>  
+                <div class="field p-col-12 md:col-5">
+                    <span class="p-float-label">
+                        <p-dropdown inputId="dropdownAula" [options]="tipEvaluacion" [(ngModel)]="tipoEvaluacion"
+                            optionLabel="name" optionValue="value"></p-dropdown>
+                        <label for="dropdownAula">Tipo de Evaluación</label>
+                    </span>
+                </div>
+            </div>
         </div>
 
         <div class="row mb-4">
             <div class="grid p-fluid">
                 <div class="field md:col-3">
                     <span class="p-float-label">
-                        <p-calendar inputId="calendar" [(ngModel)]="fechaRegistro" [showTime]="false" [showSeconds]="false" dateFormat="dd-mm-yy"></p-calendar>
+                        <p-calendar inputId="calendar" [(ngModel)]="fechaRegistro" [showTime]="false"
+                            [showSeconds]="false" dateFormat="dd-mm-yy"></p-calendar>
                         <label for="calendar">Fecha de la noticia</label>
                     </span>
                 </div>
                 <div class="field md:col-3">
                     <span class="p-float-label">
-                      <p-calendar
-                        inputId="horaprogramada"
-                        [(ngModel)]="horaprogramada"   
-                        (onSelect)="capturarHora($event)"
-                        [showTime]="true"
-                        [showSeconds]="false"
-                        dateFormat="dd-mm-yy"
-                        [timeOnly]="true"
-                      ></p-calendar>
-                      <label for="horaprogramada">Hora programada</label>
+                        <p-calendar inputId="horaprogramada" [(ngModel)]="horaprogramada"
+                            (onSelect)="capturarHora($event)" [showTime]="true" [showSeconds]="false"
+                            dateFormat="dd-mm-yy" [timeOnly]="true"></p-calendar>
+                        <label for="horaprogramada">Hora programada</label>
                     </span>
                     <small style="color: brown;">Campo obligatorio *</small>
                 </div>
-            </div>   
+            </div>
             <div class="row mb-4">
                 <div class="grid p-fluid">
                     <div class="field col-12">
@@ -50,7 +52,18 @@
                         </span>
                     </div>
                 </div>
-            </div>         
+            </div>
+
+            <div class="row mb-4">
+                <div class="grid p-fluid">
+                    <div class="field col-12">
+                        <span class="p-float-label">
+                            <textarea pInputTextarea rows="3" [(ngModel)]="textoEnrriquesido"></textarea>
+                            <label for="textoEnrriquesido">Texto enrriquesido</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- Nuevo campo porcentaje asignado -->
         <!-- <div class="row mb-4">
@@ -65,15 +78,10 @@
         </div> -->
         <div class="row mb-4">
             <div class="grid p-fluid">
-                <!-- <div class="field md:col-6">
+                <div class="field md:col-5">
                     <span class="p-float-label">
-                        <p-dropdown inputId="dropdownAula" [options]="tipEvaluacion"  [(ngModel)]="tipoEvaluacion" optionLabel="name" optionValue="value"></p-dropdown>
-                        <label for="dropdownAula">Tipo de Evaluación</label>
-                    </span>
-                </div> -->
-                <div class="field md:col-6">
-                    <span class="p-float-label">
-                        <p-dropdown inputId="dropdownEstado" [options]="estados"  [(ngModel)]="estado" optionLabel="name" optionValue="value"></p-dropdown>
+                        <p-dropdown inputId="dropdownEstado" [options]="estados" [(ngModel)]="estado" optionLabel="name"
+                            optionValue="value"></p-dropdown>
                         <label for="dropdownEstado">Estados</label>
                     </span>
                 </div>
@@ -81,24 +89,74 @@
         </div>
         <div class="row mb-4">
             <div class="grid p-fluid">
+                <!-- Botón para seleccionar archivos -->
+                <div class="field md:col-4">
+                    <button pButton icon="pi pi-upload" label="Recursos" iconPos="right"
+                        class="p-button-warning p-button-sm" (click)="onSelectFiles()"></button>
+
+                    <div style="margin-top: .5rem;" *ngIf="existingFiles.length > 0">
+                        <h3>Archivos Existentes:</h3>
+                        <ul>
+                            <li *ngFor="let file of existingFiles">
+                                <a [href]="file" target="_blank">{{ file }}</a>
+                                <!-- <button pButton icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="removeFile(file)">Eliminar</button> -->
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Componente de carga de archivos -->
+                <div class="field md:col-6" *ngIf="isFileUploadVisible">
+                    <p-fileUpload name="files" (onSelect)="onFileSelect($event)" [multiple]="true"
+                        accept="image/*,video/*,.pdf" chooseLabel="Seleccionar Archivos" [auto]="true">
+                    </p-fileUpload>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="grid p-fluid">
                 <div class="field md:col-6">
                     <span class="p-float-label">
-                        <p-dropdown inputId="dropdownModalidad" [options]="tipModalidad" [(ngModel)]="modalidad" optionLabel="name" optionValue="value"></p-dropdown>
+                        <p-dropdown inputId="dropdownModalidad" [options]="tipModalidad" [(ngModel)]="modalidad"
+                            optionLabel="name" optionValue="value"></p-dropdown>
                         <label for="dropdownModalidad">Modalidad</label>
                     </span>
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="flex justify-content-end flex-column sm:flex-row">
                 <div class="flex flex-wrap gap-2">
-                    <button *ngIf="acciones === 'registrar'" pButton icon="pi pi-plus" label="Guardar Evaluación" iconPos="right" class="p-button-success p-button-sm" (click)="guardarEvaluacion()"></button>
-                    <button *ngIf="acciones === 'actualizar'" pButton icon="pi pi-refresh" label="Actualizar Evaluación" iconPos="right" class="p-button-warning p-button-sm" (click)="actualizarEvaluacion()"></button>
-                    <button pButton label="Cerrar" icon="pi pi-times" iconPos="right" class="p-button-close-clean" (click)="closeModal()"></button>
+                    <button *ngIf="acciones === 'registrar'" pButton icon="pi pi-plus" label="Guardar Evaluación"
+                        iconPos="right" class="p-button-success p-button-sm"
+                        (click)="guardarEvaluacion($event)"></button>
+                    <button *ngIf="acciones === 'actualizar'" pButton icon="pi pi-refresh" label="Actualizar Evaluación"
+                        iconPos="right" class="p-button-warning p-button-sm" (click)="actualizarEvaluacion()"></button>
+                    <button pButton label="Cerrar" icon="pi pi-times" iconPos="right" class="p-button-close-clean"
+                        (click)="closeModal()"></button>
                 </div>
             </div>
         </div>
+
+        <p-dialog header="Subir Recursos" [(visible)]="recursosModal" [modal]="true" [closable]="false">
+            <div class="p-d-flex p-jc-between">
+                <p-fileUpload name="files" url="http://localhost:8000/api/upload" [multiple]="true"
+                    accept="image/*,video/*,.pdf" chooseLabel="Seleccionar Archivos" [auto]="true">
+                </p-fileUpload>
+            </div>
+
+            <div *ngIf="true">
+                <h3>Archivos Subidos:</h3>
+                <ul>
+                    <!-- <li *ngFor="let file of uploadedFiles">{{ file.name }}</li> -->
+                    <li>Prueba</li>
+                </ul>
+            </div>
+
+            <p-footer>
+                <button pButton type="button" label="Cerrar" icon="pi pi-times" (click)="closeModalRecursos()"></button>
+            </p-footer>
+        </p-dialog>
 
     </ng-template>
 </p-panel>

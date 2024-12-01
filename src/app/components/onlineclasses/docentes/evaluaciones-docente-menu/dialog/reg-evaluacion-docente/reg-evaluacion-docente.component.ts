@@ -16,6 +16,7 @@ export class RegEvaluacionDocenteComponent {
     tipoEvaluacion!: string;
     estado!: string;
     observaciones!: string;
+    textoEnrriquesido!: string;
     grupoDeEvaluacionesId!: number;
     fechaRegistro!: Date | null;
     horaprogramada!: Date | null;  // Aseguramos que esta es del tipo Date
@@ -23,21 +24,25 @@ export class RegEvaluacionDocenteComponent {
     acciones!: string;  // Aquí almacenamos la acción ('registrar' o 'actualizar')
     modalidad: any;
     loading: boolean = false;
+    recursosModal: boolean = false;
+    selectedFiles: any[] = []
+    evaluacion_id: any = null
+    isFileUploadVisible: boolean = false;
+    existingFiles: any[] = []
 
     // Datos de los dropdowns
     tipEvaluacion = [
-        { name: 'Oral', value: 65 },       
-        { name: 'Escrito', value: 44 },  
-        { name: 'Recuperación', value: 45 }
+        { name: 'Evaluacion', value: 80 },
+        { name: 'Tema', value: 81 }
     ];
-    
+
     estados = [
-        { name: 'Pendiente', value: 1 },   
-        { name: 'En Proceso', value: 2 }, 
+        { name: 'Pendiente', value: 1 },
+        { name: 'En Proceso', value: 2 },
         { name: 'Culminado', value: 3 }
     ];
     tipModalidad = [
-        { name: 'Presencial', value: 0 },       
+        { name: 'Presencial', value: 0 },
         { name: 'Remoto', value: 1 }
     ];
     domain_id: any;
@@ -46,22 +51,23 @@ export class RegEvaluacionDocenteComponent {
         public ref: DynamicDialogRef,
         private evaluacionesService: EvaluacionesService,
         private messageService: MessageService,
-        public config: DynamicDialogConfig ,
+        public config: DynamicDialogConfig,
         private helpersService: HelpersService
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.domain_id = this.helpersService.getDominioId();
         console.log(this.domain_id)
         if (this.config && this.config.data) {
             this.acciones = this.config.data.acciones;
-    
+
             if (this.acciones === 'registrar') {
-                this.grupoDeEvaluacionesId = this.config.data.idGrupoEvaluaciones;  
+                this.grupoDeEvaluacionesId = this.config.data.idGrupoEvaluaciones;
             }
-    
+
             if (this.acciones === 'actualizar') {
                 const idEvaluacion = this.config.data.idEvaluacion;
+                this.evaluacion_id = this.config.data.idEvaluacion;
                 this.cargarDatosParaEditar(idEvaluacion);
             }
         }
@@ -89,8 +95,13 @@ export class RegEvaluacionDocenteComponent {
                 this.observaciones = evaluacion.observaciones;
                 this.fechaRegistro = new Date(evaluacion.fecha_y_hora_programo);
                 this.grupoDeEvaluacionesId = evaluacion.grupo_de_evaluaciones_id;
-                this.modalidad = evaluacion.modalidad; 
+                this.modalidad = evaluacion.modalidad;
                 this.porcentajeAsignado = evaluacion.porcentaje_asignado;
+
+                this.existingFiles = JSON.parse(evaluacion.contenido);
+
+                console.log(this.existingFiles);
+                
 
                 // Extraer y establecer la hora como Date en horaprogramada
                 const fechaCompleta = new Date(evaluacion.fecha_y_hora_programo);
@@ -107,7 +118,7 @@ export class RegEvaluacionDocenteComponent {
         );
     }
 
-    guardarEvaluacion(): void {
+    guardarEvaluacion(event: any): void {
         // Combinar la fecha y la hora
         let fechaHoraProgramada = null;
         if (this.fechaRegistro && this.horaprogramada) {
@@ -121,8 +132,9 @@ export class RegEvaluacionDocenteComponent {
             tipo_evaluacion_id: Number(this.tipoEvaluacion),
             fecha_y_hora_programo: fechaHoraProgramada,  // Aquí se asigna la fecha con la hora
             observaciones: this.observaciones || null,
+            textoEnrriquesido: this.textoEnrriquesido || null,
             estado_id: Number(this.estado),
-            modalidad: this.modalidad, 
+            modalidad: this.modalidad,
             domain_id: this.domain_id,
             grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null,
             porcentaje_asignado: this.porcentajeAsignado || 0
@@ -131,7 +143,12 @@ export class RegEvaluacionDocenteComponent {
         console.log('Datos enviados:', nuevaEvaluacion);
         this.loading = true;
 
-        this.evaluacionesService.crearEvaluacion(nuevaEvaluacion).subscribe(
+        console.log('Archivos subidos:', event.files);
+        console.log(this.selectedFiles);
+
+        // this.selectedFiles.push(...event.files); // Guarda los archivos subidos
+
+        this.evaluacionesService.crearEvaluacion(nuevaEvaluacion, this.selectedFiles).subscribe(
             (response) => {
                 this.loading = false;
                 Swal.fire({
@@ -184,7 +201,7 @@ export class RegEvaluacionDocenteComponent {
             tipo_evaluacion_id: Number(this.tipoEvaluacion),
             fecha_y_hora_programo: fechaHoraProgramada,
             observaciones: this.observaciones || null,
-            modalidad: this.modalidad, 
+            modalidad: this.modalidad,
             estado_id: Number(this.estado),
             domain_id: this.domain_id,
             grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null,
@@ -209,7 +226,33 @@ export class RegEvaluacionDocenteComponent {
         );
     }
 
-    closeModal(){
-        this.ref.close({register: false});
+    closeModal() {
+        this.ref.close({ register: false });
+    }
+
+    showModalRecursos() {
+        this.recursosModal = true;  // Cambiar a true para mostrar el modal
+    }
+
+    // Función opcional para cerrar el modal
+    closeModalRecursos() {
+        this.recursosModal = false; // Cambiar a false para ocultar el modal
+    }
+
+    onFileSelect(event: any) {
+        // this.selectedFiles = event.files;  // Guardar los archivos seleccionados
+        this.selectedFiles.push(...Array.from(event.files));
+        console.log(this.selectedFiles);
+    }
+
+    onSelectFiles() {
+        this.isFileUploadVisible = !this.isFileUploadVisible;  // Alternar visibilidad
+        console.log(this.selectedFiles);
+
+    }
+
+    removeFile(file: any) {
+        console.log(file + 'removed!');
+
     }
 }

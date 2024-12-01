@@ -1121,6 +1121,7 @@ export class GeneralService {
                 })
             );
     }
+
     guardarEvaluacion(parametro: any): Observable<ApiResponse> {
         return this.http
             .post<ApiResponse>(`${this.baseUrl}evaluaciones`, parametro, {
@@ -2597,5 +2598,12 @@ export class GeneralService {
                     }
                 })
             );
+    }
+
+    getEvaluacionPorId (evaluacion_id: number): Observable<ApiResponse> {
+        return this.http
+            .get<ApiResponse>(
+                `${this.urlparametro}evaluacion/${evaluacion_id}`
+            )
     }
 }

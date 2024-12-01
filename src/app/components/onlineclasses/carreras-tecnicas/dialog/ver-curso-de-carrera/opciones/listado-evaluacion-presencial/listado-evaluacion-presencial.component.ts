@@ -32,6 +32,10 @@ export class ListadoEvaluacionPresencialComponent implements OnInit {
         // Asignar la lista de alumnos a la variable `alumnos`
         this.alumnos = data;
         console.log('Alumnos recibidos:', this.alumnos);
+
+        console.log(typeof this.alumnos[0].asistencia);
+        console.log(typeof this.alumnos[1].asistencia);
+        
       },
       (error) => {
         console.error('Error al obtener alumnos:', error);
@@ -44,7 +48,8 @@ guardarNotas() {
       evaluacion_id: this.evaluacionId,
       notas: this.alumnos.map(alumno => ({
         alumno_id: alumno.id,
-        nota: alumno.nota
+        nota: alumno.nota,
+        asistencia: (alumno.asistencia) ? 1 : 0
       }))
     };
 
