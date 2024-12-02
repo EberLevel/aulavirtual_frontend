@@ -17,39 +17,47 @@ export class ListCursosPlanEstudioComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        console.log(
-            'this.config.data?.carreraId;',
-            this.config.data?.carreraId
-        );
-        const planEstudioId = this.config.data?.carreraId;
-        this.obtenerUnidadesDidacticas(planEstudioId);
+        const planEstudioId = this.config.data?.planEstudioId; // Recibe el ID del plan de estudio
+        const carreraId = this.config.data?.carreraId; // Recibe el ID de la carrera
+        console.log('planEstudioIdplanEstudioId', carreraId, planEstudioId);
+        if (!planEstudioId || !carreraId) {
+            console.error('Faltan parámetros para cargar las unidades didácticas.');
+            this.loading = false;
+            return;
+        }
+    
+        this.obtenerUnidadesDidacticas(planEstudioId, carreraId);
     }
+    
 
-    obtenerUnidadesDidacticas(planEstudioId: number): void {
-        this.cursoService.getCursosByPlanEstudio(planEstudioId).subscribe(
-            (response: any) => {
-                console.log('first', response);
-                if (response && response.length > 0) {
-                    this.unidadesDidacticas = response.map((curso: any) => {
-                        return {
-                            curso_nombre: curso.curso_nombre,
-                            carrera_nombre: curso.carrera_nombre,
-                            plan_de_estudio_nombre: curso.plan_de_estudio_nombre,
-                        };
-                    });
-                } else {
+    obtenerUnidadesDidacticas(planEstudioId: number, carreraId: number): void {
+        this.cursoService
+            .getCursosByPlanEstudioYCarrera(planEstudioId, carreraId)
+            .subscribe(
+                (response: any) => {
+                    console.log('Cursos obtenidos:', response);
+                    if (response && response.length > 0) {
+                        this.unidadesDidacticas = response.map(
+                            (curso: any) => ({
+                                curso_nombre: curso.curso_nombre,
+                                carrera_nombre: curso.carrera_nombre,
+                                plan_de_estudio_nombre:
+                                    curso.plan_de_estudio_nombre,
+                            })
+                        );
+                    } else {
+                        this.unidadesDidacticas = [];
+                    }
+                    this.loading = false;
+                },
+                (error) => {
+                    console.error(
+                        'Error al obtener las unidades didácticas:',
+                        error
+                    );
                     this.unidadesDidacticas = [];
+                    this.loading = false;
                 }
-                this.loading = false;
-            },
-            (error) => {
-                console.error(
-                    'Error al obtener las unidades didácticas:',
-                    error
-                );
-                this.unidadesDidacticas = [];
-                this.loading = false;
-            }
-        );
+            );
     }
 }

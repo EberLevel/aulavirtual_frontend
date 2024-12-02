@@ -47,7 +47,6 @@ export class AeCityFormComponent {
 
     ngOnInit(): void {
         this.rolId = this.helpersService.getRolId();
-        console.log('Rol ID:', this.rolId);
 
         if (this.rolId === 24) {
             this.ciudadForm.get('estado')?.disable();
