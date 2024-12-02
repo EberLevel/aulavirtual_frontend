@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { EvaluacionModalidadService } from 'src/app/components/onlineclasses/service/evaluacion-modalidad.service';
@@ -15,12 +15,15 @@ export class ListadoEvaluacionPresencialComponent implements OnInit {
   tipo_evaluacion_id: number | null = null;
   selectedAlumnos: any[] = []; // Alumnos seleccionados
   isLoading: boolean = true;
+  showNotaColumn: boolean = true;
+  showNotaRegisterColumn: boolean = true;
 
   constructor(
     private ref: DynamicDialogRef,
     private evaluacionesService: EvaluacionModalidadService,  
     private config: DynamicDialogConfig,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -40,23 +43,28 @@ export class ListadoEvaluacionPresencialComponent implements OnInit {
 
         this.selectedAlumnos = this.alumnos.filter(alumno => alumno.asistencia === 1);
 
-        this.isLoading = false;
-        
+        this.cdRef.detectChanges();
+
       },
       (error) => {
-        this.isLoading = false;
         console.error('Error al obtener alumnos:', error);
       }
     );
   }
-
+  
   obtenerTipoEvaluacion() {
     this.evaluacionesService.obtenerTipoEvaluacion(this.evaluacionId).subscribe(
       (data) => {
         console.log(data);
         this.tipo_evaluacion_id = data.tipo_evaluacion_id;
+        this.isLoading = false;
+
+        this.showNotaColumn = this.tipo_evaluacion_id !== 81;
+        this.showNotaRegisterColumn = this.tipo_evaluacion_id !== 81;
+        this.cdRef.detectChanges();
       },
       (error) => {
+        this.isLoading = false;
         console.error('Error al obtener alumnos:', error);
       }
     );

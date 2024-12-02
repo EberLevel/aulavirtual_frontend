@@ -13,8 +13,8 @@
                             <tr>
                                 <th>ID Alumno</th>
                                 <th>Nombre Completo</th>
-                                <th>Nota Registrada</th>
-                                <th *ngIf="!isLoading && tipo_evaluacion_id !== 81">Ingresar Nota</th>
+                                <th *ngIf="!isLoading && showNotaRegisterColumn">Nota Registrada</th>
+                                <th *ngIf="!isLoading && showNotaColumn">Ingresar Nota</th>
                                 <th>
                                     Asistencia <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
@@ -25,7 +25,7 @@
                             <tr>
                                 <td>{{ alumno.id }}</td>
                                 <td>{{ alumno.nombres }} {{ alumno.apellidos }}</td>
-                                <td>{{ alumno.nota || 'No asignada' }}</td>
+                                <td *ngIf="alumno.tipo_evaluacion_id !== 81">{{ alumno.nota || 'No asignada' }}</td>
                                 <td *ngIf="alumno.tipo_evaluacion_id !== 81">
                                     <input pInputText type="number" [(ngModel)]="alumno.nota" placeholder="Ingrese la nota" />
                                 </td>
