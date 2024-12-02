@@ -17,6 +17,11 @@ export class EvaluacionModalidadService {
   constructor(private http: HttpClient) {}
 
   // Obtener alumnos por evaluación
+
+  obtenerTipoEvaluacion(evaluacionId: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}evaluacion/${evaluacionId}`, this.httpOptions);
+  }
+
   obtenerAlumnosPorEvaluacion(evaluacionId: number): Observable<any> {
     return this.http.get(`${this.baseUrl}evaluacionesByalumnos/${evaluacionId}`, this.httpOptions);
   }

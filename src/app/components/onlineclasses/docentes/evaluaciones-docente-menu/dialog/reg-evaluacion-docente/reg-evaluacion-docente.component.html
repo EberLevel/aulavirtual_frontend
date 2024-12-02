@@ -58,9 +58,13 @@
                 <div class="grid p-fluid">
                     <div class="field col-12">
                         <span class="p-float-label">
-                            <textarea pInputTextarea rows="3" [(ngModel)]="textoEnrriquesido"></textarea>
+                            <!-- <textarea pInputTextarea rows="3" [(ngModel)]="textoEnrriquesido"></textarea> -->
                             <label for="textoEnrriquesido">Texto enrriquesido</label>
                         </span>
+                        <p-editor
+                            [style]="{ height: '90px' }"
+                            [(ngModel)]="textoEnrriquesido"
+                        ></p-editor>
                     </div>
                 </div>
             </div>

@@ -30,6 +30,7 @@
                                 <th style="min-width: 10rem" scope="col">Fecha y Hora</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
                                 <th style="min-width: 10rem" scope="col">Estado</th>
+                                <th style="min-width: 10rem" scope="col">Asistencia</th>
                                 <th style="min-width: 10rem" scope="col">Modalidad</th>
                             </tr>
                         </ng-template>
@@ -47,6 +48,12 @@
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>
+                                <td>
+                                    <span [class.badge]="true" [class.badge-success]="carrera.asistencia === 1"
+                                        [class.badge-danger]="carrera.asistencia === 0">
+                                        {{ carrera.asistencia === 1 ? 'Asistió' : 'No Asistió' }}
+                                    </span>
+                                </td>
                                 <td>{{ getModalidad(carrera.modalidad) }}</td>
                             </tr>
                         </ng-template>

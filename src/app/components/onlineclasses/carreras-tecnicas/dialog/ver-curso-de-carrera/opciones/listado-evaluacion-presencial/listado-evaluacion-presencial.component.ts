@@ -12,6 +12,9 @@ import Swal from 'sweetalert2';
 export class ListadoEvaluacionPresencialComponent implements OnInit {
   alumnos: any[] = []; 
   evaluacionId: number = 0;
+  tipo_evaluacion_id: number | null = null;
+  selectedAlumnos: any[] = []; // Alumnos seleccionados
+  isLoading: boolean = true;
 
   constructor(
     private ref: DynamicDialogRef,
@@ -24,6 +27,7 @@ export class ListadoEvaluacionPresencialComponent implements OnInit {
     this.evaluacionId = this.config.data.evaluacionId;  
     console.log(this.evaluacionId)
     this.obtenerAlumnos();
+    this.obtenerTipoEvaluacion()
   }
 
   obtenerAlumnos() {
@@ -31,11 +35,26 @@ export class ListadoEvaluacionPresencialComponent implements OnInit {
       (data) => {
         // Asignar la lista de alumnos a la variable `alumnos`
         this.alumnos = data;
-        console.log('Alumnos recibidos:', this.alumnos);
-
-        console.log(typeof this.alumnos[0].asistencia);
-        console.log(typeof this.alumnos[1].asistencia);
         
+        this.tipo_evaluacion_id = data.tipo_evaluacion_id
+
+        this.selectedAlumnos = this.alumnos.filter(alumno => alumno.asistencia === 1);
+
+        this.isLoading = false;
+        
+      },
+      (error) => {
+        this.isLoading = false;
+        console.error('Error al obtener alumnos:', error);
+      }
+    );
+  }
+
+  obtenerTipoEvaluacion() {
+    this.evaluacionesService.obtenerTipoEvaluacion(this.evaluacionId).subscribe(
+      (data) => {
+        console.log(data);
+        this.tipo_evaluacion_id = data.tipo_evaluacion_id;
       },
       (error) => {
         console.error('Error al obtener alumnos:', error);
@@ -93,6 +112,27 @@ guardarNotas() {
     );
   }
   
+  onRowSelect(event: any): void {
+    const alumno = event.data;
+    alumno.asistencia = 1; // Marcar asistencia como 1
+    console.log('Alumno seleccionado:', alumno);
+  }
   
+  onRowUnselect(event: any): void {
+    const alumno = event.data;
+    alumno.asistencia = 0; // Marcar asistencia como 0
+    console.log('Alumno deseleccionado:', alumno);
+  }
+  
+  onHeaderSelectChange(): void {
+    if (this.selectedAlumnos.length === this.alumnos.length) {
+      // Todos seleccionados: marcar asistencia como 1
+      this.alumnos.forEach(alumno => (alumno.asistencia = 1));
+    } else {
+      // Ninguno seleccionado: marcar asistencia como 0
+      this.alumnos.forEach(alumno => (alumno.asistencia = 0));
+    }
+    console.log('Estado de asistencia actualizado:', this.alumnos);
+  }
   
 }

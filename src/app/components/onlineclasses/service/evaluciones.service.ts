@@ -53,7 +53,7 @@ export class EvaluacionesService {
         console.log('recursos:', recursos);
 
         const formData = new FormData();
-
+        
         formData.append('nombre', evaluacion.nombre);
         formData.append('tipo_evaluacion_id', evaluacion.tipo_evaluacion_id);
         formData.append('fecha_y_hora_programo', evaluacion.fecha_y_hora_programo);
