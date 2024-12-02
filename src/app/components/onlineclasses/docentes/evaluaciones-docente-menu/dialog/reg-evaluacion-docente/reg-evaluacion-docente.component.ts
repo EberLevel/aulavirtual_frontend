@@ -16,7 +16,7 @@ export class RegEvaluacionDocenteComponent {
     tipoEvaluacion!: string;
     estado!: string;
     observaciones!: string;
-    textoEnrriquesido!: string;
+    textoEnrriquesido!: string | null;
     grupoDeEvaluacionesId!: number;
     fechaRegistro!: Date | null;
     horaprogramada!: Date | null;  // Aseguramos que esta es del tipo Date
@@ -97,12 +97,12 @@ export class RegEvaluacionDocenteComponent {
                 this.grupoDeEvaluacionesId = evaluacion.grupo_de_evaluaciones_id;
                 this.modalidad = evaluacion.modalidad;
                 this.porcentajeAsignado = evaluacion.porcentaje_asignado;
+                this.textoEnrriquesido = evaluacion.texto_enrriquesido;
+                this.existingFiles = JSON.parse(evaluacion.contenido) ?? [];
 
-                this.existingFiles = JSON.parse(evaluacion.contenido);
-
-                console.log(this.existingFiles);
                 
-
+                console.log(this.textoEnrriquesido);
+                
                 // Extraer y establecer la hora como Date en horaprogramada
                 const fechaCompleta = new Date(evaluacion.fecha_y_hora_programo);
                 const soloHora = new Date();  // Usamos la fecha actual y sobreescribimos solo la hora
@@ -138,6 +138,7 @@ export class RegEvaluacionDocenteComponent {
             domain_id: this.domain_id,
             grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null,
             porcentaje_asignado: this.porcentajeAsignado || 0
+            // contenido: this.selectedFiles
         };
 
         console.log('Datos enviados:', nuevaEvaluacion);
@@ -205,12 +206,16 @@ export class RegEvaluacionDocenteComponent {
             estado_id: Number(this.estado),
             domain_id: this.domain_id,
             grupo_de_evaluaciones_id: this.grupoDeEvaluacionesId || null,
-            porcentaje_asignado: this.porcentajeAsignado || 0
+            porcentaje_asignado: this.porcentajeAsignado || 0,
+            textoEnrriquesido: this.textoEnrriquesido || null
+            // contenido: this.selectedFiles
+
         };
 
         console.log('Datos enviados para actualizar:', evaluacionActualizada);
+        console.log('selectedFiles:', this.selectedFiles);
 
-        this.evaluacionesService.actualizarEvaluacion(this.config.data.idEvaluacion, evaluacionActualizada).subscribe(
+        this.evaluacionesService.actualizarEvaluacion(this.config.data.idEvaluacion, evaluacionActualizada, this.selectedFiles).subscribe(
             (response) => {
                 Swal.fire({
                     title: 'Actualizado',

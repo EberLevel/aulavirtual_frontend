@@ -25,7 +25,7 @@ export class EvaluacionesService {
         formData.append('tipo_evaluacion_id', evaluacion.tipo_evaluacion_id);
         formData.append('fecha_y_hora_programo', evaluacion.fecha_y_hora_programo);
         formData.append('observaciones', evaluacion.observaciones);
-        formData.append('textoEnrriquesido', evaluacion.textoEnrriquesido);
+        formData.append('texto_enrriquesido', evaluacion.textoEnrriquesido);
         formData.append('estado_id', evaluacion.estado_id);
         formData.append('modalidad', evaluacion.modalidad);
         formData.append('domain_id', evaluacion.domain_id);
@@ -40,12 +40,46 @@ export class EvaluacionesService {
         });
 
         console.log(evaluacion, recursos);
+
+        formData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+        });
         
         return this.http.post(`${this.baseUrl}evaluaciones`, formData);
     }
     // Actualizar evaluación
-    actualizarEvaluacion(id: number, evaluacion: any): Observable<any> {
-        return this.http.put(`${this.baseUrl}evaluacion/${id}`, evaluacion);
+    actualizarEvaluacion(id: number, evaluacion: any, recursos: File[]): Observable<any> {
+
+        console.log('recursos:', recursos);
+
+        const formData = new FormData();
+
+        formData.append('nombre', evaluacion.nombre);
+        formData.append('tipo_evaluacion_id', evaluacion.tipo_evaluacion_id);
+        formData.append('fecha_y_hora_programo', evaluacion.fecha_y_hora_programo);
+        formData.append('observaciones', evaluacion.observaciones);
+        formData.append('texto_enrriquesido', evaluacion.textoEnrriquesido);
+        formData.append('estado_id', evaluacion.estado_id);
+        formData.append('modalidad', evaluacion.modalidad);
+        formData.append('domain_id', evaluacion.domain_id);
+        formData.append('grupo_de_evaluaciones_id', evaluacion.grupo_de_evaluaciones_id);
+        formData.append('porcentaje_asignado', evaluacion.porcentaje_asignado);
+
+        recursos.forEach(file => {
+            formData.append('recursos[]', file, file.name);  // 'archivos' es el nombre del campo que espera el backend
+        });
+
+        console.log(evaluacion, recursos);
+
+        console.log(formData);
+        
+
+        return this.http.post(`${this.baseUrl}evaluacion/${id}`, formData, {
+            headers: {
+                Accept: 'application/json'
+            }
+            
+        });
     }
     // Obtener evaluaciones por grupo
     obtenerEvaluacionesPorGrupo(id: number): Observable<any> {

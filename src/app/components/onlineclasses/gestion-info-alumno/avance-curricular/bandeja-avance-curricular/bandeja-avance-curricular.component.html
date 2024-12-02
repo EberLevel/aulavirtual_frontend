@@ -68,6 +68,9 @@
                                     Competencia
                                 </th>
                                 <th style="min-width: 10rem" scope="col">
+                                    Recursos
+                                </th>
+                                <th style="min-width: 10rem" scope="col">
                                     Acciones
                                 </th>
                             </tr>
@@ -84,6 +87,9 @@
                                 <td>{{ curso.ciclo_nombre  }}</td>
                                 <td>{{ curso.area_de_formacion_nombre }}</td>
                                 <td>{{ curso.modulo_formativo_nombre }}</td>
+                                <td>
+                                    <button pButton type="button" pTooltip="Recursos" icon="pi pi-download" (click)="openFilesModal(curso)"></button>
+                                </td>
                                 <td style="height: 20rem; display: block">
                                     <p-dropdown
                                         [options]="estadoOptions"
@@ -116,4 +122,19 @@
             </div>
         </div>
     </ng-template>
+
+    <!-- Modal para Mostrar Archivos -->
+<p-dialog header="Archivos del Curso" [(visible)]="filesModalVisible" [modal]="true" [style]="{width: '50vw'}">
+    <div *ngIf="selectedFiles?.length; else noFiles">
+        <div *ngFor="let file of selectedFiles" class="file-row">
+            <span class="file-link">
+                <a [href]="file" target="_blank">{{ getFileName(file) }}</a>
+            </span>
+            <button pButton type="button" icon="pi pi-download" class="p-button-secondary" (click)="downloadFile(file)"></button>
+        </div>
+    </div>
+    <ng-template #noFiles>
+        <p>No hay archivos disponibles.</p>
+    </ng-template>
+</p-dialog>
 </p-panel>

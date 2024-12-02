@@ -107,7 +107,7 @@
                 <!-- Componente de carga de archivos -->
                 <div class="field md:col-6" *ngIf="isFileUploadVisible">
                     <p-fileUpload name="files" (onSelect)="onFileSelect($event)" [multiple]="true"
-                        accept="image/*,video/*,.pdf" chooseLabel="Seleccionar Archivos" [auto]="true">
+                        accept="image/*,video/*,.pdf,.xlsx,.csv" chooseLabel="Seleccionar Archivos" [auto]="true">
                     </p-fileUpload>
                 </div>
             </div>

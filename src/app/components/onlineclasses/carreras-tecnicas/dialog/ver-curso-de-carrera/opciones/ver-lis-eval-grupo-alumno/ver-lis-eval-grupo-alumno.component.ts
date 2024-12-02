@@ -43,6 +43,8 @@ export class VerLisEvalGrupoAlumnoComponent {
     porcentajeTotal: number = 0;
     grupoEvaluaciones: any;
     evaluacion: any;
+    filesModalVisible: boolean = false;
+    selectedFiles: string[] = [];
 
     constructor(
         public helpersService: HelpersService,
@@ -250,5 +252,36 @@ export class VerLisEvalGrupoAlumnoComponent {
                 (carrera.cursos &&
                     carrera.cursos.toLowerCase().includes(filterValue))
         );
+    }
+
+    // Abre el modal y prepara los archivos
+    openFilesModal(carrera: any) {
+
+        console.log(carrera);
+        
+        this.selectedFiles = this.parseJson(carrera.contenido);
+        this.filesModalVisible = true;
+    }
+
+    getFileName(fileUrl: string): string {
+        return fileUrl.split('/').pop() || 'Archivo';
+    }
+
+    parseJson(json: string): string[] {
+        try {
+            return JSON.parse(json);
+        } catch {
+            return [];
+        }
+    }
+
+    // Descarga el archivo
+    downloadFile(fileUrl: string) {
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.setAttribute('download', this.getFileName(fileUrl));
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 }

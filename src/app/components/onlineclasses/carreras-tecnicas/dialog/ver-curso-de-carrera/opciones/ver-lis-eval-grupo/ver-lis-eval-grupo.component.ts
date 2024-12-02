@@ -287,10 +287,13 @@ export class VerListadoDeEvaluacionesPorGrupoComponent {
         console.log(this.originalgrupoEvaluacionesList);
         console.log(this.grupoEvaluacionesList);
         
-        if (this.filterType === 0) {
+        if (+this.filterType === 0) {
             this.grupoEvaluacionesList = [
                 ...this.originalgrupoEvaluacionesList,
             ];
+            
+            console.log(this.originalgrupoEvaluacionesList);
+            console.log(this.grupoEvaluacionesList);
             return;
         }
         this.grupoEvaluacionesList = this.originalgrupoEvaluacionesList.filter(
