@@ -26,9 +26,11 @@
                                 <th style="min-width: 10rem" scope="col">Nota</th>
                                 <!-- <th style="min-width: 10rem" scope="col">Nota Porcentual</th>
                                 <th style="min-width: 10rem" scope="col">Porcentaje</th> -->
+                                <th style="min-width: 10rem" scope="col">Recursos</th>
                                 <th style="min-width: 10rem" scope="col">Fecha y Hora</th>
                                 <th style="min-width: 10rem" scope="col">Observaciones</th>
                                 <th style="min-width: 10rem" scope="col">Estado</th>
+                                <th style="min-width: 10rem" scope="col">Asistencia</th>
                                 <th style="min-width: 10rem" scope="col">Modalidad</th>
                             </tr>
                         </ng-template>
@@ -39,10 +41,20 @@
                                 <td>{{ carrera.nota | number: '1.2-2' }}</td>
                                 <!-- <td>{{ (carrera.nota * carrera.porcentaje_asignado) / 100 | number: '1.2-2' }}</td>
                                 <td>{{ carrera.porcentaje_asignado}}%</td> -->
+                                <td>
+                                    <button pButton type="button" pTooltip="Recursos" icon="pi pi-file-export"
+                                        (click)="openFilesModal(carrera)"></button>
+                                </td>
                                 <td>{{ carrera.fecha_y_hora_programo }}</td>
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>
-                                <td>{{ getModalidad(carrera.modalidad) }}</td> 
+                                <td>
+                                    <span [class.badge]="true"
+                                    [style.background-color]="+carrera.asistencia === 1 ? 'green' : 'red'">
+                                        {{ +carrera.asistencia === 1 ? 'Asistió' : 'No Asistió' }}
+                                    </span>
+                                </td>
+                                <td>{{ getModalidad(carrera.modalidad) }}</td>
                             </tr>
                         </ng-template>
 
@@ -64,4 +76,20 @@
             </div>
         </div>
     </ng-template>
+
+    <!-- Modal para Mostrar Archivos -->
+    <p-dialog header="Archivos del Curso" [(visible)]="filesModalVisible" [modal]="true" [style]="{width: '50vw'}">
+        <div *ngIf="selectedFiles?.length; else noFiles">
+            <div *ngFor="let file of selectedFiles" class="file-row">
+                <span class="file-link">
+                    <a [href]="file" target="_blank">{{ getFileName(file) }}</a>
+                </span>
+                <button pButton type="button" icon="pi pi-download" class="p-button-secondary"
+                    (click)="downloadFile(file)"></button>
+            </div>
+        </div>
+        <ng-template #noFiles>
+            <p>No hay archivos disponibles.</p>
+        </ng-template>
+    </p-dialog>
 </p-panel>

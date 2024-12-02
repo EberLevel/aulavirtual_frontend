@@ -58,9 +58,13 @@
                 <div class="grid p-fluid">
                     <div class="field col-12">
                         <span class="p-float-label">
-                            <textarea pInputTextarea rows="3" [(ngModel)]="textoEnrriquesido"></textarea>
+                            <!-- <textarea pInputTextarea rows="3" [(ngModel)]="textoEnrriquesido"></textarea> -->
                             <label for="textoEnrriquesido">Texto enrriquesido</label>
                         </span>
+                        <p-editor
+                            [style]="{ height: '90px' }"
+                            [(ngModel)]="textoEnrriquesido"
+                        ></p-editor>
                     </div>
                 </div>
             </div>
@@ -107,7 +111,7 @@
                 <!-- Componente de carga de archivos -->
                 <div class="field md:col-6" *ngIf="isFileUploadVisible">
                     <p-fileUpload name="files" (onSelect)="onFileSelect($event)" [multiple]="true"
-                        accept="image/*,video/*,.pdf" chooseLabel="Seleccionar Archivos" [auto]="true">
+                        accept="image/*,video/*,.pdf,.xlsx,.csv" chooseLabel="Seleccionar Archivos" [auto]="true">
                     </p-fileUpload>
                 </div>
             </div>

@@ -7,14 +7,17 @@
         <div class="row mb-4">
             <div class="grid p-fluid">
                 <div class="field col-12">
-                    <p-table [value]="alumnos" responsiveLayout="scroll" class="p-datatable-gridlines">
-                        <ng-template pTemplate="header">
+                    <p-table [value]="alumnos" [(selection)]="selectedAlumnos"  responsiveLayout="scroll" class="p-datatable-gridlines" [showSelectAll]="true" (onRowSelect)="onRowSelect($event)"
+                    (onRowUnselect)="onRowUnselect($event)" (onHeaderCheckboxToggle)="onHeaderSelectChange()">
+                        <ng-template pTemplate="header" let-alumno>
                             <tr>
                                 <th>ID Alumno</th>
                                 <th>Nombre Completo</th>
                                 <th>Nota Registrada</th>
-                                <th>Ingresar Nota</th>
-                                <th>Asistencia</th>
+                                <th *ngIf="!isLoading && tipo_evaluacion_id !== 81">Ingresar Nota</th>
+                                <th>
+                                    Asistencia <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
                             </tr>
                         </ng-template>
 
@@ -23,11 +26,11 @@
                                 <td>{{ alumno.id }}</td>
                                 <td>{{ alumno.nombres }} {{ alumno.apellidos }}</td>
                                 <td>{{ alumno.nota || 'No asignada' }}</td>
-                                <td>
+                                <td *ngIf="alumno.tipo_evaluacion_id !== 81">
                                     <input pInputText type="number" [(ngModel)]="alumno.nota" placeholder="Ingrese la nota" />
                                 </td>
                                 <td>
-                                    <input type="checkbox" [(ngModel)]="alumno.asistencia">
+                                    <p-tableCheckbox [value]="alumno"></p-tableCheckbox>
                                 </td>
                             </tr>
                         </ng-template>

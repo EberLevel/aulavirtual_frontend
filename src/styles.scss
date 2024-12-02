@@ -162,3 +162,29 @@ textarea:focus-visible {
 .p-button-secondary:hover {
     background-color: #5a6268;
 }
+
+.file-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.file-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.file-link a:hover {
+    text-decoration: underline;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    font-size: 0.9em;
+    text-align: center;
+    color: white;
+}

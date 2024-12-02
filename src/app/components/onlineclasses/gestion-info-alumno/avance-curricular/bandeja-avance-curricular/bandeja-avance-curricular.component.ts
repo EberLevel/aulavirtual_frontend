@@ -14,6 +14,8 @@ export class BandejaAvanceCurricularComponent implements OnInit {
     cursosList: any[] = []; // Lista de cursos
     loading: boolean = false;
     alumnoId!: number;
+    filesModalVisible: boolean = false;
+    selectedFiles: string[] = [];
 
     estadoOptions: SelectItem[] = [
         { label: 'Pendiente', value: 1 },
@@ -27,7 +29,7 @@ export class BandejaAvanceCurricularComponent implements OnInit {
         private cursoService: CursoService,
         private helpersService: HelpersService,
         public config: DynamicDialogConfig
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         const alumno = this.config.data.alumno; // Accede a los datos del diálogo
@@ -52,7 +54,7 @@ export class BandejaAvanceCurricularComponent implements OnInit {
             (data: any) => {
                 // Aquí asigna el estado_id de la respuesta al estado que manejará el dropdown
                 console.log('Datos recibidos:', data);
-                
+
                 this.cursosList = data.map((curso: any) => {
                     return {
                         ...curso,
@@ -67,26 +69,54 @@ export class BandejaAvanceCurricularComponent implements OnInit {
             }
         );
     }
-    
+
     onEstadoChange(event: any, curso: any): void {
-      const estadoId = event.value;
-  
-      const estadoData = {
-          cursoId: curso.id,
-          estadoId: estadoId.value,
-          alumnoId: this.alumnoId 
-      };
-      console.log("estadoData" , estadoData)
-  
-      this.cursoService.updateCursoEstado(estadoData).subscribe(
-          (response: any) => {
-              console.log('Estado actualizado:', response);
-          },
-          (error: any) => {
-              console.error('Error al actualizar el estado:', error);
-          }
-      );
-  }
-  
-  
+        const estadoId = event.value;
+
+        const estadoData = {
+            cursoId: curso.id,
+            estadoId: estadoId.value,
+            alumnoId: this.alumnoId
+        };
+        console.log("estadoData", estadoData)
+
+        this.cursoService.updateCursoEstado(estadoData).subscribe(
+            (response: any) => {
+                console.log('Estado actualizado:', response);
+            },
+            (error: any) => {
+                console.error('Error al actualizar el estado:', error);
+            }
+        );
+    }
+
+    // Abre el modal y prepara los archivos
+    openFilesModal(curso: any) {
+        this.selectedFiles = this.parseJson(curso.contenido);
+        this.filesModalVisible = true;
+    }
+
+    getFileName(fileUrl: string): string {
+        return fileUrl.split('/').pop() || 'Archivo';
+    }
+
+    parseJson(json: string): string[] {
+        try {
+            return JSON.parse(json);
+        } catch {
+            return [];
+        }
+    }
+
+    // Descarga el archivo
+    downloadFile(fileUrl: string) {
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.setAttribute('download', this.getFileName(fileUrl));
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
 }
