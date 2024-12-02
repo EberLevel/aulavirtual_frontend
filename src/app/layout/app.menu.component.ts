@@ -100,13 +100,13 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Docente',
                                 icon: 'pi pi-users',
                                 items: [
-                                    {
-                                        label: 'Horario',
-                                        icon: 'pi pi-fw pi-calendar',
-                                        routerLink: [
-                                            '/pl-virtual/horario-docente',
-                                        ],
-                                    },
+                                    // {
+                                    //     label: 'Horario',
+                                    //     icon: 'pi pi-fw pi-calendar',
+                                    //     routerLink: [
+                                    //         '/pl-virtual/horario-docente',
+                                    //     ],
+                                    // },
                                     {
                                         label: 'Unidad Didactica',
                                         icon: 'pi pi-share-alt',
@@ -265,11 +265,11 @@ export class AppMenuComponent implements OnInit {
                                             '/pl-virtual/bandeja-curso',
                                         ],
                                     },
-                                    {
-                                        label: 'Horarios',
-                                        icon: 'pi pi-fw pi-calendar',
-                                        routerLink: ['/apps/calendar'],
-                                    },
+                                    // {
+                                    //     label: 'Horarios',
+                                    //     icon: 'pi pi-fw pi-calendar',
+                                    //     routerLink: ['/apps/calendar'],
+                                    // },
                                     {
                                         label: 'Pagos',
                                         icon: 'pi pi-shopping-cart',
@@ -627,11 +627,11 @@ export class AppMenuComponent implements OnInit {
                                        icon: 'pi pi-fw pi-folder',
                                        routerLink: ['']
                                    },*/
-                                        {
-                                            label: 'Horarios',
-                                            icon: 'pi pi-fw pi-calendar',
-                                            routerLink: ['/apps/calendar'],
-                                        }
+                                        // {
+                                        //     label: 'Horarios',
+                                        //     icon: 'pi pi-fw pi-calendar',
+                                        //     routerLink: ['/apps/calendar'],
+                                        // }
 
                                         // {
                                         //     label: 'Foros',
@@ -674,14 +674,14 @@ export class AppMenuComponent implements OnInit {
                                                 // routerLink: ['/pl-virtual/']
                                             }
                                             : null,
-                                        {
-                                            label: 'Horario',
-                                            icon: 'pi pi-fw pi-calendar',
-                                            // routerLink: ['/pl-virtual/cursos-docente']
-                                            routerLink: [
-                                                '/pl-virtual/horario-docente',
-                                            ],
-                                        },
+                                        // {
+                                        //     label: 'Horario',
+                                        //     icon: 'pi pi-fw pi-calendar',
+                                        //     // routerLink: ['/pl-virtual/cursos-docente']
+                                        //     routerLink: [
+                                        //         '/pl-virtual/horario-docente',
+                                        //     ],
+                                        // },
                                         {
                                             label: 'Unidad Didactica',
                                             icon: 'pi pi-share-alt',
@@ -703,11 +703,11 @@ export class AppMenuComponent implements OnInit {
                                         //     routerLink: ['/']
 
                                         // },
-                                        {
-                                            label: 'Asistencia',
-                                            icon: 'pi pi-users',
-                                            routerLink: ['/'],
-                                        },
+                                        // {
+                                        //     label: 'Asistencia',
+                                        //     icon: 'pi pi-users',
+                                        //     routerLink: ['/'],
+                                        // },
                                     ].filter((item) => item !== null),
                                 }
                                 : null,
