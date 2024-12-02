@@ -49,9 +49,9 @@
                                 <td>{{ carrera.observaciones }}</td>
                                 <td>{{ carrera.estado_nombre }}</td>
                                 <td>
-                                    <span [class.badge]="true" [class.badge-success]="carrera.asistencia === 1"
-                                        [class.badge-danger]="carrera.asistencia === 0">
-                                        {{ carrera.asistencia === 1 ? 'Asistió' : 'No Asistió' }}
+                                    <span [class.badge]="true"
+                                    [style.background-color]="+carrera.asistencia === 1 ? 'green' : 'red'">
+                                        {{ +carrera.asistencia === 1 ? 'Asistió' : 'No Asistió' }}
                                     </span>
                                 </td>
                                 <td>{{ getModalidad(carrera.modalidad) }}</td>
