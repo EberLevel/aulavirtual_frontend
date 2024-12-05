@@ -46,6 +46,8 @@ export class VerLisEvalGrupoAlumnoComponent {
     filesModalVisible: boolean = false;
     selectedFiles: string[] = [];
 
+    filterType: number = 0;
+
     constructor(
         public helpersService: HelpersService,
         private dialogService: DialogService,
@@ -61,6 +63,7 @@ export class VerLisEvalGrupoAlumnoComponent {
         console.log('alumnoId , grupoId', alumnoId, grupoId);
         this.grupoEvaluaciones = this.config.data.data || this.config.data;
         this.getNotasPorAlumnoYGrupo(alumnoId, grupoId);
+        // this.listarGrupoEvaluaciones();
     }
 
     listarGrupoEvaluaciones() {
@@ -105,6 +108,7 @@ export class VerLisEvalGrupoAlumnoComponent {
                     console.log('Datos recibidos de la API:', response);
                     if (response.success) {
                         this.grupoEvaluacionesList = response.notas;
+                        this.originalgrupoEvaluacionesList = [...response.notas];
                     } else {
                         console.error('Error al obtener las notas');
                     }
@@ -283,5 +287,31 @@ export class VerLisEvalGrupoAlumnoComponent {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    applyFilters(): void {
+        // Comienza con la lista original
+
+        console.log(this.originalgrupoEvaluacionesList);
+        console.log(this.grupoEvaluacionesList);
+        
+        if (+this.filterType === 0) {
+            this.grupoEvaluacionesList = [
+                ...this.originalgrupoEvaluacionesList,
+            ];
+            
+            console.log(this.originalgrupoEvaluacionesList);
+            console.log(this.grupoEvaluacionesList);
+            return;
+        }
+        this.grupoEvaluacionesList = this.originalgrupoEvaluacionesList.filter(
+            (examen) => +examen.tipo_evaluacion_id === +this.filterType
+        );
+    }
+
+    onGlobalFilter2() {
+        console.log('cambio');
+        
+        this.applyFilters()
     }
 }
